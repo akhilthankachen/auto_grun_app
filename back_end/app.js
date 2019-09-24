@@ -17,7 +17,7 @@ app.use(cors()); // cors in use
 app.use(bodyParser.json()); // body parser
 
 // app loop
-app.get('/', (req,res) => {
+app.get('/', (req,res) => { // home '/' response
     res.send('working');
 });
 app.listen(port, () => {
