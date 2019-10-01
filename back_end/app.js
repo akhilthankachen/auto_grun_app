@@ -47,7 +47,9 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 
 // routes
 const users = require('./routes/users');
+const smsBackend = require('./routes/smsBackend');
 app.use('/users', users);
+app.use('/sms', smsBackend);
 
 // app loop
 app.get('/', (req,res) => { // home '/' response
