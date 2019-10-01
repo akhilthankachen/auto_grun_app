@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/receive', (req,res,next) => {
-    console.log(req.body);
+    var content = req.nody.comments;
+    content = JSON.parse(content);
+    console.log(content.akhil);
     res.send();
 });
 
