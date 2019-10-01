@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const database_config = require('./config/database');
 const mode_config = require('./config/env');
-const superUser = require('./models/users/superUser');
+const User = require('./models/users/User');
 
 // database connection
 mongoose.Promise = global.Promise;
@@ -28,16 +28,15 @@ app.use(passport.session());
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 var opts = {}
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT');
 opts.secretOrKey = database_config.secret;
-opts.issuer = 'superuser.grunagro.com';
-opts.audience = 'grunagro.com';
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    superUser.findOne({id: jwt_payload.sub}, function(err, user) {
+    User.findOne({id: jwt_payload.sub}, function(err, user) {
         if (err) {
             return done(err, false);
         }
         if (user) {
+            console.log(user);
             return done(null, user);
         } else {
             return done(null, false);
