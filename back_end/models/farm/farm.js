@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Farm = new mongoose.Schema({
+const farmSchema = new mongoose.Schema({
     name: {
         type: String,
         default: '',
@@ -45,5 +45,5 @@ const Farm = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Farm', Farm);
+const Farm = module.exports = mongoose.model('Farm', farmSchema);
 

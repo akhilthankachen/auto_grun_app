@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ZoneLog = new mongoose.Schema({
+const zoneLogSchema = new mongoose.Schema({
     zoneId: {
         type: String,
         required: true
@@ -22,5 +22,5 @@ const ZoneLog = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('ZoneLog', ZoneLog);
+const ZoneLog = module.exports = mongoose.model('ZoneLog', zoneLogSchema);
 

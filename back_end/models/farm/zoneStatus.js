@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ZoneStatus = new mongoose.Schema({
+const zoneStatusSchema = new mongoose.Schema({
     zoneId: {
         type: String,
         required: true
@@ -23,5 +23,5 @@ const ZoneStatus = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('ZoneStatus', ZoneStatus);
+const ZoneStatus = module.exports = mongoose.model('ZoneStatus', zoneStatusSchema);
 

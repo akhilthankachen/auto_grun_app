@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Zone = new mongoose.Schema({
+const zoneSchema = new mongoose.Schema({
     farmId: {
         type: String,
         required: true
@@ -11,5 +11,5 @@ const Zone = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Zone', Zone);
+const Zone = module.exports = mongoose.model('Zone', zoneSchema);
 
