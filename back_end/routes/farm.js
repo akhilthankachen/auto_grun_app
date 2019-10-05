@@ -6,6 +6,7 @@ const User = require('../models/users/User');
 const Farm = require('../models/users/Farm');
 const config = require('../config/database');
 
+/*
 router.post('/addFarm',passport.authenticate('jwt', {session: false}), (req,res,next) => {
   res.json({user: req.user});
   let farm = new Farm({
@@ -15,7 +16,8 @@ router.post('/addFarm',passport.authenticate('jwt', {session: false}), (req,res,
         address : req.body.address,
         street : req.body.street,
         landmark : req.body.landmark,
-        
+
     }
   })
 });
+*/
