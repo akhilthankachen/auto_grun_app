@@ -31,12 +31,14 @@ var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT');
 opts.secretOrKey = database_config.secret;
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
+    console.log("JWT payload -",jwt_payload);
+    
+    User.findById(jwt_payload._id, function(err, user) {
         if (err) {
             return done(err, false);
         }
         if (user) {
-            console.log(user);
+            console.log("JWT -",user);
             return done(null, user);
         } else {
             return done(null, false);
@@ -48,6 +50,26 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 // routes
 const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
+
+User.find({}, (err,user) => {
+    console.log("Init state Users - ",user);
+    
+    if(err) throw err;
+    if(user.length === 0){
+        let newUser = new User({
+            name : "test",
+            mobileNumber: 1234567890,
+            email : "test@test.com",
+            userType : "super",
+            username : "test",
+            password : "test",
+        })
+        User.addUser(newUser,(err,user) => {
+            if(err) throw err;
+            console.log("Created user : ",user);
+        })
+    }
+})
 app.use('/users', users);
 app.use('/sms', smsBackend);
 

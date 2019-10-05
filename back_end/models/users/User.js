@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../../config/database');
+var Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -14,7 +15,8 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     userType: {
         type: String,
@@ -30,9 +32,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: 'root'
     },
-    clusterId: {
-        type: String,
-        default: ''
+    ownerId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 
@@ -51,6 +53,11 @@ module.exports.getUserById = function (id,callback){
 
 module.exports.getUserByUsername = function (username,callback){
   const query = {username: username};
+  User.findOne(query,callback);
+};
+
+module.exports.getUserByEmail = function (email,callback){
+  const query = {email: email};
   User.findOne(query,callback);
 };
 
