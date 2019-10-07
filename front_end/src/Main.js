@@ -14,6 +14,8 @@ export default class Main extends Component<Props> {
 const AppSwitchNavigator = createSwitchNavigator({
     login: LoginScreen,
     dashboard: DashboardScreen
+},{
+    initialRouteName: 'login'
 })
 
 const AppContainer = createAppContainer(AppSwitchNavigator)
