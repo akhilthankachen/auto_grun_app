@@ -26,22 +26,8 @@ export default class LoginScreen extends Component<Props> {
       showHide: true,
       status: ''
     }
-    getMyValue = async () => {
-      try {
-        const value = await AsyncStorage.getItem('@token')
-        if(value){
-          this.props.navigation.navigate('dashboard')
-        }
-      } catch(e) {
-        // read error
-      }
-      console.log('Done')
-    }
   }
 
-  //componentDidMount = () => {
-
-  //}
 
   onLoginPress = () =>{
     if(this.state.username != '' && this.state.password != ''){
@@ -54,7 +40,9 @@ export default class LoginScreen extends Component<Props> {
         body: JSON.stringify({
           username: this.state.username,
           password: this.state.password
-        })
+        },
+
+        )
       })  
       .then((response) => {
         if(response.status == 200){
@@ -168,7 +156,7 @@ export default class LoginScreen extends Component<Props> {
               checkedIcon='check-box'
               uncheckedIcon='check-box-outline-blank'
               checked={this.state.checked}
-              onPress = {(bool)=>{this.setState({checked: !this.state.checked})}}
+              onPress = {()=>{this.setState({checked: !this.state.checked})}}
             />
           </View>
           <View style = {styles.forgotContainer}>
