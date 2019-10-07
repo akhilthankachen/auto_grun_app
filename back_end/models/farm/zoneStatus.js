@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const zoneStatusSchema = new mongoose.Schema({
     zoneId: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: "Zone"
     },
     dateTime: {
         type: Date,
