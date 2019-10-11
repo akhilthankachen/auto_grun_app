@@ -2,24 +2,23 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
+import AddNewButton from '../buttons/addNewButton'
 
 
 
 type Props = {};
-export default class DashboardScreen extends Component<Props> {
+export default class FarmsScreen extends Component<Props> {
+
+  addNewFarm = ()=>{
+    alert('hey am pressed')
+  }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text> DashboardScreen </Text>
-        <Button
-            title='logout'
-            onPress={()=>{
-                AsyncStorage.setItem('@token', '').then(()=>{
-                    this.props.navigation.navigate('login')
-                })
-            }}
-            />
+        <View style={styles.newButton}>
+          <AddNewButton onPress={this.addNewFarm}/>
+        </View>
       </View>
     );
   }
@@ -32,4 +31,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  newButton: {
+    position: 'absolute',
+    bottom: 15,
+    right: 20
+  }
 });

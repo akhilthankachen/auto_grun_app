@@ -6,12 +6,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 type Props = {};
-export default class DashboardScreen extends Component<Props> {
+export default class SettingsScreen extends Component<Props> {
 
   render() {
     return (
       <View style={styles.container}>
-        <Text> DashboardScreen </Text>
+        <Text> SettingsScreen </Text>
         <Button
             title='logout'
             onPress={()=>{

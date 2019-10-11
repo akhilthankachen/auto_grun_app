@@ -103,6 +103,7 @@ export default class LoginScreen extends Component<Props> {
             <TextInput 
               style = {styles.username}
               placeholder = {'Username'}
+              autoCapitalize = 'none'
               onChangeText = {(text) => {this.setState({
                 username: text,
                 status: ''
@@ -120,6 +121,7 @@ export default class LoginScreen extends Component<Props> {
             <TextInput 
               style = {styles.password}
               placeholder = {'Password'}
+              autoCapitalize = 'none'
               underlineColorAndroid = 'transparent'
               secureTextEntry = {this.state.showHide}
               onChangeText = {(text) => {this.setState({
