@@ -6,6 +6,7 @@ import SplashScreen from './SplashScreen'
 import UsersScreen from './userScreens/UsersScreen'
 import FarmsScreen from './farmScreens/FarmsScreen'
 import SettingsScreen from './SettingsScreen'
+import AddUserScreen from './userScreens/AddUserScreen'
 import {createSwitchNavigator, createAppContainer} from 'react-navigation'
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import {createStackNavigator} from 'react-navigation-stack'
@@ -35,9 +36,85 @@ export default class Main extends Component<Props> {
     }
 }
 
-const DashboardTabNavigator = createMaterialTopTabNavigator({
+const SettingsScreenStack = createStackNavigator({
+    users: {
+        screen: SettingsScreen,
+        navigationOptions: {
+            headerTitle : 'Settings'
+        }
+    }
+},{
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: {       
+        headerTitleStyle: {
+            fontSize: 20,
+            textTransform: 'capitalize',
+            fontWeight: '700',
+            color: 'rgb(5, 43, 0)'
+        },
+    }
+})
+
+const UserScreenStack = createStackNavigator({
     users: {
         screen: UsersScreen,
+        navigationOptions: {
+            headerTitle : 'Users'
+        }
+    },
+    add_user: {
+        screen: AddUserScreen
+    }
+},{
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: {       
+        headerTitleStyle: {
+            fontSize: 20,
+            textTransform: 'capitalize',
+            fontWeight: '700',
+            color: 'rgb(5, 43, 0)'
+        },                
+        headerRight: (
+            <TouchableOpacity>
+                <Icon name="search" color='rgb(20, 20, 20)' size={30} type='material'/>
+            </TouchableOpacity>
+        ),
+        headerRightContainerStyle:{
+            marginRight: 45
+        }
+    }
+})
+
+const FarmScreenStack = createStackNavigator({
+    users: {
+        screen: FarmsScreen,
+        navigationOptions: {
+            headerTitle : 'Farms'
+        }
+    }
+},{
+    headerLayoutPreset: 'center',
+    defaultNavigationOptions: {       
+        headerTitleStyle: {
+            fontSize: 20,
+            textTransform: 'capitalize',
+            fontWeight: '700',
+            color: 'rgb(5, 43, 0)'
+        },                
+        headerRight: (
+            <TouchableOpacity>
+                <Icon name="search" color='rgb(20, 20, 20)' size={30} type='material'/>
+            </TouchableOpacity>
+        ),
+        headerRightContainerStyle:{
+            marginRight: 45
+        },  
+    }
+})
+
+const DashboardTabNavigator = createMaterialTopTabNavigator({
+    users: {
+        screen: UserScreenStack,
         navigationOptions: {
             tabBarLabel: 'Users',
             tabBarIcon: ({tintColor}) => (
@@ -46,7 +123,7 @@ const DashboardTabNavigator = createMaterialTopTabNavigator({
         }
     },
     farms: {
-        screen: FarmsScreen,
+        screen: FarmScreenStack,
         navigationOptions: {
             tabBarLabel: 'Farms',
             tabBarIcon: ({tintColor}) => (
@@ -55,7 +132,7 @@ const DashboardTabNavigator = createMaterialTopTabNavigator({
         }
     },
     settings: {
-        screen: SettingsScreen,
+        screen: SettingsScreenStack,
         navigationOptions: {
             tabBarLabel: 'Farms',
             tabBarIcon: ({tintColor}) => (
@@ -66,9 +143,10 @@ const DashboardTabNavigator = createMaterialTopTabNavigator({
 },{
     navigationOptions: ({navigation})=>{
         const { routeName } = navigation.state.routes[navigation.state.index]
-        return {
-            headerTitle: routeName
-        }
+            return {
+                header: null,
+                headerTitle: routeName
+            }
     },
     shifting: true,
     animationEnabled: false,
@@ -98,28 +176,14 @@ const DashboardTabNavigator = createMaterialTopTabNavigator({
 const DashboardStackNavigator = createStackNavigator({
     dashboardTab: DashboardTabNavigator
 },{
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-        headerTitleStyle: {
-            fontSize: 20,
-            textTransform: 'capitalize',
-            fontWeight: '700',
-            color: 'rgb(5, 43, 0)'
-        },
-        headerStyle: {
-            height: 70
-        },
-        headerLeftContainerStyle: {
-            marginLeft: 40
-        },
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
         headerRight: (
             <TouchableOpacity>
                 <Icon name="search" color='rgb(20, 20, 20)' size={30} type='material'/>
             </TouchableOpacity>
-        ),
-        headerRightContainerStyle:{
-            marginRight: 45
-        }
+        )
+      };
     }
 })
 
@@ -127,11 +191,8 @@ const AppSwitchNavigator = createSwitchNavigator({
     splash: SplashScreen,
     login: LoginScreen,
     dashboard: DashboardStackNavigator,
-
 },{
     initialRouteName: 'splash'
 })
 
 const AppContainer = createAppContainer(AppSwitchNavigator)
-
-

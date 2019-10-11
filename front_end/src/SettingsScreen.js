@@ -11,7 +11,6 @@ export default class SettingsScreen extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text> SettingsScreen </Text>
         <Button
             title='logout'
             onPress={()=>{

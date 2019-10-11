@@ -1,21 +1,23 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import {Button} from 'react-native-elements'
+import { StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import AddNewButton from '../buttons/addNewButton'
-
+import AddNewButton from '../other_components/addNewButton'
+import Empty from '../other_components/empty'
 
 
 type Props = {};
 export default class UsersScreen extends Component<Props> {
 
   addNewUser = ()=>{
-    
+    this.props.navigation.navigate('add_user')
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <View>
+          <Empty />
+        </View>
         <View style={styles.newUserButton}>
           <AddNewButton onPress={this.addNewUser} />
         </View>
