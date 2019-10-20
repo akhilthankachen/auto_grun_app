@@ -59,3 +59,15 @@ router.post('/addFarm',passport.authenticate('jwt', {session: false}), (req,res,
   }
 
 });
+
+router.post('/editFarm',passport.authenticate('jwt',{session: false}), (req,res,next) => {
+  
+  Farm.updateOne({mobileNumber: req.body.mobileNumber},newDoc,(err,farm) => {
+    if(err) throw err;
+    if(!farm){
+      res.json({success:false,msg:"Number not found"});
+    } else {
+      
+    }
+  })
+})

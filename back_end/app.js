@@ -51,6 +51,7 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 // routes
 const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
+const listUser = require('./routes/listUser');
 
 User.find({}, (err,user) => {
     console.log("Init state Users - ",user);
@@ -73,6 +74,7 @@ User.find({}, (err,user) => {
 })
 app.use('/users', users);
 app.use('/sms', smsBackend);
+app.use('/listUser', listUser);
 
 // app loop
 app.get('/', (req,res) => { // home '/' response
