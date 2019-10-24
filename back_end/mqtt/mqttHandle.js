@@ -20,7 +20,7 @@ client.on('message', function (topic, message) {
         })
 
         cow.save(function(){
-            console.log('saved')
+            console.log('saved'+Date.now() +' '+message)
         })
     }
 })

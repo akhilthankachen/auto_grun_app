@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Dimensions} from 'react-native';
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
+import config from '../config'
 
 
 const WIDTH = Dimensions.get('window').width
@@ -10,9 +11,29 @@ export default class DashboardScreen extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
-            liveTemp: '38.3'
+            liveTemp: '',
         }
     }
+
+    componentDidMount = () => {
+        setInterval(()=>{
+            fetch(config.remote+'/cowfarm/lastTemp', {
+                method: 'GET'
+            })  
+            .then((response) => {
+                if(response.status == 200){
+                    return response.json()
+                }
+            })
+            .then((responseJSON)=>{
+                this.setState({
+                    liveTemp: responseJSON.message
+                })
+                console.log('updated' + responseJSON.message)
+            })
+        }, 5000)
+    }
+
   render() {
     return (
       <View style={styles.container}>
