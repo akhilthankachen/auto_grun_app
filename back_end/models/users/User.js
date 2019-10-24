@@ -35,6 +35,15 @@ const userSchema = new mongoose.Schema({
     ownerId: {
         type: Schema.Types.ObjectId,
         ref: "User"
+    },
+    enterprise: {
+      type: String
+    },
+    gst: {
+      type: String
+    },
+    registeredAddress: {
+      type: String
     }
 });
 

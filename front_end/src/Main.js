@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet} from 'react-native';
 import LoginScreen from './LoginScreen'
 import DashboardScreen from './DashboardScreen'
 import SplashScreen from './SplashScreen'
@@ -10,7 +10,6 @@ import AddUserScreen from './userScreens/AddUserScreen'
 import {createSwitchNavigator, createAppContainer} from 'react-navigation'
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import {createStackNavigator} from 'react-navigation-stack'
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { Icon } from 'react-native-elements'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -59,11 +58,15 @@ const UserScreenStack = createStackNavigator({
     users: {
         screen: UsersScreen,
         navigationOptions: {
-            headerTitle : 'Users'
+            headerTitle : 'Users',
+            headerBackTitle: null,
         }
     },
     add_user: {
-        screen: AddUserScreen
+        screen: AddUserScreen,
+        navigationOptions: {
+            headerTitle : 'Add User',
+        }
     }
 },{
     headerLayoutPreset: 'center',

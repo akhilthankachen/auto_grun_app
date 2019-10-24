@@ -52,7 +52,11 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
 const listUser = require('./routes/listUser');
+const cowfarm = require('./routes/cowFarm')
 
+
+
+// init super user
 User.find({}, (err,user) => {
     console.log("Init state Users - ",user);
     
@@ -75,6 +79,7 @@ User.find({}, (err,user) => {
 app.use('/users', users);
 app.use('/sms', smsBackend);
 app.use('/listUser', listUser);
+app.use('/cowfarm', cowfarm)
 
 // app loop
 app.get('/', (req,res) => { // home '/' response
@@ -85,3 +90,7 @@ app.listen(port, () => {
         console.log('server started at port ' + port);
     }
 });
+
+
+// mqtt switch on
+const mqtt = require('./mqtt/mqttHandle')

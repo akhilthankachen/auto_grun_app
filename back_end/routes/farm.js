@@ -60,6 +60,7 @@ router.post('/addFarm',passport.authenticate('jwt', {session: false}), (req,res,
 
 });
 
+<<<<<<< HEAD
 router.post('/editFarm',passport.authenticate('jwt',{session: false}), (req,res,next) => {
   
   Farm.updateOne({mobileNumber: req.body.mobileNumber},newDoc,(err,farm) => {
@@ -71,3 +72,7 @@ router.post('/editFarm',passport.authenticate('jwt',{session: false}), (req,res,
     }
   })
 })
+=======
+
+module.exports = router;
+>>>>>>>  cowfarm added
