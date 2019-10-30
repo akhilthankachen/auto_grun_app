@@ -16,7 +16,7 @@ const CowFarmSchema = new mongoose.Schema({
         required: true
     },
     dateTime: {
-        type: Date,
+        type: Number,
         default: Date.now
     }
 });
