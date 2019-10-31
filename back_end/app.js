@@ -48,6 +48,9 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     });
 }));
 
+// static file serving 
+app.use(express.static('public'))
+
 // routes
 const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
