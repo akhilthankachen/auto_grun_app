@@ -11,7 +11,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { bool } from 'prop-types';
 
 type Props = {};
 const { width : WIDTH } = Dimensions.get('window')

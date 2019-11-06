@@ -1,66 +1,34 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
-import config from '../config'
-
+import LiveFeed from './components/LiveFeed';
+import AvgTemp from './components/AvgTemp'
+import MaxTemp from './components/MaxTemp'
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
 export default class DashboardScreen extends Component<Props> {
-    constructor(props){
-        super(props)
-        this.state = {
-            liveTemp: '',
-        }
-    }
-
-    componentDidMount = () => {
-        setInterval(()=>{
-            fetch(config.remote+'/cowfarm/lastTemp', {
-                method: 'GET'
-            })  
-            .then((response) => {
-                if(response.status == 200){
-                    return response.json()
-                }
-            })
-            .then((responseJSON)=>{
-                this.setState({
-                    liveTemp: responseJSON.message
-                })
-                console.log('updated' + responseJSON.message)
-            })
-        }, 5000)
-    }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.box}>
-            <View style={styles.liveFeed}>
-                <Text style={styles.liveFeedText}>
-                    Live Feed
-                </Text>
-            </View>
-            <View style={styles.liveTemp}>
-                <Text style={styles.liveTempText}>
-                    {this.state.liveTemp}°C
-                </Text>
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+                <LiveFeed/>
+                <AvgTemp/>
+                <MaxTemp/>
+            </ScrollView>
+            <View style={styles.logout}>
+                <Button
+                    title='logout'
+                    onPress={()=>{
+                        AsyncStorage.setItem('@token', '').then(()=>{
+                            this.props.navigation.navigate('login')
+                        })
+                }}
+                />
             </View>
         </View>
-
-        <View style={styles.logout}>
-            <Button
-            title='logout'
-            onPress={()=>{
-                AsyncStorage.setItem('@token', '').then(()=>{
-                    this.props.navigation.navigate('login')
-                })
-            }}
-            />
-        </View>
-      </View>
     );
   }
 }
@@ -69,6 +37,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgb(232, 232, 232)',
+  },
+  contentContainer: {
     alignItems: 'center'
   },
   logout: {

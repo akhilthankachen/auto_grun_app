@@ -2,7 +2,7 @@ const CowFarm = require('../models/cowfarm/CowFarm')
 // mqtt client
 
 var mqtt = require('mqtt')
-module.exports = client  = mqtt.connect('mqtt://165.22.208.118', {
+module.exports = client  = mqtt.connect('mqtt://192.168.2.100', {
     username: 'cowfarm',
     password: 'cowfarm'
 })
@@ -22,6 +22,6 @@ client.on('message', function (topic, message) {
         cow.save(function(){
             console.log('saved'+Date.now() +' '+message)
         })
-    }
+    }   
 })
 
