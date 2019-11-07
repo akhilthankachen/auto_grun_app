@@ -9,7 +9,7 @@ import LineGraph from './LineGraph'
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
-export default class AvgMinMax extends Component<Props> {
+export default class TempGraph extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
@@ -30,7 +30,7 @@ export default class AvgMinMax extends Component<Props> {
       <View style={styles.container}>
         <View style={styles.box}>
             <Text style={styles.headingContainer}>
-              Average Temp Per Hour
+              {this.props.heading}
             </Text>
             <View style={styles.lineGraph}>
                 <LineGraph/>

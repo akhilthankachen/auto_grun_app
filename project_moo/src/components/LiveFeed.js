@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
+var setIntervalObject;
 export default class LiveFeed extends Component<Props> {
     constructor(props){
         super(props)
@@ -36,7 +37,7 @@ export default class LiveFeed extends Component<Props> {
     componentDidMount = () => {
         this.getMyValue()
 
-        setInterval(()=>{
+        setIntervalObject = setInterval(()=>{
             fetch(config.remote+'/cowfarm/lastTemp', {
                 method: 'GET'
             })  
@@ -56,7 +57,14 @@ export default class LiveFeed extends Component<Props> {
                     console.log('set temp')
                 })
             })
+            .catch((err)=>{
+                console.log(err)
+            })
         }, 5000)
+    }
+
+    componentWillUnmount = ()=>{
+      clearInterval(setIntervalObject)
     }
 
   render() {

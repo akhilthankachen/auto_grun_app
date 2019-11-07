@@ -1,10 +1,11 @@
 const CowFarm = require('../models/cowfarm/CowFarm')
+const config = require('../config/mqtt')
 // mqtt client
 
 var mqtt = require('mqtt')
-module.exports = client  = mqtt.connect('mqtt://192.168.2.100', {
-    username: 'cowfarm',
-    password: 'cowfarm'
+module.exports = client  = mqtt.connect(config.remote, {
+    username: config.username,
+    password: config.password
 })
 
 client.on('connect', function () {

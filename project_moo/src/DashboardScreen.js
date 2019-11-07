@@ -3,8 +3,9 @@ import {StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import LiveFeed from './components/LiveFeed';
-import AvgTemp from './components/AvgTemp'
-import MaxTemp from './components/MaxTemp'
+import TempGraph from './components/TempGraph'
+import LogoutButton from './components/LogoutButton'
+import AddNewTimerButton from './components/AddNewTimerButton';
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
@@ -15,19 +16,12 @@ export default class DashboardScreen extends Component<Props> {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <LiveFeed/>
-                <AvgTemp/>
-                <MaxTemp/>
+                <TempGraph heading="Average Temp Per Hour"/>
+                <TempGraph heading="Maximum Temp Per Hour"/>
+                <TempGraph heading="Minimum Temp Per Hour"/>
+                <AddNewTimerButton style={styles.addNewTimer} />
+                <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
-            <View style={styles.logout}>
-                <Button
-                    title='logout'
-                    onPress={()=>{
-                        AsyncStorage.setItem('@token', '').then(()=>{
-                            this.props.navigation.navigate('login')
-                        })
-                }}
-                />
-            </View>
         </View>
     );
   }
@@ -42,25 +36,18 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logout: {
-      position: 'absolute',
-      bottom: 15,
-      right: 15
+    marginTop: 15,
+    marginBottom: 15
   },
+  addNewTimer: {
+    marginTop: 15
+  },    
   box: {
     backgroundColor: 'white',
     width: WIDTH - 30,
     height: 200,
     marginTop: 15,
     borderRadius: 5,
-  },
-  liveFeed: {
-      marginLeft: 25,
-      marginTop: 20
-  },
-  liveFeedText: {
-      fontFamily: 'sans-serif-medium',
-      fontSize: 22,
-      color: 'rgb(27, 16, 13)'
   },
   liveTemp: {
       alignSelf: 'center'

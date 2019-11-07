@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
 
 const WIDTH = Dimensions.get('window').width
-export default class LogoutButton extends Component {
+export default class AddNewTimer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,12 +23,12 @@ export default class LogoutButton extends Component {
         <TouchableOpacity style = {this.props.style} onPress = {this.onlogoutPress}>
             <View style={styles.button}>
                 <Icon 
-                    name = 'exit-to-app'
+                    name = 'add'
                     type = 'material'
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.logoutText}>Logout</Text>
+                <Text style={styles.logoutText}>Add New Timer</Text>
             </View>
         </TouchableOpacity>
       </View>
