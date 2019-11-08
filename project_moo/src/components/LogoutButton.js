@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
 
@@ -12,9 +12,22 @@ export default class LogoutButton extends Component {
   }
 
   onlogoutPress = ()=>{
-    AsyncStorage.setItem('@token', '').then(()=>{
-        this.props.navigation.navigate('splash')
-    })
+    Alert.alert(
+        'Logout',
+        'Are you sure ?',
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {
+                AsyncStorage.setItem('@token', '').then(()=>{
+                    this.props.navigation.navigate('splash')
+                })
+            }},
+        ],
+        {cancelable: false},
+    );
   }
 
   render() {

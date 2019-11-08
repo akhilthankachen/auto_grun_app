@@ -53,9 +53,7 @@ export default class LiveFeed extends Component<Props> {
                     liveTemp: responseJSON.message,
                     lastUpdated: dateFormated
                 })
-                AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON)).then(()=>{
-                    console.log('set temp')
-                })
+                AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
             })
             .catch((err)=>{
                 console.log(err)

@@ -179,6 +179,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-datetimepicker')
     implementation project(':sp-react-native-mqtt')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])

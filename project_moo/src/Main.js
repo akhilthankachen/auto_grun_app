@@ -5,6 +5,7 @@ import SplashScreen from './SplashScreen'
 import {createSwitchNavigator, createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import DashboardScreen from './DashboardScreen';
+import AddTimerScreen from './AddTimerScreen'
 
 var tabBarHeight = 50
 
@@ -28,10 +29,20 @@ export default class Main extends Component<Props> {
     }
 }
 
+const dashboardStack = createStackNavigator({
+    dashboard: DashboardScreen,
+    addTimer: AddTimerScreen
+},{
+    initialRouteName: 'dashboard',
+    defaultNavigationOptions: {
+        headerShown: false
+    }
+})
+
 const AppSwitchNavigator = createSwitchNavigator({
     splash: SplashScreen,
     login: LoginScreen,
-    dashboard: DashboardScreen
+    dashboard: dashboardStack
 },{
     initialRouteName: 'splash'
 })

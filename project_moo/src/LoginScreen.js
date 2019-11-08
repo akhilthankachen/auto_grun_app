@@ -95,7 +95,7 @@ export default class LoginScreen extends Component<Props> {
               <Icon 
                 name = 'person'
                 type = 'material'
-                color = 'rgb(10, 79, 0)'
+                color = 'rgb(239, 134, 138)'
                 size = {23}
               />
             </View>
@@ -113,7 +113,7 @@ export default class LoginScreen extends Component<Props> {
             <View style = {styles.person}>
                 <Icon 
                   name = 'lock'
-                  color = 'rgb(10, 79, 0)'
+                  color = 'rgb(239, 134, 138)'
                   size = {23}
                 />
             </View>
@@ -135,7 +135,7 @@ export default class LoginScreen extends Component<Props> {
                 <Icon 
                   name = 'ios-eye'
                   type = 'ionicon'
-                  color = 'rgb(10, 79, 0)'
+                  color = 'rgb(239, 134, 138)'
                   size = {25}
                 />
               </TouchableOpacity>
@@ -149,7 +149,7 @@ export default class LoginScreen extends Component<Props> {
               Login
             </Text>
           </TouchableOpacity>
-          <View style = {styles.remember}>
+          <View style = {styles.remember} >
             <CheckBox 
               center
               title = 'Remember me'
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     width: WIDTH - 55,
     height: 50,
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 5,
     paddingLeft: 40,
     fontSize: 20,
   },
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     width: WIDTH - 55,
     height: 50,
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 5,
     paddingLeft: 40,
     fontSize: 20,
   },
@@ -221,10 +221,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: WIDTH - 55,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(131, 166, 125)'
+    backgroundColor: 'rgb(125, 196, 106)'
   },
   loginText: {
     color: 'white',
@@ -251,5 +251,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     color: 'red',
+  },
+  remember: {
+    display: 'none'
   }
 });

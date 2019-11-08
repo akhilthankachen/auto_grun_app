@@ -1,32 +1,45 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
 
 const WIDTH = Dimensions.get('window').width
-export default class AddNewTimer extends Component {
+export default class SaveAndActivate extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
   }
 
-  onAddPress = ()=>{
-    this.props.navigation.navigate('addTimer')
+  onlogoutPress = ()=>{
+    Alert.alert(
+        'Save And Activate',
+        'Are you finished ?',
+        [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {
+
+            }},
+        ],
+        {cancelable: false},
+    );
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style = {this.props.style} onPress = {this.onAddPress}>
+        <TouchableOpacity style = {this.props.style} onPress = {this.onlogoutPress}>
             <View style={styles.button}>
                 <Icon 
-                    name = 'add'
+                    name = 'save'
                     type = 'material'
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.addNewTimerText}>Add New Timer</Text>
+                <Text style={styles.logoutText}>Save And Activate</Text>
             </View>
         </TouchableOpacity>
       </View>
@@ -39,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     button: {
-        width: WIDTH - 30,
+        width: WIDTH - 102,
         height: 60,
         alignItems: 'center',
         justifyContent: 'center',
@@ -48,7 +61,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         flexDirection: 'row'
     },
-    addNewTimerText: {
+    logoutText: {
         fontFamily: 'sans-serif-medium',
         fontWeight: '500',
         fontSize: 15,

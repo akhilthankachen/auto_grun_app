@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
 
 const WIDTH = Dimensions.get('window').width
-export default class AddNewTimer extends Component {
+export default class AddTimeAndDurationButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
   }
 
-  onAddPress = ()=>{
-    this.props.navigation.navigate('addTimer')
+  onlogoutPress = ()=>{
+    this.props.onPress()
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style = {this.props.style} onPress = {this.onAddPress}>
+        <TouchableOpacity style = {this.props.style} onPress = {this.onlogoutPress}>
             <View style={styles.button}>
                 <Icon 
                     name = 'add'
@@ -26,7 +26,7 @@ export default class AddNewTimer extends Component {
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.addNewTimerText}>Add New Timer</Text>
+                <Text style={styles.logoutText}>Add Time And Duration</Text>
             </View>
         </TouchableOpacity>
       </View>
@@ -36,19 +36,18 @@ export default class AddNewTimer extends Component {
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
     },
     button: {
-        width: WIDTH - 30,
-        height: 60,
+        width: WIDTH - 60,
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'rgb(255, 204, 186)',
         color: 'white',
         borderRadius: 5,
         flexDirection: 'row'
     },
-    addNewTimerText: {
+    logoutText: {
         fontFamily: 'sans-serif-medium',
         fontWeight: '500',
         fontSize: 15,

@@ -19,7 +19,7 @@ export default class DashboardScreen extends Component<Props> {
                 <TempGraph heading="Average Temp Per Hour"/>
                 <TempGraph heading="Maximum Temp Per Hour"/>
                 <TempGraph heading="Minimum Temp Per Hour"/>
-                <AddNewTimerButton style={styles.addNewTimer} />
+                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation}/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>
