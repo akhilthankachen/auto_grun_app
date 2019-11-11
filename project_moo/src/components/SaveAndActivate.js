@@ -21,7 +21,7 @@ export default class SaveAndActivate extends Component {
                 style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-
+              this.props.onPress()
             }},
         ],
         {cancelable: false},

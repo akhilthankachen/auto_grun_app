@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Icon, CheckBox } from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 import config from '../config'
+import LoadingModal from './components/LoadingModal'
 import {
   StyleSheet, 
   Text, 
@@ -19,6 +20,7 @@ export default class LoginScreen extends Component<Props> {
   constructor(props){
     super(props)
     this.state = {
+      modalVisible: false,
       username: '',
       password: '',
       checked: false,
@@ -28,7 +30,12 @@ export default class LoginScreen extends Component<Props> {
   }
 
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   onLoginPress = () =>{
+    this.setModalVisible(true)
     if(this.state.username != '' && this.state.password != ''){
       fetch(config.remote+'/users/authenticate', {
         method: 'POST',
@@ -50,6 +57,7 @@ export default class LoginScreen extends Component<Props> {
           this.setState({
             status: '* Error'
           })
+          this.setModalVisible(false)
         }
       })
       .then((responseJSON)=>{
@@ -58,13 +66,16 @@ export default class LoginScreen extends Component<Props> {
           this.setState({
             status: '* '+responseJSON.msg
           })
+          this.setModalVisible(false)
         }else{
           // user token
           AsyncStorage.setItem('@token', JSON.stringify(responseJSON)).then(()=>{
+            this.setModalVisible(false)
             this.props.navigation.navigate('dashboard')
           })
           .catch((err)=>{
             console.log(err)
+            this.setModalVisible(false)
           })
         }
       })
@@ -72,17 +83,21 @@ export default class LoginScreen extends Component<Props> {
         this.setState({
           status: '* Error, Check network connection'
         })
+        this.setModalVisible(false)
       })
     }else{
       this.setState({
         status: '* Empty fields'
       })
+      this.setModalVisible(false)
     }
   }
+
 
   render() {
     return (
       <View style={styles.container}>
+        <LoadingModal content="Logging In" isVisible={this.state.modalVisible}/>
         <Image style={styles.logo} source={require('./images/logo-small.png')}/>
 
         <View style={styles.loginSection}>

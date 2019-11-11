@@ -6,10 +6,18 @@ import LiveFeed from './components/LiveFeed';
 import TempGraph from './components/TempGraph'
 import LogoutButton from './components/LogoutButton'
 import AddNewTimerButton from './components/AddNewTimerButton';
+import TimerDisplay from './components/TimerDisplay'
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
 export default class DashboardScreen extends Component<Props> {
+  constructor(props){
+    super(props)
+  }
+
+  renderTimerList = ()=>{
+    return <TimerDisplay/>  
+  }
 
   render() {
     return (
@@ -19,6 +27,9 @@ export default class DashboardScreen extends Component<Props> {
                 <TempGraph heading="Average Temp Per Hour"/>
                 <TempGraph heading="Maximum Temp Per Hour"/>
                 <TempGraph heading="Minimum Temp Per Hour"/>
+                <View style={styles.timerSettingsList}>
+                  {this.renderTimerList()}
+                </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation}/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>

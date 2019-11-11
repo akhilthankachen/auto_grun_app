@@ -47,6 +47,7 @@ export default class LiveFeed extends Component<Props> {
                 }
             })
             .then((responseJSON)=>{
+              if(responseJSON != null){
                 let date = new Date(responseJSON.dateTime)
                 let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
                 this.setState({
@@ -54,6 +55,7 @@ export default class LiveFeed extends Component<Props> {
                     lastUpdated: dateFormated
                 })
                 AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
+              }
             })
             .catch((err)=>{
                 console.log(err)

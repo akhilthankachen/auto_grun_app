@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Button, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Alert, Modal, TouchableHighlight } from 'react-native';
 import SaveAndActivate from './components/SaveAndActivate'
 import Close from './components/Close'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -7,7 +7,8 @@ import AddTimeAndDurationButton from './components/AddTimeAndDurationButton'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Icon } from 'react-native-elements'
 import TimeAndDurationBox from './components/TimeAndDurationBox';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AsyncStorage from '@react-native-community/async-storage';
+import LoadingModal from './components/LoadingModal'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -22,12 +23,17 @@ export default class AddTimerScreen extends Component {
     super(props);
     this.state = {
         isVisible: false,
+        modalVisible: false,
         channel: 1,
         hour: '-- ',
         minutes: ' --',
         duration: '',
         timeDuration: []
     };
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
   }
 
   setTime = (event, date)=>{
@@ -37,9 +43,11 @@ export default class AddTimerScreen extends Component {
             minutes: date.getMinutes()
         })
     }
-    this.setState({
-        isVisible: false
-    })
+    if(event.type == 'set'){
+        this.setState({
+            isVisible: false
+        })
+    }
   }
 
   addTimeAndDuration = () =>{
@@ -80,17 +88,75 @@ export default class AddTimerScreen extends Component {
     this.scroller.scrollTo({x: 0, y: pos});
   };
 
+  setTimerData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@timerSettings')
+      if(value !== null) {
+        var json = JSON.parse(value)
+        if(this.state.channel == 1){
+            json.channel1.push(this.state.timeDuration)
+        }else if(this.state.channel == 2){
+            json.channel2.push(this.state.timeDuration)
+        }
+        json = JSON.stringify(json)
+        await AsyncStorage.setItem('@timerSettings', json)
+        this.setModalVisible(false)
+        this.props.navigation.navigate('dashboard')
+      }else{
+        try {
+            var json = {"channel1": [],"channel2": []}
+            if(this.state.channel == 1){
+                json.channel1.push(this.state.timeDuration)
+            }else if(this.state.channel == 2){
+                json.channel2.push(this.state.timeDuration)
+            }
+            json = JSON.stringify(json)
+            await AsyncStorage.setItem('@timerSettings', json)
+            this.setModalVisible(false)
+            this.props.navigation.navigate('dashboard')
+        } catch (e) {
+            console.log(e)
+        }
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+
+  saveActivateExit = ()=>{
+    if (Array.isArray(this.state.timeDuration) && this.state.timeDuration.length){
+        this.setModalVisible(true)
+        this.setTimerData()
+    }else{
+        Alert.alert(
+            'Empty Timer',
+            'Add some schedules !',
+            [
+                {text: 'OK', onPress: () => {
+                  
+                }},
+            ],
+            {cancelable: false},
+        );
+    }         
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        
+        <LoadingModal content='Saving and activating settings.' isVisible={this.state.modalVisible}/>
+
         { this.state.isVisible && <DateTimePicker value={new Date()}
             mode={'time'}
             is24Hour={true}
             display="spinner"
             onChange={this.setTime}/> }
+
         <ScrollView 
         style={styles.main}
-        contentContainerStyle={{alignItems:'center'}}
+        contentContainerStyle={{alignItems:'center',height:HEIGHT}}
         ref={(scroller) => {this.scroller = scroller}}>
             <View style={styles.headingBox}>
                 <Text style={styles.heading}>
@@ -131,9 +197,11 @@ export default class AddTimerScreen extends Component {
                             onChangeText={(text) => this.setState({duration: text})}
                             value={this.state.duration}
                             placeholder={'0'}
-                            onKeyPress={() => {
-                                this.scrollToPos(70)
-                              }}
+                            onFocus={() => {
+                                
+                                this.scrollToPos(20)
+                            }}
+                            keyboardType='numeric'
                         />
                         <Text style={styles.durationText}>  Minutes</Text>
                     </View>
@@ -146,14 +214,16 @@ export default class AddTimerScreen extends Component {
                 {this.renderTimeList()}
             </View>
         </ScrollView>
+
         <View style={styles.bottom}>
             <View>
                 <Close navigation={this.props.navigation}/>
             </View>
             <View>
-                <SaveAndActivate style={styles.saveAndActivate}/> 
+                <SaveAndActivate style={styles.saveAndActivate} onPress={this.saveActivateExit}/> 
             </View>                   
         </View>
+
       </View>
     );
   }
@@ -229,5 +299,7 @@ const styles = StyleSheet.create({
         width:50,
         borderRadius: 5,
         textAlign: 'center'
+    },
+    savingModal: {
     }
 });

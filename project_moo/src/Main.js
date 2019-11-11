@@ -4,6 +4,7 @@ import LoginScreen from './LoginScreen'
 import SplashScreen from './SplashScreen'
 import {createSwitchNavigator, createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
+import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import DashboardScreen from './DashboardScreen';
 import AddTimerScreen from './AddTimerScreen'
 
@@ -29,7 +30,8 @@ export default class Main extends Component<Props> {
     }
 }
 
-const dashboardStack = createStackNavigator({
+
+const dashboardStackNavigator = createStackNavigator({
     dashboard: DashboardScreen,
     addTimer: AddTimerScreen
 },{
@@ -42,7 +44,7 @@ const dashboardStack = createStackNavigator({
 const AppSwitchNavigator = createSwitchNavigator({
     splash: SplashScreen,
     login: LoginScreen,
-    dashboard: dashboardStack
+    dashboard: dashboardStackNavigator
 },{
     initialRouteName: 'splash'
 })
