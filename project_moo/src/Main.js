@@ -33,7 +33,7 @@ export default class Main extends Component<Props> {
 
 const dashboardStackNavigator = createStackNavigator({
     dashboard: DashboardScreen,
-    addTimer: AddTimerScreen
+    addTimer: AddTimerScreen,
 },{
     initialRouteName: 'dashboard',
     defaultNavigationOptions: {

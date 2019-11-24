@@ -68,9 +68,9 @@ export default class AddTimerScreen extends Component {
       }
   }
 
-  onPressDelete = (key)=>{
+  onPressDelete = (index)=>{
       let temp = this.state.timeDuration
-      temp.splice(key, 1)
+      temp.splice(index, 1)
       this.setState({
           timeDuration: temp
       })

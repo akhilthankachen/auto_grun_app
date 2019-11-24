@@ -36,9 +36,9 @@ export default class LineGraph extends Component<Props> {
             height={220}
             yAxisSuffix={"°C"}
             chartConfig={{
-                backgroundColor: "rgb(255, 204, 186)",
-                backgroundGradientFrom: "rgb(255, 196, 175)",
-                backgroundGradientTo: "rgb(255, 228, 218)",
+                backgroundColor: "white",
+                backgroundGradientFrom: "white",
+                backgroundGradientTo: "white",
                 decimalPlaces: 2, // optional, defaults to 2dp
                 color: (opacity = 1) => `rgb(241, 69, 90)`,
                 labelColor: (opacity = 1) => `rgb(195, 56, 73)`,
@@ -60,7 +60,5 @@ export default class LineGraph extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  
 });

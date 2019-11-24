@@ -46,24 +46,19 @@ export default class TempGraph extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   box: {
     backgroundColor: 'white',
     width: WIDTH - 30,
     height: 360,
     marginTop: 15,
     borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden'
+    alignItems: 'center'
   },
   lineGraph: {
-    marginTop: 10
+    marginTop: 30
   },
   headingContainer: {
-    marginTop: 50
+    marginTop: 15
   },
   lastSync: {
     textAlign: 'center',

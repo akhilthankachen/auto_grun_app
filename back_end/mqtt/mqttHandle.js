@@ -3,10 +3,12 @@ const config = require('../config/mqtt')
 // mqtt client
 
 var mqtt = require('mqtt')
-module.exports = client  = mqtt.connect(config.remote, {
-    username: config.username,
-    password: config.password
-})
+module.exports = client  = mqtt.connect(config.remote)
+
+//{
+//   username: config.username,
+//   password: config.password
+//}
 
 client.on('connect', function () {
     client.subscribe('/cowfarm1/temp')
