@@ -96,4 +96,4 @@ app.listen(port, () => {
 
 
 // mqtt switch on
-const mqtt = require('./mqtt/mqttHandle')
+const client = require('./mqtt/mqttHandle')

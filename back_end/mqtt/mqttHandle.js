@@ -11,7 +11,9 @@ module.exports = client  = mqtt.connect(config.remote)
 //}
 
 client.on('connect', function () {
+    console.log('mqtt connected')
     client.subscribe('/cowfarm1/temp')
+    client.subscribe('/cowfarm1/settings')
 })
 
 client.on('message', function (topic, message) {
@@ -23,8 +25,12 @@ client.on('message', function (topic, message) {
         })
 
         cow.save(function(){
-            console.log('saved'+Date.now() +' '+message)
+            console.log('saved '+Date.now() +' '+message)
         })
     }   
 })
+
+module.exports.publish = () => {
+    
+}
 

@@ -83,7 +83,7 @@ export default class LiveFeed extends Component<Props> {
             </View>
             <View style={styles.lastSync}>
                 <Text style={styles.lastSyncText}>Last Updated</Text>
-                <Text>{this.state.lastUpdated}</Text>
+                <Text style={styles.lastSyncText}>{this.state.lastUpdated}</Text>
             </View>
         </View>
       </View>
@@ -107,31 +107,27 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'space-between'
   },
   liveFeed: {
-    position: 'absolute',
-    top: 30
-  },
+    marginTop: 30
+  },  
   liveFeedText: {
     fontFamily: 'sans-serif-medium',
-    fontSize: 22,
-    color: 'rgb(27, 16, 13)'
-  },
-  liveTemp: {
-    alignSelf: 'center'
+    fontSize: 20,
+    color: 'black'
   },
   liveTempText: {
     fontSize: 70,
-    color: 'rgb(195, 56, 73)',
-    marginTop: 10
+    fontFamily: 'sans-serif-medium',
+    color: '#1B4859',
   },
   lastSync: {
-    textAlign: 'center',
-    position: 'absolute',
-    bottom: 30
+    marginBottom: 30
   },
   lastSyncText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'sans-serif-light',
+    fontStyle: 'italic'
   }
 });

@@ -40,18 +40,17 @@ export default class LineGraph extends Component<Props> {
                 backgroundGradientFrom: "white",
                 backgroundGradientTo: "white",
                 decimalPlaces: 2, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgb(241, 69, 90)`,
-                labelColor: (opacity = 1) => `rgb(195, 56, 73)`,
+                color: (opacity = 1) => `#1B4859`,
+                labelColor: (opacity = 1) => `#5E7A7E`,
                 propsForDots: {
                     r: "5",
                     strokeWidth: "2",
-                    stroke: "#ffa726"
+                    stroke: "#5E7A7E"
                 }
             }}
             style={{
                 marginVertical: 8,
                 borderRadius: 5,
-                
             }}
         />
       </View>

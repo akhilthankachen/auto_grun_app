@@ -37,7 +37,7 @@ export default class TempGraph extends Component<Props> {
             </View>
             <View style={styles.lastSync}>
                 <Text style={styles.lastSyncText}>Last Updated</Text>
-                <Text>{this.state.lastUpdated}</Text>
+                <Text style={styles.lastSyncText}>{this.state.lastUpdated}</Text>
             </View>
         </View>
       </View>
@@ -63,9 +63,11 @@ const styles = StyleSheet.create({
   lastSync: {
     textAlign: 'center',
     position: 'absolute',
-    bottom: 25
+    bottom: 25,
   },
   lastSyncText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'sans-serif-light',
+    fontStyle: 'italic'
   }
 });

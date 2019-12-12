@@ -12,7 +12,7 @@ export default class timerDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOn: false,
+      isOn: this.props.isActive,
       isVisible: false,
       displayTimerVisible: false,
       keyDup: this.props.keyDup,
@@ -21,10 +21,29 @@ export default class timerDisplay extends Component {
     };
   }
 
+  componentDidUpdate = ()=>{
+    if(this.props.isActive == true && this.state.isVisible == true){
+      this.setState({
+        isVisible: false,
+        isOn: true
+      })
+    }
+    if(this.state.isOn == true && this.props.isActive == false){
+      this.setState({
+        isOn: false
+      })
+    }
+  }
+
   toggleStatus = (isOn)=>{
-    this.setState({
-      isOn: isOn
-    })
+    if(this.state.isOn == true){
+      alert('Activate another settings to deactivate this..')
+    }else{
+      this.setState({
+        isVisible: true
+      })
+      this.props.onPressActivate(this.state.index, this.state.channel)
+    }
   }
 
   onPressDelete = async ()=>{
@@ -68,7 +87,7 @@ export default class timerDisplay extends Component {
         channel={this.state.channel}
         onPressClose={this.onPressCloseDisplayTimer}
       />
-      <LoadingModal isVisible={this.state.isVisible} content='Deleting Settings'/>
+      <LoadingModal isVisible={this.state.isVisible} content='Activating Settings'/>
         <View style={styles.titleBox}>
           <Text style={styles.titleText}>Settings {this.props.keyDup}</Text>
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>

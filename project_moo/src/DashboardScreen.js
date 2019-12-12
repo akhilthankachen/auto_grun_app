@@ -11,6 +11,7 @@ import LoadingModal from './components/LoadingModal'
 import DisplayTimerModal from './components/DisplayTimerModal'
 
 const WIDTH = Dimensions.get('window').width
+var didFocusSubscription = ''
 type Props = {};
 export default class DashboardScreen extends Component<Props> {
   constructor(props){
@@ -20,6 +21,8 @@ export default class DashboardScreen extends Component<Props> {
       channel1: [],
       channel2: [],
       isVisible: false,
+      activeIndexChannel1: -1,
+      activeIndexChannel2: -1,
     }
   }
 
@@ -32,6 +35,7 @@ export default class DashboardScreen extends Component<Props> {
           channel1: json.channel1,
           channel2: json.channel2,
         })
+        this.forceUpdate()
       }else{
         console.log('no value')
       }
@@ -40,29 +44,69 @@ export default class DashboardScreen extends Component<Props> {
     } 
   }
 
+
+
   componentDidMount = ()=>{
-    const didFocusSubscription = this.props.navigation.addListener(
+    didFocusSubscription = this.props.navigation.addListener(
       'didFocus',
       payload => {
         this.getData()
-        this.forceUpdate()
       }
     );
   }
 
+  componentWillUnmount = ()=>{
+    didFocusSubscription.remove()
+  }
 
   onPressDeleteSettings = ()=>{
     this.getData()
   }
 
+  onPressActivateSettings = (index, channel, callback)=>{
+    if(channel == 1){
+      this.setState({
+        activeIndexChannel1: index
+      })
+    }else{
+      this.setState({
+        activeIndexChannel2: index
+      })
+    }
+  }
+
   renderTimerListChannel1 = ()=>{
     return  this.state.channel1.map((item,index)=>{
-      return <TimerDisplay key={index+1} keyDup={index+1} index={index} channel={1} onPressDelete={this.onPressDeleteSettings}/>
+      var isActive = false
+      if(this.state.activeIndexChannel1 == index){
+        isActive = true
+      }
+      return <TimerDisplay 
+                key={index+1} 
+                keyDup={index+1} 
+                index={index} 
+                channel={1} 
+                onPressDelete={this.onPressDeleteSettings}
+                onPressActivate={this.onPressActivateSettings}
+                isActive={isActive}
+            />
     })
   }
   renderTimerListChannel2 = ()=>{
     return  this.state.channel2.map((item,index)=>{
-      return <TimerDisplay key={this.state.channel1.length+index+1} keyDup={this.state.channel1.length+index+1} index={index} channel={2} onPressDelete={this.onPressDeleteSettings}/>
+      var isActive = false
+      if(this.state.activeIndexChannel2 == index){
+        isActive = true
+      }
+      return <TimerDisplay 
+                key={this.state.channel1.length+index+1} 
+                keyDup={this.state.channel1.length+index+1} 
+                index={index} 
+                channel={2} 
+                onPressDelete={this.onPressDeleteSettings}
+                onPressActivate={this.onPressActivateSettings}
+                isActive={isActive}
+            />
     })
   }
 
