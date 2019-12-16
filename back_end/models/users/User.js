@@ -25,12 +25,10 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        default: 'root'
     },
     password: {
         type: String,
         required: true,
-        default: 'root'
     },
     ownerId: {
         type: Schema.Types.ObjectId,

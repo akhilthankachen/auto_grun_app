@@ -39,7 +39,6 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
             return done(err, false);
         }
         if (user) {
-            console.log("JWT -",user);
             return done(null, user);
         } else {
             return done(null, false);
@@ -56,7 +55,7 @@ const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
 const listUser = require('./routes/listUser');
 const cowfarm = require('./routes/cowFarm')
-
+const device = require('./routes/device')
 
 
 // init super user
@@ -66,12 +65,12 @@ User.find({}, (err,user) => {
     if(err) throw err;
     if(user.length === 0){
         let newUser = new User({
-            name : "test",
+            name : "root",
             mobileNumber: 1234567890,
-            email : "test@test.com",
+            email : "root@root.com",
             userType : "super",
-            username : "test",
-            password : "test",
+            username : "root",
+            password : "grunroot",
         })
         User.addUser(newUser,(err,user) => {
             if(err) throw err;
@@ -83,6 +82,8 @@ app.use('/users', users);
 app.use('/sms', smsBackend);
 app.use('/listUser', listUser);
 app.use('/cowfarm', cowfarm)
+app.use('/device', device)
+
 
 // app loop
 app.get('/', (req,res) => { // home '/' response

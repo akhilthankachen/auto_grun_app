@@ -30,7 +30,7 @@ client.on('message', function (topic, message) {
     }   
 })
 
-module.exports.publish = () => {
-    
+module.exports.publish = (topic, message) => {
+    client.publish(topic, message)
 }
 
