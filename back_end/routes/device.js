@@ -93,7 +93,7 @@ router.get('/lastTemp', (req,res,next) => {
     });
 })
 
-router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (res,req,next) => {
+router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -143,7 +143,7 @@ router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (res,r
 
 
 
-router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (res,req,next) => {
+router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -192,7 +192,7 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (res,re
 })
 
 
-router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (res,req,next) => {
+router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
