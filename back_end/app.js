@@ -8,9 +8,14 @@ const database_config = require('./config/database');
 const mode_config = require('./config/env');
 const User = require('./models/users/User');
 
+// mqtt
+const ip = 'mqtt://localhost:1883';
+const client = mqtt.connect(ip);
+
+
 // database connection
 mongoose.Promise = global.Promise;
-mongoose.connect(database_config.database, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
     .then( res => console.log("connected to db") )
     .catch( err => console.log(err));
 
@@ -81,7 +86,7 @@ User.find({}, (err,user) => {
 app.use('/users', users);
 app.use('/sms', smsBackend);
 app.use('/listUser', listUser);
-app.use('/cowfarm', cowfarm)
+// app.use('/cowfarm', cowfarm)
 app.use('/device', device)
 
 
@@ -96,5 +101,20 @@ app.listen(port, () => {
 });
 
 
+client.on('connect', () => {
+    client.subscribe('temp');
+    console.log("Mqtt connected");
+})
+
+client.on('message', (topic, message) => {
+    switch(topic){
+        case 'temp': {
+            require('./routes/device').tempRouter(client,message);
+            break;
+        }
+    }
+})
+
+
 // mqtt switch on
-const client = require('./mqtt/mqttHandle')
+// const client = require('./mqtt/mqttHandle')
