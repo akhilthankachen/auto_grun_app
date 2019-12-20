@@ -16,7 +16,7 @@ const client = mqtt.connect(ip);
 
 // database connection
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/auto?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
     .then( res => console.log("connected to db") )
     .catch( err => console.log(err));
 
