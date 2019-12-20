@@ -9,6 +9,13 @@ const DeviceSchema = new mongoose.Schema({
     user : {
         type : Schema.Types.ObjectId,
         ref : "User"
+    },
+    ack : {
+        type : Boolean,
+        default: false
+    },
+    settings : {
+        type: String
     }
 });
 

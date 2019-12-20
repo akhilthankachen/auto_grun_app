@@ -1,36 +1,61 @@
-const CowFarm = require('../models/cowfarm/CowFarm')
-const config = require('../config/mqtt')
-// mqtt client
-
 var mqtt = require('mqtt')
-module.exports = client  = mqtt.connect(config.remote)
+const tempRouter = require('../routes/device').tempRouter
+const Device = require('../models/device/Device')
+
+const ip = 'mqtt://localhost:1883';
+module.exports = client  = mqtt.connect(ip)
 
 //{
 //   username: config.username,
 //   password: config.password
 //}
 
+settingsAckRouter = (message) => {
+    console.log('ack from device')
+    message = message.toString().split(" ");
+    const mac = message[0] ? message[0] : "0";
+    const route = 'settingsResponse/' + mac;
+    console.log(message)
+
+    Device.findOne({mac:mac},(err,doc) => {
+        if(err){
+            console.log(err);
+            client.publish(route, 'Failure');
+        } else {
+            client.publish(route, 'Success')
+            console.log(doc);
+            doc.ack = true
+            doc.save((err) => {
+                if(err) console.log(err);
+                console.log('ack saved')
+            })
+        }
+    })    
+}
+
 client.on('connect', function () {
-    console.log('mqtt connected')
-    client.subscribe('/cowfarm1/temp')
-    client.subscribe('/cowfarm1/settings')
+    client.subscribe('temp')
+    client.subscribe('settingsAck')
 })
 
 client.on('message', function (topic, message) {
-    if(topic == '/cowfarm1/temp'){
-        let cow = new CowFarm({
-            deviceName: 'cowfarm1',
-            messageType: 'temp',
-            message: message.toString()
-        })
-
-        cow.save(function(){
-            console.log('saved '+Date.now() +' '+message)
-        })
-    }   
+    switch(topic){
+        case 'temp': {
+            tempRouter(client, message);
+            break;
+        }
+        case 'settingsAck': {
+            settingsAckRouter(message);
+            break;
+        }
+    } 
 })
 
-module.exports.publish = (topic, message) => {
+module.exports.publishCustom = (topic, message) => {
     client.publish(topic, message)
 }
+
+
+
+
 

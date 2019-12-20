@@ -10,8 +10,8 @@ const User = require('./models/users/User');
 var mqtt = require('mqtt')
 
 // mqtt
-const ip = 'mqtt://localhost:1883';
-const client = mqtt.connect(ip);
+// const ip = 'mqtt://localhost:1883';
+// const client = mqtt.connect(ip);
 
 
 // database connection
@@ -100,23 +100,23 @@ app.listen(port, () => {
     }
 });
 
-const tempRouter = require('./routes/device').tempRouter
-console.log(tempRouter)
+// const tempRouter = require('./routes/device').tempRouter
+// console.log(tempRouter)
 
-client.on('connect', () => {
-    client.subscribe('temp');
-    console.log("Mqtt connected");
-})
+// client.on('connect', () => {
+//     client.subscribe('temp');
+//     console.log("Mqtt connected");
+// })
 
-client.on('message', (topic, message) => {
-    switch(topic){
-        case 'temp': {
-            tempRouter(client, message)
-            break;
-        }
-    }
-})
+// client.on('message', (topic, message) => {
+//     switch(topic){
+//         case 'temp': {
+//             tempRouter(client, message)
+//             break;
+//         }
+//     }
+// })
 
 
 // mqtt switch on
-// const client = require('./mqtt/mqttHandle')
+const client = require('./mqtt/mqttHandle')
