@@ -7,6 +7,7 @@ const passport = require('passport');
 const database_config = require('./config/database');
 const mode_config = require('./config/env');
 const User = require('./models/users/User');
+var mqtt = require('mqtt')
 
 // mqtt
 const ip = 'mqtt://localhost:1883';
@@ -59,7 +60,6 @@ app.use(express.static('public'))
 const users = require('./routes/users');
 const smsBackend = require('./routes/smsBackend');
 const listUser = require('./routes/listUser');
-const cowfarm = require('./routes/cowFarm')
 const device = require('./routes/device')
 
 
