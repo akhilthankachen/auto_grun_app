@@ -27,18 +27,18 @@ module.exports.tempRouter = (client, message) => {
             });
         } else {
             if(typeof(temp) == 'number'){
-                let data = new DeviceTemp({
+                let data = {
                     mac : mac,
                     temp : temp
-                });
+                }
             
-            data.save((err) => {
-                if (err) { throw err };
-            });
-            console.log(message);
-            client.publish(route ,'success',(err) => {
-                if (err) console.log(err);
-            });
+                DeviceTemp.create(data,(err) => {
+                    if (err) { throw err };
+                });
+                console.log(message);
+                client.publish(route ,'success',(err) => {
+                    if (err) console.log(err);
+                });
             } else {
                 client.publish(route, 'Failure',(err) => {
                 if(err) console.log(err);
