@@ -8,51 +8,6 @@ const DeviceTemp = require('../models/device/deviceTemp');
 const config = require('../config/database');
 
 
-module.exports.tempRouter = (client, message) => {
-    message = message.toString().split(" ");
-    const mac = message[0] ? message[0] : "0";
-    const temp = (message[1]) ? parseInt(message[1]) : false;
-    const route = 'tempResponse/' + mac;
-
-    Device.findOne({mac:mac},(err,doc) => {
-        if(err){
-            console.log(err);
-            client.publish(route, 'Failure',(err) => {
-                if(err) console.log(err);
-            });
-        } else if (!doc) {
-            console.log("Mac not found");
-            client.publish(route, 'Failure',(err) => {
-                if(err) console.log(err);
-            });
-        } else {
-            if(typeof(temp) == 'number'){
-                let data = {
-                    mac : mac,
-                    temp : temp
-                }
-            
-                DeviceTemp.create(data,(err) => {
-                    if (err) { throw err };
-                });
-                console.log(message);
-                client.publish(route ,'success',(err) => {
-                    if (err) console.log(err);
-                });
-            } else {
-                client.publish(route, 'Failure',(err) => {
-                if(err) console.log(err);
-            })
-        }
-        }
-
-    })
-    
-
-    
-}
-
-
 router.post('/createDevice',passport.authenticate('jwt', {session: false}), (req,res,next) => {
     if(!req.user) {
         res.json({success:false, msg: "User not found"});
@@ -241,6 +196,45 @@ router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (res,r
 })
 
 
-
-
 module.exports = router;
+
+
+module.exports.tempRouter = (client, message) => {
+    message = message.toString().split(" ");
+    const mac = message[0] ? message[0] : "0";
+    const temp = (message[1]) ? parseInt(message[1]) : false;
+    const route = 'tempResponse/' + mac;
+
+    Device.findOne({mac:mac},(err,doc) => {
+        if(err){
+            console.log(err);
+            client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            });
+        } else if (!doc) {
+            console.log("Mac not found");
+            client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            });
+        } else {
+            if(typeof(temp) == 'number'){
+                let data = {
+                    mac : mac,
+                    temp : temp
+                }
+            
+                DeviceTemp.create(data,(err) => {
+                    if (err) { throw err };
+                });
+                console.log(message);
+                client.publish(route ,'success',(err) => {
+                    if (err) console.log(err);
+                });
+            } else {
+                client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            })
+        }
+        }
+    })    
+}

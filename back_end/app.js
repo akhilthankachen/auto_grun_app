@@ -100,6 +100,8 @@ app.listen(port, () => {
     }
 });
 
+const tempRouter = require('./routes/device').tempRouter
+console.log(tempRouter)
 
 client.on('connect', () => {
     client.subscribe('temp');
@@ -109,7 +111,7 @@ client.on('connect', () => {
 client.on('message', (topic, message) => {
     switch(topic){
         case 'temp': {
-            require('./routes/device').tempRouter(client,message);
+            tempRouter(client, message)
             break;
         }
     }
