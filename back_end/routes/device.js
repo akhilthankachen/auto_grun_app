@@ -4,6 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users/User');
 const Device = require('../models/device/Device');
+const DeviceTemp = require('../models/device/deviceTemp');
 const config = require('../config/database');
 
 
@@ -26,7 +27,7 @@ module.exports.tempRouter = (client, message) => {
             });
         } else {
             if(typeof(temp) == 'number'){
-                let data = new Device({
+                let data = new DeviceTemp({
                     mac : mac,
                     temp : temp
                 });
