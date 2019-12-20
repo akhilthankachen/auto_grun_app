@@ -25,6 +25,6 @@ module.exports.create = (data,cb) => {
 
     dtemp.mac = data.mac;
     dtemp.temp = data.temp;
-    dtemp.timeStamp = data.timeStamp;
+    dtemp.timeStamp = now;
     dtemp.save(cb);
 }
