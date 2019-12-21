@@ -65,11 +65,42 @@ export default class DashboardScreen extends Component<Props> {
 
   onPressActivateSettings = (index, channel, callback)=>{
     if(channel == 1){
-      
+      if(this.state.activeIndexChannel2 == -1){
+        var settings = {
+          channel1: this.state.channel1[activeIndexChannel1],
+          channel2: []
+        }
+      }else{
+        var settings = {
+          channel1: this.state.channel1[activeIndexChannel1],
+          channel2: this.state.channel2[activeIndexChannel2]
+        }
+      }
+      fetch(config.remote+'/device/lastTemp', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': this.state.clientToken.token,
+        },
+        body: settings
+      },)  
+      .then((response) => {
+          if(response.status == 200){
+              return response.json()
+          }
+      })
+      .then((responseJSON)=>{
+        if(responseJSON != null){
+          console.log(responseJSON)
+        }
+      })
+      .catch((err)=>{
+          console.log(err)
+      })
       this.setState({
         activeIndexChannel1: index
       })
-
     }else{
       this.setState({
         activeIndexChannel2: index

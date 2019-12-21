@@ -53,6 +53,7 @@ router.post('/settings', passport.authenticate('jwt',{session:false}), (req,res,
         } else {
             doc.ack = false;
             doc.settings = JSON.stringify(req.body.settings);
+            console.log(req.body.settings)
             doc.save((err) => {
                 console.log(err);
                 publish('settings/'+doc.mac,JSON.stringify(req.body.settings));
