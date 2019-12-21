@@ -38,9 +38,14 @@ export default class LiveFeed extends Component<Props> {
         this.getMyValue()
 
         setIntervalObject = setInterval(()=>{
-            fetch(config.remote+'/cowfarm/lastTemp', {
-                method: 'GET'
-            })  
+            fetch(config.remote+'/device/lastTemp', {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + this.state.clientToken,
+                }
+            },)  
             .then((response) => {
                 if(response.status == 200){
                     return response.json()

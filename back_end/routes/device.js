@@ -78,7 +78,7 @@ router.get('/settingsAck', passport.authenticate('jwt',{session:false}), (req,re
 
 
 
-router.post('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
