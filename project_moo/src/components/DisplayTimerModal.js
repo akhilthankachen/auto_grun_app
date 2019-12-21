@@ -29,7 +29,7 @@ export default class DisplayTimerModal extends Component {
         if(this.state.channel == 1){
           var list = []
           json.channel1[this.state.index].map((item,index)=>{
-            list.push(<OnlyTimeDuration key={index} hour={item.hour} minutes={item.minutes} duration={item.duration}/>)
+            list.push(<OnlyTimeDuration key={index} hour={item.h} minutes={item.m} duration={item.d}/>)
           })
           this.setState({
             list: list
@@ -37,7 +37,7 @@ export default class DisplayTimerModal extends Component {
         }else{
           var list = []
           json.channel2[this.state.index].map((item,index)=>{
-            list.push(<OnlyTimeDuration key={index} hour={item.hour} minutes={item.minutes} duration={item.duration}/>)
+            list.push(<OnlyTimeDuration key={index} hour={item.h} minutes={item.m} duration={item.d}/>)
           })
           this.setState({
             list: list

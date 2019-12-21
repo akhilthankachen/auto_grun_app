@@ -127,15 +127,15 @@ export default class DashboardScreen extends Component<Props> {
       if(this.state.activeIndexChannel2 == -1){
         var json = {
           settings: {
-            channel1: this.state.channel1[index],
-            channel2: []
+            ch1: this.state.channel1[index],
+            ch2: []
           }
         }
       }else{
         var json = {
           settings: {
-            channel1: this.state.channel1[index],
-            channel2: this.state.channel2[this.state.activeIndexChannel2]
+            ch1: this.state.channel1[index],
+            ch2: this.state.channel2[this.state.activeIndexChannel2]
           }
         }
       }
@@ -197,15 +197,15 @@ export default class DashboardScreen extends Component<Props> {
       if(this.state.activeIndexChannel1 == -1){
         var json = {
           settings: {
-            channel1: [],
-            channel2: this.state.channel2[index]
+            ch1: [],
+            ch2: this.state.channel2[index]
           }
         }
       }else{
         var json = {
           settings: {
-            channel1: this.state.channel1[this.state.activeIndexChannel1],
-            channel2: this.state.channel2[index]
+            ch1: this.state.channel1[this.state.activeIndexChannel1],
+            ch2: this.state.channel2[index]
           }
         }
       }

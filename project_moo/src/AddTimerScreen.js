@@ -53,9 +53,9 @@ export default class AddTimerScreen extends Component {
   addTimeAndDuration = () =>{
       if(this.state.hour != '-- ' && this.state.duration != ''){
         var interArray = this.state.timeDuration
-        var json = {"hour": this.state.hour,
-                    "minutes": this.state.minutes,
-                    "duration": this.state.duration }
+        var json = {"h": this.state.hour,
+                    "m": this.state.minutes,
+                    "d": parseInt(this.state.duration) }
         interArray.push(json)
         this.setState({
             timeDuration: interArray,
@@ -79,7 +79,7 @@ export default class AddTimerScreen extends Component {
   renderTimeList = ()=>{
     return this.state.timeDuration.slice(0).reverse().map((item, index) => {
         return (
-            <TimeAndDurationBox key={index} index={index} hour={item.hour} minutes={item.minutes} duration={item.duration} onPress={this.onPressDelete}/>
+            <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} onPress={this.onPressDelete}/>
         );
     });
   }

@@ -24,6 +24,7 @@ mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/a
 const port = 3000;
 var app = express();
 
+app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 
 // middleware declaration
 app.use(bodyParser.urlencoded({ extended: false }));
