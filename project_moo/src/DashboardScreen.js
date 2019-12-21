@@ -9,6 +9,7 @@ import AddNewTimerButton from './components/AddNewTimerButton';
 import TimerDisplay from './components/TimerDisplay'
 import LoadingModal from './components/LoadingModal'
 import DisplayTimerModal from './components/DisplayTimerModal'
+import config from '../config'
 
 const WIDTH = Dimensions.get('window').width
 var didFocusSubscription = ''
