@@ -24,6 +24,50 @@ export default class DashboardScreen extends Component<Props> {
       isVisible: false,
       activeIndexChannel1: -1,
       activeIndexChannel2: -1,
+      clientToken: ''
+    }
+    this.getToken()
+    this.getActiveIndexOne()
+    this.getActiveIndexTwo()
+  }
+
+  getActiveIndexOne = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@ActiveOne')
+      if(value != null){
+        console.log('bye')
+        this.setState({
+          activeIndexChannel1: JSON.parse(value)
+        })
+      }
+    } catch(e) {
+        // do nothing
+    }
+  }
+  getActiveIndexTwo = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@ActiveTwo')
+      if(value != null){
+        console.log('bye')
+        this.setState({
+          activeIndexChannel2: JSON.parse(value)
+        })
+      }
+    } catch(e) {
+        // do nothing
+    }
+  }
+
+  getToken = async () => {
+    try {
+        const value = await AsyncStorage.getItem('@token')
+        if(value != null){
+          this.setState({
+            clientToken: JSON.parse(value)
+          })
+        }
+    } catch(e) {
+        // do nothing
     }
   }
 
@@ -60,31 +104,49 @@ export default class DashboardScreen extends Component<Props> {
     didFocusSubscription.remove()
   }
 
-  onPressDeleteSettings = ()=>{
+  onPressDeleteSettings = (index, channel)=>{
+    if(channel == 1){
+      if(this.state.activeIndexChannel1 > index){
+        this.setState({
+          activeIndexChannel1: this.state.activeIndexChannel1 - 1
+        })
+      }
+    }
+    if(channel == 2){
+      if(this.state.activeIndexChannel2 > index){
+        this.setState({
+          activeIndexChannel2: this.state.activeIndexChannel2 - 1
+        })
+      }
+    }
     this.getData()
   }
 
   onPressActivateSettings = (index, channel, callback)=>{
     if(channel == 1){
       if(this.state.activeIndexChannel2 == -1){
-        var settings = {
-          channel1: this.state.channel1[activeIndexChannel1],
-          channel2: []
+        var json = {
+          settings: {
+            channel1: this.state.channel1[index],
+            channel2: []
+          }
         }
       }else{
-        var settings = {
-          channel1: this.state.channel1[activeIndexChannel1],
-          channel2: this.state.channel2[activeIndexChannel2]
+        var json = {
+          settings: {
+            channel1: this.state.channel1[index],
+            channel2: this.state.channel2[this.state.activeIndexChannel2]
+          }
         }
       }
-      fetch(config.remote+'/device/lastTemp', {
+      fetch(config.remote+'/device/settings', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': this.state.clientToken.token,
         },
-        body: settings
+        body: JSON.stringify(json)
       },)  
       .then((response) => {
           if(response.status == 200){
@@ -93,26 +155,123 @@ export default class DashboardScreen extends Component<Props> {
       })
       .then((responseJSON)=>{
         if(responseJSON != null){
-          console.log(responseJSON)
+          if(responseJSON.success == true){
+            setTimeout(()=>{
+              fetch(config.remote+'/device/settingsAck', {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': this.state.clientToken.token,
+                }
+              },)  
+              .then((response) => {
+                  if(response.status == 200){
+                      return response.json()
+                  }
+              })
+              .then((responseJSON)=>{
+                if(responseJSON != null){
+                  if(responseJSON.msg == true){
+                    this.setState({
+                      activeIndexChannel1: index
+                    })
+                    AsyncStorage.setItem('@ActiveOne', JSON.stringify(index))
+                  }
+                  if(responseJSON.msg == false){
+                    callback()
+                  }
+                }
+              })
+              .catch((err)=>{
+                  console.log(err)
+              })
+            },2000)
+          }
         }
       })
       .catch((err)=>{
           console.log(err)
       })
-      this.setState({
-        activeIndexChannel1: index
-      })
     }else{
-      this.setState({
-        activeIndexChannel2: index
+      if(this.state.activeIndexChannel1 == -1){
+        var json = {
+          settings: {
+            channel1: [],
+            channel2: this.state.channel2[index]
+          }
+        }
+      }else{
+        var json = {
+          settings: {
+            channel1: this.state.channel1[this.state.activeIndexChannel1],
+            channel2: this.state.channel2[index]
+          }
+        }
+      }
+      fetch(config.remote+'/device/settings', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': this.state.clientToken.token,
+        },
+        body: JSON.stringify(json)
+      },)  
+      .then((response) => {
+          if(response.status == 200){
+              return response.json()
+          }
+      })
+      .then((responseJSON)=>{
+        if(responseJSON != null){
+          if(responseJSON.success == true){
+            setTimeout(()=>{
+              fetch(config.remote+'/device/settingsAck', {
+                method: 'GET',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': this.state.clientToken.token,
+                }
+              },)  
+              .then((response) => {
+                  if(response.status == 200){
+                      return response.json()
+                  }
+              })
+              .then((responseJSON)=>{
+                if(responseJSON != null){
+                  if(responseJSON.msg == true){
+                    this.setState({
+                      activeIndexChannel2: index
+                    })
+                    AsyncStorage.setItem('@ActiveTwo', JSON.stringify(index))
+                  }
+                  if(responseJSON.msg == false){
+                    callback()
+                  }
+                }
+              })
+              .catch((err)=>{
+                  console.log(err)
+              })
+            },2000)
+          }
+        }
+      })
+      .catch((err)=>{
+          console.log(err)
       })
     }
   }
 
   renderTimerListChannel1 = ()=>{
+    console.log('hello')
     return  this.state.channel1.map((item,index)=>{
       var isActive = false
       if(this.state.activeIndexChannel1 == index){
+        console.log('hey')
         isActive = true
       }
       return <TimerDisplay 

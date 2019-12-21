@@ -36,7 +36,7 @@ settingsAckRouter = (message) => {
 tempRouter = (client, message) => {
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
-    const temp = (message[1]) ? parseInt(message[1]) : false;
+    const temp = (message[1]) ? parseFloat(message[1]) : false;
     const route = 'tempResponse/' + mac;
 
     Device.findOne({mac:mac},(err,doc) => {

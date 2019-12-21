@@ -8,6 +8,9 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
+// device id
+String deviceId = "test123 ";
+
 // GPIO where the DS18B20 is connected to
 const int oneWireBus = 4;     
 
@@ -100,7 +103,7 @@ void setup() {
 
   // Note: Local domain names (e.g. "Computer.local" on OSX) are not supported by Arduino.
   // You need to set the IP address directly.
-  client.begin("165.22.208.118", net);
+  client.begin("142.93.216.218", net);
   client.onMessage(messageReceived);
 
   connect();
@@ -121,11 +124,13 @@ void loop() {
   // publish a message roughly one minute.
   if (millis() - lastMillis > 60000) {
     lastMillis = millis();
-    sensors.requestTemperatures(); 
-    float temperatureC = sensors.getTempCByIndex(0);
+    //sensors.requestTemperatures(); 
+    //float temperatureC = sensors.getTempCByIndex(0);
+    float temperatureC = 32.5;
     tempInHour( temperatureC , timeClient.getHours() );
     Serial.println("tick");
 
-    client.publish("/cowfarm1/temp", String(temperatureC));
+    client.publish("temp", deviceId + String(temperatureC));
+    Serial.println(String(temperatureC));
   }
 }

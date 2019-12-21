@@ -61,7 +61,6 @@ export default class LiveFeed extends Component<Props> {
                 }
             },)  
             .then((response) => {
-              console.log(response.status)
                 if(response.status == 200){
                     return response.json()
                 }
@@ -74,6 +73,7 @@ export default class LiveFeed extends Component<Props> {
                     liveTemp: responseJSON.temp,
                     lastUpdated: dateFormated
                 })
+                console.log(responseJSON.temp)
                 AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
               }
             })

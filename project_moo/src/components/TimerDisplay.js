@@ -33,6 +33,17 @@ export default class timerDisplay extends Component {
         isOn: false
       })
     }
+    if(this.state.isOn == false && this.props.isActive == true){
+      this.setState({
+        isOn: true
+      })
+    }
+  }
+
+  switchOff = ()=>{
+    this.setState({
+      isVisible: false
+    })
   }
 
   toggleStatus = (isOn)=>{
@@ -42,26 +53,30 @@ export default class timerDisplay extends Component {
       this.setState({
         isVisible: true
       })
-      this.props.onPressActivate(this.state.index, this.state.channel)
+      this.props.onPressActivate(this.state.index, this.state.channel, this.switchOff)
     }
   }
 
   onPressDelete = async ()=>{
-    try{
-      const value = await AsyncStorage.getItem('@timerSettings')
-      if(value != null){
-        var json = JSON.parse(value)
-        if(this.props.channel == 1){
-          json.channel1.splice(this.props.index, 1)
-        }else{
-          json.channel2.splice(this.props.index, 1)
+    if(this.state.isOn == true){
+      alert('Cannot remove because currently active..')
+    }else{
+      try{
+        const value = await AsyncStorage.getItem('@timerSettings')
+        if(value != null){
+          var json = JSON.parse(value)
+          if(this.props.channel == 1){
+            json.channel1.splice(this.props.index, 1)
+          }else{
+            json.channel2.splice(this.props.index, 1)
+          }
+          json = JSON.stringify(json)
+          await AsyncStorage.setItem('@timerSettings', json)
+          this.props.onPressDelete(this.state.index, this.state.channel)
         }
-        json = JSON.stringify(json)
-        await AsyncStorage.setItem('@timerSettings', json)
-        this.props.onPressDelete()
+      }catch(e){
+        console.log(e)
       }
-    }catch(e){
-      console.log(e)
     }
   }
 
