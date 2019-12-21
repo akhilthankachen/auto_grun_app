@@ -39,6 +39,7 @@ export default class timerDisplay extends Component {
     if(this.state.isOn == true){
       alert('Activate another settings to deactivate this..')
     }else{
+      delay(1000)
       this.setState({
         isVisible: true
       })

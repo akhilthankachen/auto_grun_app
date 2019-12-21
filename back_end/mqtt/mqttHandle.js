@@ -1,5 +1,4 @@
 var mqtt = require('mqtt')
-const tempRouter = require('../routes/device').tempRouter
 const Device = require('../models/device/Device')
 
 const ip = 'mqtt://localhost:1883';
@@ -29,6 +28,46 @@ settingsAckRouter = (message) => {
                 if(err) console.log(err);
                 console.log('ack saved')
             })
+        }
+    })    
+}
+
+tempRouter = (client, message) => {
+    message = message.toString().split(" ");
+    const mac = message[0] ? message[0] : "0";
+    const temp = (message[1]) ? parseInt(message[1]) : false;
+    const route = 'tempResponse/' + mac;
+
+    Device.findOne({mac:mac},(err,doc) => {
+        if(err){
+            console.log(err);
+            client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            });
+        } else if (!doc) {
+            console.log("Mac not found");
+            client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            });
+        } else {
+            if(typeof(temp) == 'number'){
+                let data = {
+                    mac : mac,
+                    temp : temp
+                }
+            
+                DeviceTemp.create(data,(err) => {
+                    if (err) { throw err };
+                });
+                console.log(message);
+                client.publish(route ,'success',(err) => {
+                    if (err) console.log(err);
+                });
+            } else {
+                client.publish(route, 'Failure',(err) => {
+                if(err) console.log(err);
+            })
+        }
         }
     })    
 }

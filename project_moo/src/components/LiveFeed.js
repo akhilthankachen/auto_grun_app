@@ -14,18 +14,32 @@ export default class LiveFeed extends Component<Props> {
         super(props)
         this.state = {
             liveTemp: '',
-            lastUpdated: ''
+            lastUpdated: '',
+            clientToken: ''
         }
+        this.getToken()
     }
+    getToken = async () => {
+      try {
+          const value = await AsyncStorage.getItem('@token')
+          if(value != null){
+            this.setState({
+              clientToken: JSON.parse(value)
+            })
+          }
+      } catch(e) {
+          // do nothing
+      }
+  }
     getMyValue = async () => {
         try {
             const value = await AsyncStorage.getItem('@lastTemp')
             if(value != null){
               let tempJson = JSON.parse(value)
-              let date = new Date(tempJson.dateTime)
+              let date = new Date(tempJson.timeStamp)
               let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
               this.setState({
-                liveTemp: tempJson.message,
+                liveTemp: tempJson.temp,
                 lastUpdated: dateFormated
               })
             }
@@ -43,20 +57,21 @@ export default class LiveFeed extends Component<Props> {
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + this.state.clientToken,
+                  'Authorization': this.state.clientToken.token,
                 }
             },)  
             .then((response) => {
+              console.log(response.status)
                 if(response.status == 200){
                     return response.json()
                 }
             })
             .then((responseJSON)=>{
               if(responseJSON != null){
-                let date = new Date(responseJSON.dateTime)
+                let date = new Date(responseJSON.timeStamp)
                 let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
                 this.setState({
-                    liveTemp: responseJSON.message,
+                    liveTemp: responseJSON.temp,
                     lastUpdated: dateFormated
                 })
                 AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
