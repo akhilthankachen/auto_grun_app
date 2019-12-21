@@ -65,9 +65,11 @@ export default class DashboardScreen extends Component<Props> {
 
   onPressActivateSettings = (index, channel, callback)=>{
     if(channel == 1){
+      
       this.setState({
         activeIndexChannel1: index
       })
+
     }else{
       this.setState({
         activeIndexChannel2: index

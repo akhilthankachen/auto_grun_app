@@ -1,5 +1,6 @@
 var mqtt = require('mqtt')
 const Device = require('../models/device/Device')
+const DeviceTemp = require('../models/device/DeviceTemp')
 
 const ip = 'mqtt://localhost:1883';
 module.exports = client  = mqtt.connect(ip)
