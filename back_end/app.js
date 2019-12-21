@@ -8,6 +8,20 @@ const database_config = require('./config/database');
 const mode_config = require('./config/env');
 const User = require('./models/users/User');
 var mqtt = require('mqtt')
+const fs = require('fs');
+const https = require('https');
+
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/easyacres.in/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/easyacres.in/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/easyacres.in/chain.pem', 'utf8');
+
+
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
+};
 
 // mqtt
 // const ip = 'mqtt://localhost:1883';
@@ -24,7 +38,7 @@ mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/a
 const port = 3000;
 var app = express();
 
-app.use(express.static(__dirname, { dotfiles: 'allow' } ));
+// app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 
 // middleware declaration
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -95,11 +109,17 @@ app.use('/device', device)
 app.get('/', (req,res) => { // home '/' response
     res.json({status:'working'});
 });
-app.listen(port, () => {
-    if(mode_config.mode == "dev"){
-        console.log('server started at port ' + port);
-    }
+
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(port, () => {
+	console.log('HTTPS Server running on port 443');
 });
+// app.listen(port, () => {
+//     if(mode_config.mode == "dev"){
+//         console.log('server started at port ' + port);
+//     }
+// });
 
 // const tempRouter = require('./routes/device').tempRouter
 // console.log(tempRouter)
