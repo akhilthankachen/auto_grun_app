@@ -96,6 +96,7 @@ tempRouter = (client, message) => {
 client.on('connect', function () {
     client.subscribe('temp')
     client.subscribe('settingsAck')
+    client.subscribe('pingAck')
 })
 
 client.on('message', function (topic, message) {
