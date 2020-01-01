@@ -35,7 +35,7 @@ mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/a
     .catch( err => console.log(err));
 
 // express app initiation
-const port = 443;
+const port = 3000;
 var app = express();
 
 // app.use(express.static(__dirname, { dotfiles: 'allow' } ));
