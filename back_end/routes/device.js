@@ -112,7 +112,6 @@ router.get('/pingAck', passport.authenticate('jwt',{session:false}), (req,res,ne
 })
 
 router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,next) => {
-    console.log('lastTemp hit')
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
