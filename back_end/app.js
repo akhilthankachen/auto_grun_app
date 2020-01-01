@@ -35,7 +35,7 @@ mongoose.connect("mongodb+srv://grun:appdevelopment@autogrun-ym1os.mongodb.net/a
     .catch( err => console.log(err));
 
 // express app initiation
-const port = 3000;
+const port = 443;
 var app = express();
 
 // app.use(express.static(__dirname, { dotfiles: 'allow' } ));
@@ -110,8 +110,8 @@ app.get('/', (req,res) => { // home '/' response
     res.json({status:'working'});
 });
 
-const httpsServer = https.createServer(credentials, app);
 
+const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port, () => {
 	console.log('HTTPS Server running on port 443');
 });

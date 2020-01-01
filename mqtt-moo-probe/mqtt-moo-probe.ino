@@ -9,6 +9,8 @@
 #include <WiFiUdp.h>
 #include <ArduinoJson.h>
 #include <RTClib.h>
+#include <EEPROM.h>
+#include <Wire.h>
 
 // settings begin
 /////////////////
@@ -30,8 +32,8 @@ int chSizeTwo;
 char addr[20] = "142.93.216.218";
 
 //channel pins
-int channelOnePin = 0;
-int channelTwoPin = 2;
+int channelOnePin = 13;
+int channelTwoPin = 0;
 
 // standlalone or connected mode
 bool standalone = false;
@@ -63,6 +65,52 @@ unsigned long lastMillis = 0;
 //
 // mqtt block begin
 
+void storeSettings( char* json ){
+  Serial.println("Saving settings to eeprom .. ");
+  
+  uint addr = 0;
+
+  // fake data
+  struct { 
+    uint val = 0;
+    char str[400] = "";
+  } data;
+
+  strncpy( data.str, json, 400 );
+
+  EEPROM.begin(512);
+  EEPROM.put(addr,data);
+  EEPROM.commit();
+  EEPROM.end();
+
+  data.val = 0; 
+  strncpy(data.str,"",400);
+  
+}
+
+void loadSettings(){
+  Serial.println("Loading settings from eeprom ..");
+
+  uint addr = 0;
+
+  // fake data
+  struct { 
+    uint val = 0;
+    char str[400] = "";
+  } data;
+
+  EEPROM.begin(512);
+
+  EEPROM.get(addr,data);
+
+  EEPROM.end();
+
+  handleSettings( data.str );
+
+  data.val = 0; 
+  strncpy(data.str,"",400);
+}
+
 void handleSettings( char* json ){
   Serial.println(json);
   //converting json
@@ -92,6 +140,7 @@ void handleSettings( char* json ){
       chTwo[i][2] = tmp["d"];
     }
   }
+
 }
 
 void connect() {
@@ -121,9 +170,12 @@ void messageReceived(String &topic, String &payload) {
   if(topic == "settings/" + deviceId){
     char charBuff[payload.length() +1];
     payload.toCharArray(charBuff, payload.length() + 1);
-    //storeSettings( charBuff );
+    storeSettings( charBuff );
     handleSettings( charBuff );
     client.publish("settingsAck", deviceId);
+  }
+  if(topic == "ping/" + deviceId){
+    client.publish("pingAck", deviceId);
   }
 }
 
@@ -171,22 +223,23 @@ void syncNtpRtc(){
   rtc.adjust(DateTime(actualTime));  
 }
 
-int initialSeconds = 0;
+int initialMinutes = 0;
 
-void initSeconds(){
+void initMinutes(){
   if( rtcMode ){
     DateTime instance = rtc.now();
-    initialSeconds = instance.second();
+    initialMinutes = instance.minute();
   }else{
     if( !standalone ){
       timeClient.update();
-      initialSeconds = timeClient.getSeconds();
+      initialMinutes = timeClient.getMinutes();
     }
   }
 }
 
 void setup() {
   Serial.begin(9600);
+  Wire.begin( 2, 14 );
   
   WiFiManager wifiManager;
   wifiManager.setTimeout(180);
@@ -226,7 +279,69 @@ void setup() {
 
   pinMode(channelOnePin, OUTPUT);
   pinMode(channelTwoPin, OUTPUT);
-  initSeconds();
+  digitalWrite(channelOnePin, LOW);
+  digitalWrite(channelTwoPin, LOW);
+
+  loadSettings();
+  initMinutes();
+}
+
+bool chActiveOne = false;
+int chActiveOneEstimation = 0;
+
+void executeTimerChOne( int hours, int minutes ){
+  if( chActiveOne ){
+    if( minutes == chActiveOneEstimation ){
+      chActiveOne = false;
+      chActiveOneEstimation = 0;
+      Serial.println("switching off digital pin channel 1" );
+      digitalWrite(channelOnePin, LOW);
+    }
+  }else{
+    if( chSizeOne != 0 ){
+      for( int i = 0 ; i<chSizeOne ; i++ ){
+        if( hours == chOne[i][0] && minutes == chOne[i][1] ){
+          chActiveOne = true;
+          if( minutes + chOne[i][2] >= 60 ){
+            chActiveOneEstimation = minutes + chOne[i][2] - 60;
+          }else{
+            chActiveOneEstimation = chOne[i][2] + minutes;              
+          }
+          Serial.println("switching on digital pin channel 1" );
+          digitalWrite(channelOnePin, HIGH);
+        }
+      }
+    }
+  }
+}
+
+bool chActiveTwo = false;
+int chActiveTwoEstimation = 0;
+
+void executeTimerChTwo( int hours, int minutes ){
+  if( chActiveTwo ){
+    if( minutes == chActiveTwoEstimation ){
+      chActiveTwo = false;
+      chActiveTwoEstimation = 0;
+      Serial.println("switching off digital pin channel 2" );
+      digitalWrite(channelTwoPin, LOW);
+    }
+  }else{
+    if( chSizeTwo != 0 ){
+      for( int i = 0 ; i<chSizeTwo ; i++ ){
+        if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
+          chActiveTwo = true;
+          if( minutes + chTwo[i][2] >= 60 ){
+            chActiveTwoEstimation = minutes + chTwo[i][2] - 60;
+          }else{
+            chActiveTwoEstimation = chTwo[i][2] + minutes;              
+          }
+          Serial.println("switching on digital pin channel 2" );
+          digitalWrite(channelTwoPin, HIGH);
+        }
+      }
+    }
+  }
 }
 
 int hours = 0;
@@ -257,11 +372,10 @@ void loop() {
 
   delay(10);  // <- fixes some issues with WiFi stability
   // publish a message roughly one minute.
-  if (initialSeconds - seconds > 60000) {
-    initialSeconds = seconds;
-    //sensors.requestTemperatures(); 
-    //float temperatureC = sensors.getTempCByIndex(0);
-    float temperatureC = 31.5;
+  if (initialMinutes!=minutes) {
+    initialMinutes = minutes;
+    sensors.requestTemperatures(); 
+    float temperatureC = sensors.getTempCByIndex(0);
     tempInHour( temperatureC , hours );
     Serial.println("tick");
 
@@ -269,5 +383,7 @@ void loop() {
     Serial.println(String(temperatureC));
   }
 
-  // check and execute 
+  // check and execute timers
+  executeTimerChOne( hours, minutes );
+  executeTimerChTwo( hours, minutes );
 }

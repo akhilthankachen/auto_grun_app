@@ -1,1 +1,1 @@
-module.exports.remote = 'http://142.93.216.218:3000'
+module.exports.remote = 'https://easyacres.in:3000'

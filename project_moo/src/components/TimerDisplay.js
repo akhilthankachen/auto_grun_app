@@ -5,6 +5,8 @@ import SimpleButton from './SimpleButton'
 import LoadingModal from './LoadingModal'
 import AsyncStorage from '@react-native-community/async-storage';
 import DisplayTimerModal from './DisplayTimerModal'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Icon } from 'react-native-elements'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -104,7 +106,6 @@ export default class timerDisplay extends Component {
       />
       <LoadingModal isVisible={this.state.isVisible} content='Activating Settings'/>
         <View style={styles.titleBox}>
-          <Text style={styles.titleText}>Settings {this.props.keyDup}</Text>
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>
           <View style={styles.statusBox}>
             <ToggleSwitch
@@ -149,12 +150,16 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   statusBox: {
+    marginLeft: 15
+  },
+  removeIcon: {
     marginRight: 15
   },
   channelText: {
     fontFamily: 'sans-serif-medium',
     fontWeight: '500',
-    fontSize: 15
+    fontSize: 15,
+    marginLeft: 15,
   },
   buttonBox: {
     flexDirection: 'row',

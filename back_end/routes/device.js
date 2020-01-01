@@ -47,13 +47,15 @@ router.post('/createDevice',passport.authenticate('jwt', {session: false}), (req
 
 router.post('/settings', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     Device.findOne({user: req.user._id},(err,doc) => {
-        if(err) console.log(err);
+        if(err) {
+            console.log(err)
+            res.json({success: false, msg: false})
+        };
         if(!req.body.settings){
             res.json({success:false,msg: "no settings given"});
         } else {
             doc.ack = false;
             doc.settings = JSON.stringify(req.body.settings);
-            console.log(req.body.settings)
             doc.save((err) => {
                 console.log(err);
                 publish('settings/'+doc.mac,JSON.stringify(req.body.settings));
@@ -67,17 +69,47 @@ router.post('/settings', passport.authenticate('jwt',{session:false}), (req,res,
 
 router.get('/settingsAck', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     Device.findOne({user:req.user._id},(err,doc) => {
-        if(err) console.log(err);
+        if(err) {
+            console.log(err)
+            res.json({success: false, msg: false})
+        };
         if(doc.ack){
-            res.json({success:true,msg:true});
+            res.json({success: true,msg: true});
         } else{
-            res.json({success:true,msg:false}); 
+            res.json({success: true,msg: false}); 
         }
         
     })
 })
 
+router.get('/ping', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+    Device.findOne({user: req.user._id},(err,doc) => {
+        if(err) {
+            console.log(err)
+            res.json({success: false, msg: false})
+        };
+        doc.ping = false;
+        doc.save((err)=>{
+            if(err) console.log(err);
+            publish('ping/'+doc.mac,"ping");
+            res.json({success: true, msg: "ping"});
+        })
+    })
+})
 
+router.get('/pingAck', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+    Device.findOne({user:req.user._id},(err,doc) => {
+        if(err) {
+            console.log(err)
+            res.json({success: false, msg: false})
+        };
+        if(doc.ping){
+            res.json({success:true, msg: true});
+        } else{
+            res.json({success:true, msg: false}); 
+        }
+    })
+})
 
 router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     console.log('lastTemp hit')

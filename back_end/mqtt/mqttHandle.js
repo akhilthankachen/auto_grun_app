@@ -10,12 +10,32 @@ module.exports = client  = mqtt.connect(ip)
 //   password: config.password
 //}
 
+pingAckRouter = (message) => {
+    message = message.toString().split(" ");
+    const mac = message[0] ? message[0] : "0";
+    const route = 'pingResponse/' + mac;
+    console.log("ping ack from device " + mac)
+
+    Device.findOne({mac:mac},(err,doc) => {
+        if(err){
+            console.log(err);
+            client.publish(route, 'Failure');
+        } else {
+            client.publish(route, 'Success')
+            doc.ping = true
+            doc.save((err) => {
+                if(err) console.log(err);
+                console.log('ack saved')
+            })
+        }
+    })    
+}
+
 settingsAckRouter = (message) => {
-    console.log('ack from device')
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
     const route = 'settingsResponse/' + mac;
-    console.log(message)
+    console.log("settings ack from device " + mac)
 
     Device.findOne({mac:mac},(err,doc) => {
         if(err){
@@ -86,6 +106,10 @@ client.on('message', function (topic, message) {
         }
         case 'settingsAck': {
             settingsAckRouter(message);
+            break;
+        }
+        case 'pingAck': {
+            pingAckRouter(message);
             break;
         }
     } 

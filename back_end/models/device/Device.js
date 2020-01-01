@@ -16,6 +16,10 @@ const DeviceSchema = new mongoose.Schema({
     },
     settings : {
         type: String
+    },
+    ping : {
+        type: Boolean,
+        default: false
     }
 });
 

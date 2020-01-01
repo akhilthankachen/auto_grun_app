@@ -266,56 +266,35 @@ export default class DashboardScreen extends Component<Props> {
     }
   }
 
-  renderTimerListChannel1 = ()=>{
-    console.log('hello')
-    return  this.state.channel1.map((item,index)=>{
-      var isActive = false
-      if(this.state.activeIndexChannel1 == index){
-        console.log('hey')
-        isActive = true
-      }
-      return <TimerDisplay 
-                key={index+1} 
-                keyDup={index+1} 
-                index={index} 
-                channel={1} 
-                onPressDelete={this.onPressDeleteSettings}
-                onPressActivate={this.onPressActivateSettings}
-                isActive={isActive}
-            />
-    })
-  }
-  renderTimerListChannel2 = ()=>{
-    return  this.state.channel2.map((item,index)=>{
-      var isActive = false
-      if(this.state.activeIndexChannel2 == index){
-        isActive = true
-      }
-      return <TimerDisplay 
-                key={this.state.channel1.length+index+1} 
-                keyDup={this.state.channel1.length+index+1} 
-                index={index} 
-                channel={2} 
-                onPressDelete={this.onPressDeleteSettings}
-                onPressActivate={this.onPressActivateSettings}
-                isActive={isActive}
-            />
-    })
-  }
-
   render() {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <LiveFeed/>
+                <View style={styles.timerSettingsList}>
+                  <TimerDisplay 
+                    key={1} 
+                    keyDup={1} 
+                    index={0} 
+                    channel={1} 
+                    onPressDelete={this.onPressDeleteSettings}
+                    onPressActivate={this.onPressActivateSettings}
+                    isActive={false}
+                  />
+                  <TimerDisplay 
+                    key={2} 
+                    keyDup={1} 
+                    index={0} 
+                    channel={2} 
+                    onPressDelete={this.onPressDeleteSettings}
+                    onPressActivate={this.onPressActivateSettings}
+                    isActive={false}
+                  />
+                </View>
+                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation}/>
                 <TempGraph heading="Average Temp Per Hour"/>
                 <TempGraph heading="Maximum Temp Per Hour"/>
                 <TempGraph heading="Minimum Temp Per Hour"/>
-                <View style={styles.timerSettingsList}>
-                  {this.renderTimerListChannel1()}
-                  {this.renderTimerListChannel2()}
-                </View>
-                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation}/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>

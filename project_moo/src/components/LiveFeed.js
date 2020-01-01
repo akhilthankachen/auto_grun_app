@@ -9,13 +9,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 const WIDTH = Dimensions.get('window').width
 type Props = {};
 var setIntervalObject;
+var setIntervalObjectPing;
 export default class LiveFeed extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
             liveTemp: '',
             lastUpdated: '',
-            clientToken: ''
+            clientToken: '',
+            deviceOnline: null,
+            networkOnline: true,
         }
         this.getToken()
     }
@@ -70,21 +73,103 @@ export default class LiveFeed extends Component<Props> {
                 let date = new Date(responseJSON.timeStamp)
                 let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
                 this.setState({
-                    liveTemp: responseJSON.temp,
-                    lastUpdated: dateFormated
+                  liveTemp: responseJSON.temp,
+                  lastUpdated: dateFormated
                 })
-                console.log(responseJSON.temp)
                 AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
               }
             })
             .catch((err)=>{
                 console.log(err)
             })
+        }, 30000)
+
+        setIntervalObjectPing = setInterval(()=>{
+          fetch(config.remote+'/device/ping', {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': this.state.clientToken.token,
+            }
+          },)
+          .then((response) => {
+            if(response.status == 200){
+                return response.json()
+            }
+          })  
+          .then((responseJSON)=>{
+            if(responseJSON != null){
+              if(responseJSON.success == true){
+
+                setTimeout(()=>{
+                  fetch(config.remote+'/device/pingAck', {
+                    method: 'GET',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                      'Authorization': this.state.clientToken.token,
+                    }
+                  },)
+                  .then((response) => {
+                    if(response.status == 200){
+                        return response.json()
+                    }
+                  }) 
+                  .then((responseJSON)=>{
+                    if(responseJSON != null){
+                      if(responseJSON.success){
+                        if(responseJSON.msg){
+                          this.setState({
+                            deviceOnline: true
+                          })
+                        }else{
+                          this.setState({
+                            deviceOnline: false
+                          })
+                        }
+                      }
+                    }
+                  })
+                  .catch((err)=>{
+                    console.log(err)
+                    this.setState({
+                      networkOnline: false
+                    })
+                  })  
+
+                }, 3000)
+              }
+            }
+          })
+          .catch((err)=>{
+              console.log(err)
+              this.setState({
+                networkOnline: false
+              })
+          })
         }, 5000)
+  
     }
 
     componentWillUnmount = ()=>{
       clearInterval(setIntervalObject)
+      clearInterval(setIntervalObjectPing)
+    }
+
+    renderStatus = ()=>{
+      if(this.state.networkOnline == true){
+        if(this.state.deviceOnline == null){
+          return <Text style={styles.deviceLoadingText}>Loading...</Text>
+        }
+        if(this.state.deviceOnline == true){
+          return <Text style={styles.deviceOnlineText}>Device Online</Text>
+        }else{
+          return <Text style={styles.deviceOfflineText}>Device Offline</Text>
+        }
+      }else{
+        return <Text style={styles.networkText}>Network Unavailable</Text>
+      }
     }
 
   render() {
@@ -104,6 +189,7 @@ export default class LiveFeed extends Component<Props> {
             <View style={styles.lastSync}>
                 <Text style={styles.lastSyncText}>Last Updated</Text>
                 <Text style={styles.lastSyncText}>{this.state.lastUpdated}</Text>
+                {this.renderStatus()}
             </View>
         </View>
       </View>
@@ -149,5 +235,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'sans-serif-light',
     fontStyle: 'italic'
+  },
+  networkText: {
+    textAlign: 'center',
+    fontFamily: 'sans-serif-medium',
+    fontStyle: 'normal',
+    color: 'red'
+  },
+  deviceOnlineText: {
+    textAlign: 'center',
+    fontFamily: 'sans-serif-medium',
+    fontStyle: 'normal',
+    color: 'green'
+  },
+  deviceOfflineText: {
+    textAlign: 'center',
+    fontFamily: 'sans-serif-medium',
+    fontStyle: 'normal',
+    color: 'red'
+  },
+  deviceLoadingText: {
+    textAlign: 'center',
+    fontFamily: 'sans-serif-medium',
+    fontStyle: 'normal',
+    color: 'black'
   }
 });
