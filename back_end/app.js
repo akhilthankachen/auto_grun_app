@@ -53,7 +53,6 @@ var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT');
 opts.secretOrKey = database_config.secret;
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    console.log("JWT payload -",jwt_payload);
     
     User.findById(jwt_payload._id, function(err, user) {
         if (err) {

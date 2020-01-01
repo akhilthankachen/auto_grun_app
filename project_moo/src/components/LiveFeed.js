@@ -119,6 +119,7 @@ export default class LiveFeed extends Component<Props> {
                   .then((responseJSON)=>{
                     if(responseJSON != null){
                       if(responseJSON.success){
+                        console.log(responseJSON.msg)
                         if(responseJSON.msg){
                           this.setState({
                             deviceOnline: true
@@ -138,7 +139,7 @@ export default class LiveFeed extends Component<Props> {
                     })
                   })  
 
-                }, 3000)
+                }, 2000)
               }
             }
           })
@@ -148,7 +149,7 @@ export default class LiveFeed extends Component<Props> {
                 networkOnline: false
               })
           })
-        }, 5000)
+        }, 10000)
   
     }
 

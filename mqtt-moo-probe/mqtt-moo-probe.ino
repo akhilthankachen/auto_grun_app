@@ -163,6 +163,7 @@ void connect() {
   Serial.println("\nconnected!");
 
   client.subscribe("settings/" + deviceId);
+  client.subscribe("ping/" + deviceId);
   // client.unsubscribe("/hello");
 }
 
@@ -176,6 +177,7 @@ void messageReceived(String &topic, String &payload) {
   }
   if(topic == "ping/" + deviceId){
     client.publish("pingAck", deviceId);
+    Serial.println("ping");
   }
 }
 
@@ -203,9 +205,9 @@ void tempInHour(float temp, int currentHour){
      
    }else{
      if( lastHour != 0 ){
-      client.publish("/cowfarm1/tempAverage", String(tempSum/tempCounter));
-      client.publish("/cowfarm1/tempMax", String(tempMax));
-      client.publish("/cowfarm1/tempMin", String(tempMin));
+      client.publish("tempAverage", deviceId + " " + String(tempSum/tempCounter));
+      client.publish("tempMax", deviceId + " " + String(tempMax));
+      client.publish("tempMin", deviceId + " " + String(tempMin));
       }
      lastHour = currentHour;
      tempMax = temp;
@@ -379,7 +381,9 @@ void loop() {
     tempInHour( temperatureC , hours );
     Serial.println("tick");
 
-    client.publish("temp", deviceId + " " + String(temperatureC));
+    if(temperatureC != 85){
+       client.publish("temp", deviceId + " " + String(temperatureC)); 
+    }
     Serial.println(String(temperatureC));
   }
 
