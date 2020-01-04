@@ -82,7 +82,7 @@ tempRouter = (message) => {
                 DeviceTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log("temp" + message);
+                console.log("temp " + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -122,7 +122,7 @@ tempAvgRouter = (message) => {
                 DeviceAvgTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log("Avg temp" + message);
+                console.log("Avg temp " + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -162,7 +162,7 @@ tempMaxRouter = (message) => {
                 DeviceMaxTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log("Max temp" + message);
+                console.log("Max temp " + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -202,7 +202,7 @@ tempMinRouter = (message) => {
                 DeviceMinTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log("Min temp" + message);
+                console.log("Min temp " + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });

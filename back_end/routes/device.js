@@ -200,7 +200,7 @@ router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setHours(23);
                 console.log("less and more",less,more);
 
-                DeviceAvgTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                DeviceAvgTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
@@ -244,7 +244,7 @@ router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (req,r
                 // more.setHours(23);
                 console.log("less and more",less,more);
 
-                DeviceTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                DeviceTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
@@ -287,7 +287,7 @@ router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setHours(23);
                 console.log("less and more",less,more);
 
-                DeviceMaxTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                DeviceMaxTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
@@ -325,7 +325,7 @@ router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setHours(23);
                 console.log("less and more",less,more);
 
-                DeviceMinTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                DeviceMinTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});

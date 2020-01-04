@@ -335,9 +335,9 @@ export default class DashboardScreen extends Component<Props> {
                   />
                 </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} deviceOnline={this.state.deviceOnline}/>
-                <TempGraph heading="Average Temp Per Hour"/>
-                <TempGraph heading="Maximum Temp Per Hour"/>
-                <TempGraph heading="Minimum Temp Per Hour"/>
+                <TempGraph heading="Average Temp Per Hour" route="/device/avgTempDay"/>
+                <TempGraph heading="Maximum Temp Per Hour" route="/device/maxTempDay"/>
+                <TempGraph heading="Minimum Temp Per Hour" route="/device/minTempDay"/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>
