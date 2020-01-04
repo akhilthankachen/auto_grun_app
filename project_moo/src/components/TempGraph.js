@@ -16,8 +16,8 @@ export default class TempGraph extends Component<Props> {
         this.state = {
           lastUpdated: '',
           clientToken: '',
-          labels: [0,0,0,0,],
-          data: [0,0,0,0],
+          labels: [0,0],
+          data: [0,0],
           keyDup: this.props.keyDup
         }
         this.getToken()
