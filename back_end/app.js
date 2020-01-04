@@ -23,6 +23,9 @@ const credentials = {
 	ca: ca
 };
 
+// setting time zone
+process.env.TZ = 'Asia/Calcutta'
+
 // mqtt
 // const ip = 'mqtt://localhost:1883';
 // const client = mqtt.connect(ip);
