@@ -200,17 +200,15 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 more.setMinutes(59);
                 more.setHours(23);
 
-                console.log(givenDate)
-
-                DeviceAvgTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
-                    if(err){
-                        console.log(err);
-                        res.json({success: false, msg: "Internal error"});
-                    } else {
-                        res.json({success: true, msg : docs});
-                    }
+                //DeviceAvgTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
+                 //   if(err){
+                 //       console.log(err);
+                 //       res.json({success: false, msg: "Internal error"});
+                 //   } else {
+                 //       res.json({success: true, msg : docs});
+                 //   }
                     
-                })
+                //})
             }
         })
     }
