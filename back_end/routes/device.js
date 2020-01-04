@@ -185,10 +185,10 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                console.log(req.body)
-                givenDate = new Date();
+                givenDate = new Date(req.body.date);
                 less = new Date(givenDate);
                 more = new Date(givenDate);
+                console.log(givenDate)
 
                 // less.setDate(less.getDate()-less.getDay());
                 less.setMilliseconds(0);
