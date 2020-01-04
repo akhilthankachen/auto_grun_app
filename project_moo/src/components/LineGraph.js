@@ -10,6 +10,7 @@ export default class LineGraph extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
+          data: this.props.data
         }
     }
 
@@ -19,16 +20,10 @@ export default class LineGraph extends Component<Props> {
       <View style={styles.container}>
         <LineChart
             data={{
+            labels:  this.props.labels,
             datasets: [
                 {
-                data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100
-                ]
+                data: this.props.data
                 }
             ]
             }}

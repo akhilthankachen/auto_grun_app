@@ -16,7 +16,9 @@ export default class TempGraph extends Component<Props> {
         this.state = {
           lastUpdated: '',
           clientToken: '',
-          temps: {}
+          labels: [0,0,0,0,],
+          data: [0,0,0,0],
+          keyDup: this.props.keyDup
         }
         this.getToken()
     }
@@ -58,18 +60,32 @@ export default class TempGraph extends Component<Props> {
         if(responseJSON != null){
           let date = new Date()
           let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
-          console.log(responseJSON)
-          this.setState({
-            temps: responseJSON.msg,
-            lastUpdated: dateFormated
-          })
+          if(responseJSON.msg){
+            var labels = responseJSON.msg.map((json)=>{
+              let tempDate = new Date(json.timeStamp)
+              return tempDate.getHours()
+            })
+
+            var data = responseJSON.msg.map((json)=>{
+              return json.temp
+            })
+
+          }
+
+          if(this.state.data.length <= data.length){
+            this.setState({
+              labels: labels,
+              data: data,
+              lastUpdated: dateFormated
+            })
+          }
           
         }
       })
       .catch((err)=>{
           console.log(err)
       })
-    }, 10000)
+    }, 30000)
   }
 
   componentWillUnmount = ()=>{
@@ -84,7 +100,7 @@ export default class TempGraph extends Component<Props> {
               {this.props.heading}
             </Text>
             <View style={styles.lineGraph}>
-                <LineGraph/>
+                <LineGraph labels={this.state.labels} data={this.state.data} key={this.state.keyDup}/>
             </View>
             <View style={styles.lastSync}>
                 <Text style={styles.lastSyncText}>Last Updated</Text>
