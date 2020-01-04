@@ -198,7 +198,6 @@ router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setMilliseconds(999);
                 more.setMinutes(59);
                 more.setHours(23);
-                console.log("less and more",less,more);
 
                 DeviceAvgTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
@@ -285,7 +284,6 @@ router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setMilliseconds(999);
                 more.setMinutes(59);
                 more.setHours(23);
-                console.log("less and more",less,more);
 
                 DeviceMaxTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
@@ -323,7 +321,6 @@ router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setMilliseconds(999);
                 more.setMinutes(59);
                 more.setHours(23);
-                console.log("less and more",less,more);
 
                 DeviceMinTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
