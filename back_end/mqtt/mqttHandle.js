@@ -56,7 +56,7 @@ settingsAckRouter = (message) => {
     })    
 }
 
-tempRouter = (client, message) => {
+tempRouter = (message) => {
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
     const temp = (message[1]) ? parseFloat(message[1]) : false;
@@ -96,7 +96,7 @@ tempRouter = (client, message) => {
     })    
 }
 
-tempAvgRouter = (client, message) => {
+tempAvgRouter = (message) => {
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
     const temp = (message[1]) ? parseFloat(message[1]) : false;
@@ -136,7 +136,7 @@ tempAvgRouter = (client, message) => {
     })    
 }
 
-tempMaxRouter = (client, message) => {
+tempMaxRouter = (message) => {
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
     const temp = (message[1]) ? parseFloat(message[1]) : false;
@@ -176,7 +176,7 @@ tempMaxRouter = (client, message) => {
     })    
 }
 
-tempMinRouter = (client, message) => {
+tempMinRouter = (message) => {
     message = message.toString().split(" ");
     const mac = message[0] ? message[0] : "0";
     const temp = (message[1]) ? parseFloat(message[1]) : false;
@@ -228,7 +228,7 @@ client.on('connect', function () {
 client.on('message', function (topic, message) {
     switch(topic){
         case 'temp': {
-            tempRouter(client, message)
+            tempRouter(message)
             break
         }
         case 'tempAverage': {
