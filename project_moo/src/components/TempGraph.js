@@ -16,8 +16,8 @@ export default class TempGraph extends Component<Props> {
         this.state = {
           lastUpdated: '',
           clientToken: '',
-          labels: [0,0],
-          data: [0,0],
+          labels: [0,0,0,0],
+          data: [0,0,0,0],
           keyDup: this.props.keyDup
         }
         this.getToken()
@@ -80,7 +80,7 @@ export default class TempGraph extends Component<Props> {
       .catch((err)=>{
           console.log(err)
       })
-    }, 30000)
+    }, 10000)
   }
 
   componentWillUnmount = ()=>{

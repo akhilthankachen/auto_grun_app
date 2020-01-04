@@ -98,8 +98,6 @@ export default class timerDisplay extends Component {
       isVisibleActivate: false,
       isVisibleDeactivate: false
     })
-
-    console.log("callback called")
   }
 
   toggleStatus = (isOn)=>{

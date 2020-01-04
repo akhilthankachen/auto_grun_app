@@ -17,7 +17,6 @@ type Props = {};
 export default class DashboardScreen extends Component<Props> {
   constructor(props){
     super(props)
-    this.getData()
     this.state = {
       channel1: [],
       channel2: [],
@@ -59,6 +58,34 @@ export default class DashboardScreen extends Component<Props> {
     }
   }
 
+  getSettingsFromServer = () => {
+    console.log('gettings settings')
+    fetch(config.remote+'/device/getSettings', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.state.clientToken.token,
+      }
+    },)  
+    .then((response) => {
+        if(response.status == 200){
+            return response.json()
+        }
+    })
+    .then((responseJSON)=>{
+      if(responseJSON != null){
+        if(responseJSON.msg == true){
+          console.log("settings" +  responseJSON.msg)
+          this.getData()
+        }
+      }
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+  }
+
   getToken = async () => {
     try {
         const value = await AsyncStorage.getItem('@token')
@@ -66,6 +93,7 @@ export default class DashboardScreen extends Component<Props> {
           this.setState({
             clientToken: JSON.parse(value)
           })
+          this.getSettingsFromServer()
         }
     } catch(e) {
         // do nothing
@@ -245,8 +273,6 @@ export default class DashboardScreen extends Component<Props> {
           }
         }
       }
-
-      console.log(JSON.stringify(json))
       fetch(config.remote+'/device/settings', {
         method: 'POST',
         headers: {

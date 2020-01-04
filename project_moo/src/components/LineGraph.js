@@ -9,9 +9,6 @@ type Props = {};
 export default class LineGraph extends Component<Props> {
     constructor(props){
         super(props)
-        this.state = {
-          data: this.props.data
-        }
     }
 
   render() {
@@ -29,7 +26,9 @@ export default class LineGraph extends Component<Props> {
             }}
             width={Dimensions.get("window").width - 60} // from react-native
             height={220}
+            xAxisSuffix={"h"}
             yAxisSuffix={"°C"}
+            fromZero={true}
             chartConfig={{
                 backgroundColor: "white",
                 backgroundGradientFrom: "white",
@@ -41,7 +40,7 @@ export default class LineGraph extends Component<Props> {
                     r: "5",
                     strokeWidth: "2",
                     stroke: "#5E7A7E"
-                }
+                },
             }}
             style={{
                 marginVertical: 8,
