@@ -28,7 +28,6 @@ pingAckRouter = (message) => {
             doc.ping = true
             doc.save((err) => {
                 if(err) console.log(err);
-                console.log('ack saved')
             })
         }
     })    
@@ -83,7 +82,7 @@ tempRouter = (message) => {
                 DeviceTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log(message);
+                console.log("temp" + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -123,7 +122,7 @@ tempAvgRouter = (message) => {
                 DeviceAvgTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log(message);
+                console.log("Avg temp" + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -163,7 +162,7 @@ tempMaxRouter = (message) => {
                 DeviceMaxTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log(message);
+                console.log("Max temp" + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
@@ -203,7 +202,7 @@ tempMinRouter = (message) => {
                 DeviceMinTemp.create(data,(err) => {
                     if (err) { throw err };
                 });
-                console.log(message);
+                console.log("Min temp" + message);
                 client.publish(route ,'success',(err) => {
                     if (err) console.log(err);
                 });
