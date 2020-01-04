@@ -24,7 +24,7 @@ const credentials = {
 };
 
 // setting time zone
-process.env.TZ = 'Asia/Calcutta'
+process.env.TZ = 'Asia/Kolkata'
 
 // mqtt
 // const ip = 'mqtt://localhost:1883';
