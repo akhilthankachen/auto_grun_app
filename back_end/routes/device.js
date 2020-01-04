@@ -199,16 +199,14 @@ router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 more.setMinutes(59);
                 more.setHours(23);
 
-                console.log(less)
-                console.log(more)
+                console.log(gicenDate)
 
                 DeviceAvgTemp.find({mac: dev.mac, timeStamp : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
                     } else {
-                        res.json({success: true, msg : docs}); 
-                        console.log(docs)
+                        res.json({success: true, msg : docs});
                     }
                     
                 })
