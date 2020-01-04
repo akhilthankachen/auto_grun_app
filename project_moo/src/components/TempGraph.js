@@ -49,7 +49,8 @@ export default class TempGraph extends Component<Props> {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': this.state.clientToken.token,
-          }
+          },
+          body: {date: new Date()}
       },)  
       .then((response) => {
           if(response.status == 200){

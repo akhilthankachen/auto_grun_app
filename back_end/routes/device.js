@@ -176,7 +176,7 @@ router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (req,r
 
 
 
-router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -185,7 +185,7 @@ router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date();
+                givenDate = new Date(req.body.date);
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
@@ -264,7 +264,7 @@ router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (req,r
     }
 })
 
-router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.post('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -273,7 +273,7 @@ router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date();
+                givenDate = new Date(req.body.date);
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
@@ -301,7 +301,7 @@ router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res
     }
 })
 
-router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.post('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -310,7 +310,7 @@ router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date();
+                givenDate = new Date(req.body.date);
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
