@@ -82,7 +82,7 @@ export default class LiveFeed extends Component<Props> {
             .catch((err)=>{
                 console.log(err)
             })
-        }, 30000)
+        }, 2000)
 
         setIntervalObjectPing = setInterval(()=>{
           fetch(config.remote+'/device/ping', {
@@ -119,15 +119,16 @@ export default class LiveFeed extends Component<Props> {
                   .then((responseJSON)=>{
                     if(responseJSON != null){
                       if(responseJSON.success){
-                        console.log(responseJSON.msg)
                         if(responseJSON.msg){
                           this.setState({
                             deviceOnline: true
                           })
+                          this.props.updateStatus(true)
                         }else{
                           this.setState({
                             deviceOnline: false
                           })
+                          this.props.updateStatus(false)
                         }
                       }
                     }
@@ -135,8 +136,10 @@ export default class LiveFeed extends Component<Props> {
                   .catch((err)=>{
                     console.log(err)
                     this.setState({
-                      networkOnline: false
+                      networkOnline: false,
+                      deviceOnline: false
                     })
+                    this.props.updateStatus(false)
                   })  
 
                 }, 2000)
@@ -146,10 +149,12 @@ export default class LiveFeed extends Component<Props> {
           .catch((err)=>{
               console.log(err)
               this.setState({
-                networkOnline: false
+                networkOnline: false,
+                deviceOnline: false
               })
+              this.props.updateStatus(false)
           })
-        }, 10000)
+        }, 5000)
   
     }
 
@@ -169,7 +174,7 @@ export default class LiveFeed extends Component<Props> {
           return <Text style={styles.deviceOfflineText}>Device Offline</Text>
         }
       }else{
-        return <Text style={styles.networkText}>Network Unavailable</Text>
+        return <Text style={styles.networkText}>Connection Error</Text>
       }
     }
 

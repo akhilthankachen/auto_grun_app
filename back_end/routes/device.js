@@ -5,9 +5,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users/User');
 const Device = require('../models/device/Device');
 const DeviceTemp = require('../models/device/deviceTemp');
+const DeviceAvgTemp = require('../models/device/DeviceAvgTemp');
+const DeviceMaxTemp = require('../models/device/DeviceMaxTemp');
+const DeviceMinTemp = require('../models/device/DeviceMinTemp');
 const config = require('../config/database');
 const publish = require('../mqtt/mqttHandle').publishCustom
-const waitAck = require('../mqtt/mqttHandle').waitAck
 
 
 router.post('/createDevice',passport.authenticate('jwt', {session: false}), (req,res,next) => {
@@ -174,7 +176,7 @@ router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (req,r
 
 
 
-router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -183,12 +185,7 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                const givenDate = req.body.givenDate;
-                console.log("req.body",req.body);
-                if(!givenDate){
-                    givenDate = new Date();
-                }
-    
+                givenDate = new Date();
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
@@ -203,17 +200,12 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 more.setHours(23);
                 console.log("less and more",less,more);
 
-                DeviceTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                DeviceAvgTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
                     if(err){
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
                     } else {
-                        let avg = 0;
-                        for(var i = 0; i < docs.length; i++) {
-                            avg += docs[i];
-                        }
-                        avg = avg / docs.length;
-                        res.json({success: true, avg : avg}); 
+                        res.json({success: true, msg : docs}); 
                     }
                     
                 })
@@ -263,6 +255,82 @@ router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (req,r
                         }
                         avg = avg / docs.length;
                         res.json({success: true, avg : avg}); 
+                    }
+                    
+                })
+            }
+        })
+    }
+})
+
+router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+    if(!req.user) {
+        res.json({success: false, msg : "User not authernticated"});
+    } else {
+        Device.findOne({user : req.user._id},(err,dev) => {
+            if(err) {
+                console.log(err);
+                res.json({success: false,msg : "Internal err"});
+            } else {
+                givenDate = new Date();
+                less = new Date(givenDate);
+                more = new Date(givenDate);
+
+                // less.setDate(less.getDate()-less.getDay());
+                less.setMilliseconds(0);
+                less.setMinutes(0);
+                less.setHours(0);
+    
+                // more.setDate(less.getDate() + 6);
+                more.setMilliseconds(999);
+                more.setMinutes(59);
+                more.setHours(23);
+                console.log("less and more",less,more);
+
+                DeviceMaxTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                    if(err){
+                        console.log(err);
+                        res.json({success: false, msg: "Internal error"});
+                    } else {
+                        res.json({success: true, msg : docs}); 
+                    }
+                    
+                })
+            }
+        })
+    }
+})
+
+router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+    if(!req.user) {
+        res.json({success: false, msg : "User not authernticated"});
+    } else {
+        Device.findOne({user : req.user._id},(err,dev) => {
+            if(err) {
+                console.log(err);
+                res.json({success: false,msg : "Internal err"});
+            } else {
+                givenDate = new Date();
+                less = new Date(givenDate);
+                more = new Date(givenDate);
+
+                // less.setDate(less.getDate()-less.getDay());
+                less.setMilliseconds(0);
+                less.setMinutes(0);
+                less.setHours(0);
+    
+                // more.setDate(less.getDate() + 6);
+                more.setMilliseconds(999);
+                more.setMinutes(59);
+                more.setHours(23);
+                console.log("less and more",less,more);
+
+                DeviceMinTemp.find({mac: dev.mac, dateTime : {$gte: less, $lte: more}},(err,docs) => {
+                    if(err){
+                        console.log(err);
+                        res.json({success: false, msg: "Internal error"});
+                    } else {
+                        res.json({success: true, msg : docs}); 
                     }
                     
                 })

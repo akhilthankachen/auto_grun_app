@@ -22,9 +22,12 @@ export default class DashboardScreen extends Component<Props> {
       channel1: [],
       channel2: [],
       isVisible: false,
-      activeIndexChannel1: -1,
-      activeIndexChannel2: -1,
-      clientToken: ''
+      activeChannel1: false,
+      activeChannel2: false,
+      clientToken: '',
+      channelOneActive: false,
+      deviceOnline: false,
+      value: ''
     }
     this.getToken()
     this.getActiveIndexOne()
@@ -35,9 +38,8 @@ export default class DashboardScreen extends Component<Props> {
     try {
       const value = await AsyncStorage.getItem('@ActiveOne')
       if(value != null){
-        console.log('bye')
         this.setState({
-          activeIndexChannel1: JSON.parse(value)
+          activeChannel1: JSON.parse(value)
         })
       }
     } catch(e) {
@@ -48,9 +50,8 @@ export default class DashboardScreen extends Component<Props> {
     try {
       const value = await AsyncStorage.getItem('@ActiveTwo')
       if(value != null){
-        console.log('bye')
         this.setState({
-          activeIndexChannel2: JSON.parse(value)
+          activeChannel2: JSON.parse(value)
         })
       }
     } catch(e) {
@@ -77,10 +78,11 @@ export default class DashboardScreen extends Component<Props> {
       if(value !== null) {
         var json = JSON.parse(value)
         this.setState({
-          channel1: json.channel1,
-          channel2: json.channel2,
+          channel1: json.ch1,
+          channel2: json.ch2,
+          value: value
         })
-        this.forceUpdate()
+        //this.forceUpdate()
       }else{
         console.log('no value')
       }
@@ -90,7 +92,6 @@ export default class DashboardScreen extends Component<Props> {
   }
 
 
-
   componentDidMount = ()=>{
     didFocusSubscription = this.props.navigation.addListener(
       'didFocus',
@@ -98,44 +99,56 @@ export default class DashboardScreen extends Component<Props> {
         this.getData()
       }
     );
+
   }
 
   componentWillUnmount = ()=>{
     didFocusSubscription.remove()
   }
 
-  onPressDeleteSettings = (index, channel)=>{
-    if(channel == 1){
-      if(this.state.activeIndexChannel1 > index){
-        this.setState({
-          activeIndexChannel1: this.state.activeIndexChannel1 - 1
-        })
-      }
-    }
-    if(channel == 2){
-      if(this.state.activeIndexChannel2 > index){
-        this.setState({
-          activeIndexChannel2: this.state.activeIndexChannel2 - 1
-        })
-      }
-    }
-    this.getData()
+  updateDeviceStatus = (status)=>{
+    this.setState({
+      deviceOnline: status
+    })
   }
 
-  onPressActivateSettings = (index, channel, callback)=>{
+  onPressActivateSettings = (channel, callback, activate)=>{
+    if(!this.state.deviceOnline){
+      callback()
+      alert("Device not online...")
+      return
+    }
     if(channel == 1){
-      if(this.state.activeIndexChannel2 == -1){
-        var json = {
-          settings: {
-            ch1: this.state.channel1[index],
-            ch2: []
+      if( activate == true ){
+        if(this.state.activeChannel2 == false){
+          var json = {
+            settings: {
+              ch1: this.state.channel1,
+              ch2: []
+            }
+          }
+        }else{
+          var json = {
+            settings: {
+              ch1: this.state.channel1,
+              ch2: this.state.channel2
+            }
           }
         }
       }else{
-        var json = {
-          settings: {
-            ch1: this.state.channel1[index],
-            ch2: this.state.channel2[this.state.activeIndexChannel2]
+        if(this.state.activeChannel2 == false){
+          var json = {
+            settings: {
+              ch1: [],
+              ch2: []
+            }
+          }
+        }else{
+          var json = {
+            settings: {
+              ch1: [],
+              ch2: this.state.channel2
+            }
           }
         }
       }
@@ -173,12 +186,17 @@ export default class DashboardScreen extends Component<Props> {
               .then((responseJSON)=>{
                 if(responseJSON != null){
                   if(responseJSON.msg == true){
-                    this.setState({
-                      activeIndexChannel1: index
-                    })
-                    AsyncStorage.setItem('@ActiveOne', JSON.stringify(index))
-                  }
-                  if(responseJSON.msg == false){
+                    if(activate){
+                      this.setState({
+                        activeChannel1: true
+                      })
+                      AsyncStorage.setItem('@ActiveOne', JSON.stringify(true))
+                    }else{
+                      this.setState({
+                        activeChannel1: false
+                      })
+                      AsyncStorage.setItem('@ActiveOne', JSON.stringify(false))
+                    }
                     callback()
                   }
                 }
@@ -194,21 +212,41 @@ export default class DashboardScreen extends Component<Props> {
           console.log(err)
       })
     }else{
-      if(this.state.activeIndexChannel1 == -1){
-        var json = {
-          settings: {
-            ch1: [],
-            ch2: this.state.channel2[index]
+      if(activate){
+        if(this.state.activeChannel1 == false){
+          var json = {
+            settings: {
+              ch1: [],
+              ch2: this.state.channel2
+            }
+          }
+        }else{
+          var json = {
+            settings: {
+              ch1: this.state.channel1,
+              ch2: this.state.channel2
+            }
           }
         }
       }else{
-        var json = {
-          settings: {
-            ch1: this.state.channel1[this.state.activeIndexChannel1],
-            ch2: this.state.channel2[index]
+        if(this.state.activeChannel1 == false){
+          var json = {
+            settings: {
+              ch1: [],
+              ch2: []
+            }
+          }
+        }else{
+          var json = {
+            settings: {
+              ch1: this.state.channel1,
+              ch2: []
+            }
           }
         }
       }
+
+      console.log(JSON.stringify(json))
       fetch(config.remote+'/device/settings', {
         method: 'POST',
         headers: {
@@ -243,12 +281,17 @@ export default class DashboardScreen extends Component<Props> {
               .then((responseJSON)=>{
                 if(responseJSON != null){
                   if(responseJSON.msg == true){
-                    this.setState({
-                      activeIndexChannel2: index
-                    })
-                    AsyncStorage.setItem('@ActiveTwo', JSON.stringify(index))
-                  }
-                  if(responseJSON.msg == false){
+                    if(activate){
+                      this.setState({
+                        activeChannel2: true
+                      })
+                      AsyncStorage.setItem('@ActiveTwo', JSON.stringify(true))
+                    }else{
+                      this.setState({
+                        activeChannel2: false
+                      })
+                      AsyncStorage.setItem('@ActiveTwo', JSON.stringify(false))
+                    }
                     callback()
                   }
                 }
@@ -270,7 +313,7 @@ export default class DashboardScreen extends Component<Props> {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
-                <LiveFeed/>
+                <LiveFeed updateStatus = {this.updateDeviceStatus}/>
                 <View style={styles.timerSettingsList}>
                   <TimerDisplay 
                     key={1} 
@@ -279,7 +322,7 @@ export default class DashboardScreen extends Component<Props> {
                     channel={1} 
                     onPressDelete={this.onPressDeleteSettings}
                     onPressActivate={this.onPressActivateSettings}
-                    isActive={false}
+                    isActive={this.state.activeChannel1}
                   />
                   <TimerDisplay 
                     key={2} 
@@ -288,10 +331,10 @@ export default class DashboardScreen extends Component<Props> {
                     channel={2} 
                     onPressDelete={this.onPressDeleteSettings}
                     onPressActivate={this.onPressActivateSettings}
-                    isActive={false}
+                    isActive={this.state.activeChannel2}
                   />
                 </View>
-                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation}/>
+                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} deviceOnline={this.state.deviceOnline}/>
                 <TempGraph heading="Average Temp Per Hour"/>
                 <TempGraph heading="Maximum Temp Per Hour"/>
                 <TempGraph heading="Minimum Temp Per Hour"/>

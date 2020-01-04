@@ -99,6 +99,7 @@ export default class LoginScreen extends Component<Props> {
       <View style={styles.container}>
         <LoadingModal content="Logging In" isVisible={this.state.modalVisible}/>
         <Image style={styles.logo} source={require('./images/logo-small.png')}/>
+        <Text style={styles.logoText}>Ally</Text>
 
         <View style={styles.loginSection}>
           <View style={styles.statusContainer}>
@@ -106,14 +107,6 @@ export default class LoginScreen extends Component<Props> {
             {this.state.status}</Text>
           </View>
           <View style={styles.usernameContainer}>
-            <View style = {styles.person}>
-              <Icon 
-                name = 'person'
-                type = 'material'
-                color = 'rgb(239, 134, 138)'
-                size = {23}
-              />
-            </View>
             <TextInput 
               style = {styles.username}
               placeholder = {'Username'}
@@ -122,16 +115,17 @@ export default class LoginScreen extends Component<Props> {
                 username: text,
                 status: ''
               })}}
-            />  
+            />
+            <View style = {styles.person}>
+              <Icon 
+                name = 'person'
+                type = 'material'
+                color = '#A66066'
+                size = {20}
+              />
+            </View>  
           </View>
           <View style = {styles.passwordContainer}>
-            <View style = {styles.person}>
-                <Icon 
-                  name = 'lock'
-                  color = 'rgb(239, 134, 138)'
-                  size = {23}
-                />
-            </View>
             <TextInput 
               style = {styles.password}
               placeholder = {'Password'}
@@ -143,6 +137,13 @@ export default class LoginScreen extends Component<Props> {
                 status: ''
               })}}
             /> 
+            <View style = {styles.person}>
+              <Icon 
+                name = 'lock'
+                color = '#A66066'
+                size = {20}
+              />
+            </View>
             <View style = {styles.showHide}>
               <TouchableOpacity
                 onPress = {()=>{this.setState({showHide: !this.state.showHide})}}  
@@ -150,7 +151,7 @@ export default class LoginScreen extends Component<Props> {
                 <Icon 
                   name = 'ios-eye'
                   type = 'ionicon'
-                  color = 'rgb(239, 134, 138)'
+                  color = '#A66066'
                   size = {25}
                 />
               </TouchableOpacity>
@@ -198,25 +199,27 @@ const styles = StyleSheet.create({
     height: null
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     marginTop: 0
   },
   usernameContainer: {
-    marginTop: 30
+    marginTop: 5
   },  
   person: {
     position: 'absolute',
     left: 10,
-    top: 14
+    top: 14,
   },
   username: {
     width: WIDTH - 55,
     height: 50,
-    borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 40,
-    fontSize: 20,
+    fontSize: 18,
+    backgroundColor: '#F2F2F2',
+    fontFamily: 'sans-serif-light',
+    color: '#5E7A7E'
   },
   passwordContainer: {
     marginTop: 10
@@ -224,10 +227,12 @@ const styles = StyleSheet.create({
   password: {
     width: WIDTH - 55,
     height: 50,
-    borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 40,
-    fontSize: 20,
+    fontSize: 18,
+    backgroundColor: '#F2F2F2',
+    fontFamily: 'sans-serif-light',
+    color: '#5E7A7E'
   },
   loginSection: {
     marginTop: 50,
@@ -239,7 +244,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(125, 196, 106)'
+    backgroundColor: '#027368'
   },
   loginText: {
     color: 'white',
@@ -253,7 +258,8 @@ const styles = StyleSheet.create({
   },
   forgotContainer: {
     alignItems: 'center',
-    marginTop: 10
+    marginTop: 10,
+    display: 'none'
   },
   forgotText: {
     fontWeight: '500',
@@ -269,5 +275,11 @@ const styles = StyleSheet.create({
   },
   remember: {
     display: 'none'
+  },
+  logoText: {
+    marginTop: 25,
+    fontFamily: 'sans-serif-medium',
+    fontSize: 25,
+    color: '#027368'
   }
 });

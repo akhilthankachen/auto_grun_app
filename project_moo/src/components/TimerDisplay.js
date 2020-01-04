@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import DisplayTimerModal from './DisplayTimerModal'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
+import OnlyTimeDuration from './OnlyTimeDuration';
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -15,96 +16,130 @@ export default class timerDisplay extends Component {
     super(props);
     this.state = {
       isOn: this.props.isActive,
-      isVisible: false,
+      isVisibleActivate: false,
+      isVisibleDeactivate: false,
       displayTimerVisible: false,
-      keyDup: this.props.keyDup,
-      index: this.props.index,
-      channel: this.props.channel
+      channel: this.props.channel,
+      data: [],
+      value: ''
     };
+
+    this.getData()
+  } 
+
+  getData = async ()=>{
+    try{
+      const value = await AsyncStorage.getItem('@timerSettings')
+      if(value != null){
+        var json = JSON.parse(value)
+        if(this.state.channel == 1){
+          this.setState({
+            data: json.ch1,
+            value: value
+          })
+        }else{
+          this.setState({
+            data: json.ch2,
+            value: value
+          })
+        }
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  checkDataAndUpdate = async ()=>{
+    try{
+      const value = await AsyncStorage.getItem('@timerSettings')
+      if(value != null){
+        var json = JSON.parse(value)
+        if(value.localeCompare(this.state.value) != 0){
+          if(this.state.channel == 1){
+            this.setState({
+              data: json.ch1,
+              value: value
+            })
+          }else{
+            this.setState({
+              data: json.ch2,
+              value: value
+            })
+          }
+          if(this.state.isOn == true){
+            this.setState({
+              isVisibleActivate: true
+            })
+            this.props.onPressActivate(this.state.channel, this.switchOff, true)
+          }
+        }
+      }
+    }catch(e){
+      console.log(e)
+    }
   }
 
   componentDidUpdate = ()=>{
-    if(this.props.isActive == true && this.state.isVisible == true){
+    if(this.props.isActive == true && this.state.isOn == false){
       this.setState({
-        isVisible: false,
         isOn: true
       })
     }
-    if(this.state.isOn == true && this.props.isActive == false){
+    if(this.props.isActive == false && this.state.isOn == true){
       this.setState({
         isOn: false
       })
     }
-    if(this.state.isOn == false && this.props.isActive == true){
-      this.setState({
-        isOn: true
-      })
-    }
+    this.checkDataAndUpdate()
   }
 
   switchOff = ()=>{
     this.setState({
-      isVisible: false
+      isVisibleActivate: false,
+      isVisibleDeactivate: false
     })
+
+    console.log("callback called")
   }
 
   toggleStatus = (isOn)=>{
     if(this.state.isOn == true){
-      alert('Activate another settings to deactivate this..')
+      this.setState({
+        isVisibleDeactivate: true
+      })
+      this.props.onPressActivate(this.state.channel, this.switchOff, false)
     }else{
       this.setState({
-        isVisible: true
+        isVisibleActivate: true
       })
-      this.props.onPressActivate(this.state.index, this.state.channel, this.switchOff)
+      this.props.onPressActivate(this.state.channel, this.switchOff, true)
     }
   }
 
-  onPressDelete = async ()=>{
-    if(this.state.isOn == true){
-      alert('Cannot remove because currently active..')
-    }else{
-      try{
-        const value = await AsyncStorage.getItem('@timerSettings')
-        if(value != null){
-          var json = JSON.parse(value)
-          if(this.props.channel == 1){
-            json.channel1.splice(this.props.index, 1)
-          }else{
-            json.channel2.splice(this.props.index, 1)
-          }
-          json = JSON.stringify(json)
-          await AsyncStorage.setItem('@timerSettings', json)
-          this.props.onPressDelete(this.state.index, this.state.channel)
-        }
-      }catch(e){
-        console.log(e)
-      }
+  renderTimeList = ()=>{
+    return this.state.data.slice(0).reverse().map((item, index) => {
+        return (
+            <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} color="active"/>
+        );
+    });
+  }
+
+  renderTimerListBuffer = ()=>{
+    let len = this.state.data.length
+    let list = []
+    for(var i = len; i<6 ; i++){
+      list.push(
+        <OnlyTimeDuration key={i} index={i} hour=" ---" minutes="---" duration=" ---" color="inactive"/>
+      )
     }
-  }
-
-  onPressView =()=>{
-    this.setState({
-      displayTimerVisible: true
-    })
-  }
-
-  onPressCloseDisplayTimer = ()=>{
-    this.setState({
-      displayTimerVisible: false
-    })
+    return list
   }
 
   render() {
     return (
       <View style={styles.container}>
-      <DisplayTimerModal
-        isVisible={this.state.displayTimerVisible} 
-        key={this.state.keyDup}
-        index={this.state.index} 
-        channel={this.state.channel}
-        onPressClose={this.onPressCloseDisplayTimer}
-      />
-      <LoadingModal isVisible={this.state.isVisible} content='Activating Settings'/>
+      <LoadingModal isVisible={this.state.isVisibleActivate} content='Activating Settings'/>
+      <LoadingModal isVisible={this.state.isVisibleDeactivate} content='Deactivating Settings'/>
         <View style={styles.titleBox}>
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>
           <View style={styles.statusBox}>
@@ -117,23 +152,29 @@ export default class timerDisplay extends Component {
             />
           </View>
         </View>
-        <View style={styles.buttonBox}>
-          <View style={styles.viewBox}>
-            <SimpleButton text='View' onPress={this.onPressView}/>
-          </View>
-          <View style={styles.removeBox}>
-            <SimpleButton text='Remove' onPress={this.onPressDelete}/>
-          </View>
+        <View style={styles.listDuration}>
+          {this.renderTimeList()}
+          {this.renderTimerListBuffer()}
         </View>
+
       </View>
     );
   }
 }
 
+//<View style={styles.buttonBox}>
+//<View style={styles.viewBox}>
+//  <SimpleButton text='View' onPress={this.onPressView}/>
+//</View>
+//<View style={styles.removeBox}>
+//  <SimpleButton text='Remove' onPress={this.onPressDelete}/>
+//</View>
+//</View>
+
 const styles = StyleSheet.create({
   container: {
     width: WIDTH - 30,
-    height: 120,
+    height: 250,
     backgroundColor: 'white',
     marginTop: 15,
     borderRadius: 5
@@ -150,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   statusBox: {
-    marginLeft: 15
+    marginRight: 15
   },
   removeIcon: {
     marginRight: 15

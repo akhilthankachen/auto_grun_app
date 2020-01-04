@@ -16,37 +16,63 @@ export default class OnlyTimeDuration extends Component {
     this.props.onPress(this.props.index)
   }
 
+  displayTime = (time)=>{
+    if(time == 0){
+      return "00"
+    }else{
+      if(time / 10 < 1){
+        return "0" + time
+      }
+      return time
+    }
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.button}>
-          <Text style={styles.logoutText}>Time : {this.props.hour}:{this.props.minutes}   Duration : {this.props.duration} Minutes</Text>
+    if(this.props.color == "active"){
+      return (
+        <View style={styles.container}>
+          <View style={styles.button}>
+            <Text style={styles.activeText}>Time : {this.displayTime(this.props.hour)}:{this.displayTime(this.props.minutes)}   Duration : {this.displayTime(this.props.duration)} Mins</Text>
+          </View>
         </View>
-      </View>
-    );
+      )
+    }else{
+      return (
+        <View style={styles.container}>
+          <View style={styles.button}>
+            <Text style={styles.inactiveText}>Time : {this.props.hour}:{this.props.minutes}   Duration : {this.props.duration} Mins</Text>
+          </View>
+        </View>
+      )
+    }
   }
 }
 
 const styles = StyleSheet.create({
-    container:{
-
-    },
     button: {
-      marginTop: 10,
-        width: WIDTH - 60,
-        height: 30,
-        alignItems: 'center',
-        backgroundColor: 'white',
-        color: 'white',
-        borderRadius: 5,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+      marginTop: 2,
+      width: WIDTH - 60,
+      height: 30,
+      alignItems: 'center',
+      backgroundColor: 'white',
+      color: 'white',
+      borderRadius: 5,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
-    logoutText: {
-        fontFamily: 'sans-serif-medium',
-        fontWeight: '500',
-        fontSize: 15,
-        paddingLeft: 15
+    activeText: {
+      fontFamily: 'sans-serif-medium',
+      fontWeight: '500',
+      fontSize: 15,
+      paddingLeft: 30,
+      color: '#0C2E59'
+    },
+    inactiveText: {
+      fontFamily: 'sans-serif-medium',
+      fontWeight: '500',
+      fontSize: 15,
+      paddingLeft: 30,
+      color: 'gray'
     }
 });

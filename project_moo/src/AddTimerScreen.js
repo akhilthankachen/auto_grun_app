@@ -28,8 +28,42 @@ export default class AddTimerScreen extends Component {
         hour: '-- ',
         minutes: ' --',
         duration: '',
-        timeDuration: []
+        timeDuration: [],
+        data: {},
+        fetchVisible: true
     };
+
+    this.getData(this.fetchOff)
+  }
+
+  fetchOff = ()=>{
+      this.setState({
+          fetchVisible: false
+      })
+  }
+
+  getData = async (callback)=>{
+    try{
+      const value = await AsyncStorage.getItem('@timerSettings')
+      if(value != null){
+        var json = JSON.parse(value)
+        this.setState({
+            data: json
+        })
+        if(this.state.channel == 1){
+          this.setState({
+            timeDuration: json.ch1
+          })
+        }else{
+          this.setState({
+            timeDuration: json.ch2
+          })
+        }
+      }
+      callback()
+    }catch(e){
+      console.log(e)
+    }
   }
 
   setModalVisible(visible) {
@@ -51,21 +85,25 @@ export default class AddTimerScreen extends Component {
   }
 
   addTimeAndDuration = () =>{
-      if(this.state.hour != '-- ' && this.state.duration != ''){
-        var interArray = this.state.timeDuration
-        var json = {"h": this.state.hour,
-                    "m": this.state.minutes,
-                    "d": parseInt(this.state.duration) }
-        interArray.push(json)
-        this.setState({
-            timeDuration: interArray,
-            hour: '-- ',
-            minutes: ' --',
-            duration: ''
-        })
-      }else{
-          alert('Time or Duration Empty')
-      }
+    if(this.state.timeDuration.length == 6){
+        alert('Maximum settings reached...')
+    }else{
+        if(this.state.hour != '-- ' && this.state.duration != ''){
+            var interArray = this.state.timeDuration
+            var json = {"h": this.state.hour,
+                        "m": this.state.minutes,
+                        "d": parseInt(this.state.duration) }
+            interArray.push(json)
+            this.setState({
+                timeDuration: interArray,
+                hour: '-- ',
+                minutes: ' --',
+                duration: ''
+            })
+        }else{
+            alert('Time or Duration Empty...')
+        }
+    }
   }
 
   onPressDelete = (index)=>{
@@ -79,9 +117,18 @@ export default class AddTimerScreen extends Component {
   renderTimeList = ()=>{
     return this.state.timeDuration.slice(0).reverse().map((item, index) => {
         return (
-            <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} onPress={this.onPressDelete}/>
+            <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} active={true} onPress={this.onPressDelete}/>
         );
     });
+  }
+
+  renderTimerListBuffer = ()=>{
+    let len = this.state.timeDuration.length
+    let list = []
+    for( var i = len; i<6; i++){
+        list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
+    }
+    return list
   }
 
   scrollToPos = (pos) => {
@@ -94,9 +141,9 @@ export default class AddTimerScreen extends Component {
       if(value !== null) {
         var json = JSON.parse(value)
         if(this.state.channel == 1){
-            json.channel1.push(this.state.timeDuration)
+            json.ch1 = this.state.timeDuration
         }else if(this.state.channel == 2){
-            json.channel2.push(this.state.timeDuration)
+            json.ch2 = this.state.timeDuration
         }
         json = JSON.stringify(json)
         await AsyncStorage.setItem('@timerSettings', json)
@@ -104,11 +151,11 @@ export default class AddTimerScreen extends Component {
         this.props.navigation.navigate('dashboard')
       }else{
         try {
-            var json = {"channel1": [],"channel2": []}
+            var json = {"ch1": [],"ch2": []}
             if(this.state.channel == 1){
-                json.channel1.push(this.state.timeDuration)
+                json.ch1 = this.state.timeDuration
             }else if(this.state.channel == 2){
-                json.channel2.push(this.state.timeDuration)
+                json.ch2 = this.state.timeDuration
             }
             json = JSON.stringify(json)
             await AsyncStorage.setItem('@timerSettings', json)
@@ -125,28 +172,44 @@ export default class AddTimerScreen extends Component {
 
 
   saveActivateExit = ()=>{
-    if (Array.isArray(this.state.timeDuration) && this.state.timeDuration.length){
-        this.setModalVisible(true)
-        this.setTimerData()
+    this.setModalVisible(true)
+    this.setTimerData()
+  }
+
+  toggleChannel = (value)=>{
+    if(value == 1){
+        if(this.state.data.ch1){
+            this.setState({
+                channel: value,
+                timeDuration: this.state.data.ch1
+            })
+        }else{
+            this.setState({
+                channel: value,
+                timeDuration: []
+            })
+        }
     }else{
-        Alert.alert(
-            'Empty Timer',
-            'Add some schedules !',
-            [
-                {text: 'OK', onPress: () => {
-                  
-                }},
-            ],
-            {cancelable: false},
-        );
-    }         
+        if(this.state.data.ch2){
+            this.setState({
+                channel: value,
+                timeDuration: this.state.data.ch2
+            })
+        }else{
+            this.setState({
+                channel: value,
+                timeDuration: []
+            })
+        }
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
-        
-        <LoadingModal content='Saving and activating settings.' isVisible={this.state.modalVisible}/>
+
+        <LoadingModal content='Saving and updating settings.' isVisible={this.state.modalVisible}/>
+        <LoadingModal content='Fetching data...' isVisible={this.state.fetchVisible}/>
 
         { this.state.isVisible && <DateTimePicker value={new Date()}
             mode={'time'}
@@ -160,7 +223,7 @@ export default class AddTimerScreen extends Component {
         ref={(scroller) => {this.scroller = scroller}}>
             <View style={styles.headingBox}>
                 <Text style={styles.heading}>
-                    Add New Timer Settings
+                    Edit Timer Settings
                 </Text>
             </View>
             <View style={styles.channelBox}>
@@ -172,7 +235,7 @@ export default class AddTimerScreen extends Component {
                         initial={0}
                         buttonColor={'rgb(238, 179, 158)'}
                         selectedButtonColor={'rgb(238, 179, 158)'}
-                        onPress={(value) => {this.setState({channel:value})}}
+                        onPress={(value)=>{this.toggleChannel(value)}}
                     />
                 </View>
             </View>
@@ -212,6 +275,7 @@ export default class AddTimerScreen extends Component {
             </View>
             <View style={{marginTop: 10}}>
                 {this.renderTimeList()}
+                {this.renderTimerListBuffer()}
             </View>
         </ScrollView>
 

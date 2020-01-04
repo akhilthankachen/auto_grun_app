@@ -39,7 +39,7 @@ export default class SaveAndActivate extends Component {
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.logoutText}>Save And Activate</Text>
+                <Text style={styles.logoutText}>Save And Update</Text>
             </View>
         </TouchableOpacity>
       </View>

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   contentBox: {
     width: '90%',
     height: 100,
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(249, 249, 249)',
     elevation: 20,
     padding: 10,
     borderRadius: 5,

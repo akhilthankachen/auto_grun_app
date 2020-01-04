@@ -12,7 +12,11 @@ export default class AddNewTimer extends Component {
   }
 
   onAddPress = ()=>{
-    this.props.navigation.navigate('addTimer')
+    if(this.props.deviceOnline){
+      this.props.navigation.navigate('addTimer')
+    }else(
+      alert("Device not online...")
+    )
   }
 
   render() {
@@ -26,7 +30,7 @@ export default class AddNewTimer extends Component {
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.addNewTimerText}>Add New Timer</Text>
+                <Text style={styles.addNewTimerText}>Edit Time Durations</Text>
             </View>
         </TouchableOpacity>
       </View>

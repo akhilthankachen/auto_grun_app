@@ -51,7 +51,7 @@ OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);
 
 WiFiClient net;
-MQTTClient client;
+MQTTClient client(400);
 
 const long utcOffsetInSeconds = 19800; // 5.5 ( UTC +5 1/2 ) *60*60
 // Define NTP Client to get time
@@ -147,7 +147,7 @@ void connect() {
 
   Serial.print("\nconnecting...");
   int i = 0;
-  while (!client.connect("esp8266", "cowfarm", "cowfarm")) {
+  while (!client.connect( "esp8266" , "cowfarm", "cowfarm")) {
     Serial.print(".");
     delay(1000);
     i++;
@@ -157,6 +157,7 @@ void connect() {
   }
 
   if(!client.connected()){
+    standalone = true;
     return;
   }
 
@@ -378,11 +379,12 @@ void loop() {
     initialMinutes = minutes;
     sensors.requestTemperatures(); 
     float temperatureC = sensors.getTempCByIndex(0);
-    tempInHour( temperatureC , hours );
+    
     Serial.println("tick");
 
     if(temperatureC != 85){
-       client.publish("temp", deviceId + " " + String(temperatureC)); 
+       client.publish("temp", deviceId + " " + String(temperatureC));
+       tempInHour( temperatureC , hours ); 
     }
     Serial.println(String(temperatureC));
   }

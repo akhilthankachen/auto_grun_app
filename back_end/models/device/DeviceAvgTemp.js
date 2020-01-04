@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DeviceTempSchema = new mongoose.Schema({
+const DeviceAvgTempSchema = new mongoose.Schema({
     mac : {
         type : String,
         required : true
@@ -16,10 +16,10 @@ const DeviceTempSchema = new mongoose.Schema({
 });
 
 
-const DeviceTemp = module.exports = mongoose.model('DeviceTemp', DeviceTempSchema);
+const DeviceAvgTemp = module.exports = mongoose.model('DeviceAvgTemp', DeviceAvgTempSchema);
 
 module.exports.create = (data,cb) => {
-    let dtemp = new DeviceTemp();
+    let dtemp = new DeviceAvgTemp();
     let now = Date.now();
 
     dtemp.mac = data.mac;
@@ -27,5 +27,3 @@ module.exports.create = (data,cb) => {
     dtemp.timeStamp = now;
     dtemp.save(cb);
 }
-//ddd
-// heelo
