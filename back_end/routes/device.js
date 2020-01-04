@@ -208,6 +208,7 @@ router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res
                         res.json({success: false, msg: "Internal error"});
                     } else {
                         res.json({success: true, msg : docs}); 
+                        console.log(docs)
                     }
                     
                 })
