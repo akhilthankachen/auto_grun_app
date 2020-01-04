@@ -36,12 +36,6 @@ export default class TempGraph extends Component<Props> {
   }
   
   componentDidMount = ()=>{
-    let date = new Date()
-    let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
-    this.setState({
-      lastUpdated: dateFormated
-    })
-
     setIntervalObject = setInterval(()=>{
       fetch(config.remote+this.props.route, {
           method: 'GET',
@@ -49,8 +43,7 @@ export default class TempGraph extends Component<Props> {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': this.state.clientToken.token,
-          },
-          body: {date: new Date()}
+          }
       },)  
       .then((response) => {
           if(response.status == 200){

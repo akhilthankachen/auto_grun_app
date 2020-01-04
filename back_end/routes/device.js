@@ -176,7 +176,7 @@ router.post('/avgTempWeek', passport.authenticate('jwt',{session:false}), (req,r
 
 
 
-router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.get('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -185,9 +185,10 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date(req.body.date);
+                givenDate = Date.now();
                 less = new Date(givenDate);
                 more = new Date(givenDate);
+                console.log(givenDate)
 
                 // less.setDate(less.getDate()-less.getDay());
                 less.setMilliseconds(0);
@@ -264,7 +265,7 @@ router.post('/avgTempHour', passport.authenticate('jwt',{session:false}), (req,r
     }
 })
 
-router.post('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.get('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -273,7 +274,7 @@ router.post('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date(req.body.date);
+                givenDate = Date.now();
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
@@ -301,7 +302,7 @@ router.post('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,re
     }
 })
 
-router.post('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
+router.get('/minTempDay', passport.authenticate('jwt',{session:false}), (req,res,next) => {
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
@@ -310,7 +311,7 @@ router.post('/minTempDay', passport.authenticate('jwt',{session:false}), (req,re
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                givenDate = new Date(req.body.date);
+                givenDate = Date.now();
                 less = new Date(givenDate);
                 more = new Date(givenDate);
 
