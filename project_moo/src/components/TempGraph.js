@@ -38,7 +38,7 @@ export default class TempGraph extends Component<Props> {
   componentDidMount = ()=>{
     setIntervalObject = setInterval(()=>{
       fetch(config.remote+this.props.route, {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
