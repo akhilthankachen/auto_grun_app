@@ -15,115 +15,23 @@ export default class timerDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOn: this.props.isActive,
-      isVisibleActivate: false,
-      isVisibleDeactivate: false,
       displayTimerVisible: false,
       channel: this.props.channel,
       data: [],
       value: ''
     };
-
-    this.getData()
   } 
 
-  getData = async ()=>{
-    try{
-      const value = await AsyncStorage.getItem('@timerSettings')
-      if(value != null){
-        var json = JSON.parse(value)
-        if(this.state.channel == 1){
-          this.setState({
-            data: json.ch1,
-            value: value
-          })
-        }else{
-          this.setState({
-            data: json.ch2,
-            value: value
-          })
-        }
-      }
-    }catch(e){
-      console.log(e)
-    }
-  }
-
-  checkDataAndUpdate = async ()=>{
-    try{
-      const value = await AsyncStorage.getItem('@timerSettings')
-      if(value != null){
-        var json = JSON.parse(value)
-        if(value.localeCompare(this.state.value) != 0){
-          if(this.state.channel == 1){
-            this.setState({
-              data: json.ch1,
-              value: value
-            })
-          }else{
-            this.setState({
-              data: json.ch2,
-              value: value
-            })
-          }
-          if(this.state.isOn == true){
-            this.setState({
-              isVisibleActivate: true
-            })
-            this.props.onPressActivate(this.state.channel, this.switchOff, true)
-          }
-        }
-      }
-    }catch(e){
-      console.log(e)
-    }
-  }
-
-  componentDidUpdate = ()=>{
-    if(this.props.isActive == true && this.state.isOn == false){
-      this.setState({
-        isOn: true
-      })
-    }
-    if(this.props.isActive == false && this.state.isOn == true){
-      this.setState({
-        isOn: false
-      })
-    }
-    this.checkDataAndUpdate()
-  }
-
-  switchOff = ()=>{
-    this.setState({
-      isVisibleActivate: false,
-      isVisibleDeactivate: false
-    })
-  }
-
-  toggleStatus = (isOn)=>{
-    if(this.state.isOn == true){
-      this.setState({
-        isVisibleDeactivate: true
-      })
-      this.props.onPressActivate(this.state.channel, this.switchOff, false)
-    }else{
-      this.setState({
-        isVisibleActivate: true
-      })
-      this.props.onPressActivate(this.state.channel, this.switchOff, true)
-    }
-  }
-
   renderTimeList = ()=>{
-    return this.state.data.slice(0).reverse().map((item, index) => {
-        return (
-            <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} color="active"/>
-        );
+    return this.props.data.slice(0).reverse().map((item, index) => {
+      return (
+          <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} color="active"/>
+      );
     });
   }
 
   renderTimerListBuffer = ()=>{
-    let len = this.state.data.length
+    let len = this.props.data.length
     let list = []
     for(var i = len; i<6 ; i++){
       list.push(
@@ -136,19 +44,8 @@ export default class timerDisplay extends Component {
   render() {
     return (
       <View style={styles.container}>
-      <LoadingModal isVisible={this.state.isVisibleActivate} content='Activating Settings'/>
-      <LoadingModal isVisible={this.state.isVisibleDeactivate} content='Deactivating Settings'/>
         <View style={styles.titleBox}>
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>
-          <View style={styles.statusBox}>
-            <ToggleSwitch
-              isOn={this.state.isOn}
-              onColor="green"
-              offColor="gray"
-              size="medium"
-              onToggle={this.toggleStatus}
-            />
-          </View>
         </View>
         <View style={styles.listDuration}>
           {this.renderTimeList()}

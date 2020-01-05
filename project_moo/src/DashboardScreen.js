@@ -21,41 +21,13 @@ export default class DashboardScreen extends Component<Props> {
       channel1: [],
       channel2: [],
       isVisible: false,
-      activeChannel1: false,
-      activeChannel2: false,
       clientToken: '',
-      channelOneActive: false,
       deviceOnline: false,
-      value: ''
+      value: '',
+      updateOnce: false,
+      initCheck: false
     }
     this.getToken()
-    this.getActiveIndexOne()
-    this.getActiveIndexTwo()
-  }
-
-  getActiveIndexOne = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@ActiveOne')
-      if(value != null){
-        this.setState({
-          activeChannel1: JSON.parse(value)
-        })
-      }
-    } catch(e) {
-        // do nothing
-    }
-  }
-  getActiveIndexTwo = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@ActiveTwo')
-      if(value != null){
-        this.setState({
-          activeChannel2: JSON.parse(value)
-        })
-      }
-    } catch(e) {
-        // do nothing
-    }
   }
 
   getSettingsFromServer = () => {
@@ -75,9 +47,17 @@ export default class DashboardScreen extends Component<Props> {
     })
     .then((responseJSON)=>{
       if(responseJSON != null){
-        if(responseJSON.msg == true){
-          console.log("settings" +  responseJSON.msg)
-          this.getData()
+        if(responseJSON.success == true){
+          var json = JSON.parse(responseJSON.msg)
+          AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
+            console.log("setting value")
+            this.setState({
+              channel1: json.ch1,
+              channel2: json.ch2,
+              value: responseJSON.msg,
+              initCheck: true
+            })
+          })
         }
       }
     })
@@ -100,38 +80,35 @@ export default class DashboardScreen extends Component<Props> {
     }
   }
 
-  getData = async ()=>{
-    try {
+
+  checkDataAndUpdate = async ()=>{
+    try{
       const value = await AsyncStorage.getItem('@timerSettings')
-      if(value !== null) {
-        var json = JSON.parse(value)
-        this.setState({
-          channel1: json.ch1,
-          channel2: json.ch2,
-          value: value
-        })
-        //this.forceUpdate()
-      }else{
-        console.log('no value')
-      }
-    } catch(e) {
+        if(value != null){
+          var json = JSON.parse(value)
+          if(value.localeCompare(this.state.value) != 0){
+            console.log("check and update")
+            this.setState({
+              channel1: json.ch1,
+              channel2: json.ch2,
+              value: value,
+            })
+          }
+        }
+    }catch(e){
       console.log(e)
-    } 
+    }
   }
 
 
-  componentDidMount = ()=>{
-    didFocusSubscription = this.props.navigation.addListener(
-      'didFocus',
-      payload => {
-        this.getData()
-      }
-    );
-
+  componentDidUpdate = ()=>{
+    if(this.state.initCheck == true){
+      this.checkDataAndUpdate()
+    }
   }
 
   componentWillUnmount = ()=>{
-    didFocusSubscription.remove()
+ 
   }
 
   updateDeviceStatus = (status)=>{
@@ -140,224 +117,98 @@ export default class DashboardScreen extends Component<Props> {
     })
   }
 
-  onPressActivateSettings = (channel, callback, activate)=>{
-    if(!this.state.deviceOnline){
-      callback()
-      alert("Device not online...")
-      return
+  onPressActivateSettings = (channel)=>{
+    console.log("onPressActivate")
+    var json = {
+      settings: {
+        ch1: this.state.channel1,
+        ch2: this.state.channel2
+      }
     }
-    if(channel == 1){
-      if( activate == true ){
-        if(this.state.activeChannel2 == false){
-          var json = {
-            settings: {
-              ch1: this.state.channel1,
-              ch2: []
-            }
-          }
-        }else{
-          var json = {
-            settings: {
-              ch1: this.state.channel1,
-              ch2: this.state.channel2
-            }
-          }
+
+    json = JSON.stringify(json)
+
+    fetch(config.remote+'/device/settings', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.state.clientToken.token,
+      },
+      body: json
+    },)  
+    .then((response) => {
+        if(response.status == 200){
+            return response.json()
         }
-      }else{
-        if(this.state.activeChannel2 == false){
-          var json = {
-            settings: {
-              ch1: [],
-              ch2: []
-            }
-          }
-        }else{
-          var json = {
-            settings: {
-              ch1: [],
-              ch2: this.state.channel2
-            }
-          }
+    })
+    .then((responseJSON)=>{
+      if(responseJSON != null){
+        if(responseJSON.success == true){
+          setTimeout(()=>{
+            fetch(config.remote+'/device/settingsAck', {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.state.clientToken.token,
+              }
+            },)  
+            .then((response) => {
+                if(response.status == 200){
+                    return response.json()
+                }
+            })
+            .then((responseJSON)=>{
+              if(responseJSON != null){
+                if(responseJSON.msg == true){
+                  alert('Settings update successfully...')
+                  this.setState({
+                    isVisible: false,
+                    updateOnce: false
+                  })
+                }else{
+                  alert('Couldn\'t update. Try again...')
+                  this.setState({
+                    updateOnce: false
+                  })
+                }
+              }
+            })
+            .catch((err)=>{
+                console.log(err)
+                alert('Couldn\'t update. Try again...')
+                this.setState({
+                  updateOnce: false
+                })
+            })
+          },2000)
         }
       }
-      fetch(config.remote+'/device/settings', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': this.state.clientToken.token,
-        },
-        body: JSON.stringify(json)
-      },)  
-      .then((response) => {
-          if(response.status == 200){
-              return response.json()
-          }
-      })
-      .then((responseJSON)=>{
-        if(responseJSON != null){
-          if(responseJSON.success == true){
-            setTimeout(()=>{
-              fetch(config.remote+'/device/settingsAck', {
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': this.state.clientToken.token,
-                }
-              },)  
-              .then((response) => {
-                  if(response.status == 200){
-                      return response.json()
-                  }
-              })
-              .then((responseJSON)=>{
-                if(responseJSON != null){
-                  if(responseJSON.msg == true){
-                    if(activate){
-                      this.setState({
-                        activeChannel1: true
-                      })
-                      AsyncStorage.setItem('@ActiveOne', JSON.stringify(true))
-                    }else{
-                      this.setState({
-                        activeChannel1: false
-                      })
-                      AsyncStorage.setItem('@ActiveOne', JSON.stringify(false))
-                    }
-                    callback()
-                  }
-                }
-              })
-              .catch((err)=>{
-                  console.log(err)
-              })
-            },2000)
-          }
-        }
-      })
-      .catch((err)=>{
-          console.log(err)
-      })
-    }else{
-      if(activate){
-        if(this.state.activeChannel1 == false){
-          var json = {
-            settings: {
-              ch1: [],
-              ch2: this.state.channel2
-            }
-          }
-        }else{
-          var json = {
-            settings: {
-              ch1: this.state.channel1,
-              ch2: this.state.channel2
-            }
-          }
-        }
-      }else{
-        if(this.state.activeChannel1 == false){
-          var json = {
-            settings: {
-              ch1: [],
-              ch2: []
-            }
-          }
-        }else{
-          var json = {
-            settings: {
-              ch1: this.state.channel1,
-              ch2: []
-            }
-          }
-        }
-      }
-      fetch(config.remote+'/device/settings', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': this.state.clientToken.token,
-        },
-        body: JSON.stringify(json)
-      },)  
-      .then((response) => {
-          if(response.status == 200){
-              return response.json()
-          }
-      })
-      .then((responseJSON)=>{
-        if(responseJSON != null){
-          if(responseJSON.success == true){
-            setTimeout(()=>{
-              fetch(config.remote+'/device/settingsAck', {
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': this.state.clientToken.token,
-                }
-              },)  
-              .then((response) => {
-                  if(response.status == 200){
-                      return response.json()
-                  }
-              })
-              .then((responseJSON)=>{
-                if(responseJSON != null){
-                  if(responseJSON.msg == true){
-                    if(activate){
-                      this.setState({
-                        activeChannel2: true
-                      })
-                      AsyncStorage.setItem('@ActiveTwo', JSON.stringify(true))
-                    }else{
-                      this.setState({
-                        activeChannel2: false
-                      })
-                      AsyncStorage.setItem('@ActiveTwo', JSON.stringify(false))
-                    }
-                    callback()
-                  }
-                }
-              })
-              .catch((err)=>{
-                  console.log(err)
-              })
-            },2000)
-          }
-        }
-      })
-      .catch((err)=>{
-          console.log(err)
-      })
-    }
+    })
+    .catch((err)=>{
+        console.log(err)
+        alert('Couldn\'t update. Try again...')
+    })
+        
   }
 
   render() {
     return (
         <View style={styles.container}>
+            <LoadingModal isVisible={this.state.isVisible} content='Activating Settings'/>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <LiveFeed updateStatus = {this.updateDeviceStatus}/>
                 <View style={styles.timerSettingsList}>
                   <TimerDisplay 
                     key={1} 
-                    keyDup={1} 
-                    index={0} 
                     channel={1} 
-                    onPressDelete={this.onPressDeleteSettings}
-                    onPressActivate={this.onPressActivateSettings}
-                    isActive={this.state.activeChannel1}
+                    data={this.state.channel1}
                   />
                   <TimerDisplay 
                     key={2} 
-                    keyDup={1} 
-                    index={0} 
-                    channel={2} 
-                    onPressDelete={this.onPressDeleteSettings}
-                    onPressActivate={this.onPressActivateSettings}
-                    isActive={this.state.activeChannel2}
+                    channel={2}
+                    data={this.state.channel2}
                   />
                 </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} deviceOnline={this.state.deviceOnline}/>

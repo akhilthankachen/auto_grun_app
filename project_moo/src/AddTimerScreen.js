@@ -9,6 +9,7 @@ import { Icon } from 'react-native-elements'
 import TimeAndDurationBox from './components/TimeAndDurationBox';
 import AsyncStorage from '@react-native-community/async-storage';
 import LoadingModal from './components/LoadingModal'
+import config from '../config'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -30,7 +31,8 @@ export default class AddTimerScreen extends Component {
         duration: '',
         timeDuration: [],
         data: {},
-        fetchVisible: true
+        fetchVisible: true,
+        clientToken: ''
     };
 
     this.getData(this.fetchOff)
@@ -60,9 +62,23 @@ export default class AddTimerScreen extends Component {
           })
         }
       }
-      callback()
+      this.getToken(callback)
     }catch(e){
       console.log(e)
+    }
+  }
+
+  getToken = async (callback) => {
+    try {
+        const value = await AsyncStorage.getItem('@token')
+        if(value != null){
+          this.setState({
+            clientToken: JSON.parse(value)
+          })
+          callback()
+        }
+    } catch(e) {
+        // do nothing
     }
   }
 
@@ -85,17 +101,50 @@ export default class AddTimerScreen extends Component {
   }
 
   addTimeAndDuration = () =>{
-    if(this.state.timeDuration.length == 6){
-        alert('Maximum settings reached...')
+    if(this.state.timeDuration != undefined){
+        if(this.state.timeDuration.length == 6){
+            alert('Maximum settings reached...')
+        }else{
+            if(this.state.hour != '-- ' && this.state.duration != ''){
+                var interArray = this.state.timeDuration
+                var json = {"h": this.state.hour,
+                            "m": this.state.minutes,
+                            "d": parseInt(this.state.duration) }
+                interArray.push(json)
+                let tempData = this.state.data
+                if(this.state.channel == 1){
+                    tempData.ch1 = interArray
+                }else{
+                    tempData.ch2 = interArray
+                }
+                this.setState({
+                    timeDuration: interArray,
+                    data: tempData,
+                    hour: '-- ',
+                    minutes: ' --',
+                    duration: '',
+                })
+
+            }else{
+                alert('Time or Duration Empty...')
+            }
+        }
     }else{
         if(this.state.hour != '-- ' && this.state.duration != ''){
-            var interArray = this.state.timeDuration
+            var interArray = []
             var json = {"h": this.state.hour,
                         "m": this.state.minutes,
                         "d": parseInt(this.state.duration) }
             interArray.push(json)
+            var tempData = this.state.data
+            if(this.state.channel == 1){
+                tempData.ch1 = interArray
+            }else{
+                tempData.ch2 = interArray
+            }
             this.setState({
                 timeDuration: interArray,
+                data: tempData,
                 hour: '-- ',
                 minutes: ' --',
                 duration: ''
@@ -115,15 +164,21 @@ export default class AddTimerScreen extends Component {
   }
 
   renderTimeList = ()=>{
-    return this.state.timeDuration.slice(0).reverse().map((item, index) => {
-        return (
-            <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} active={true} onPress={this.onPressDelete}/>
-        );
-    });
+    if(this.state.timeDuration != undefined){
+        return this.state.timeDuration.slice(0).reverse().map((item, index) => {
+            return (
+                <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} active={true} onPress={this.onPressDelete}/>
+            );
+        });
+    }
   }
 
   renderTimerListBuffer = ()=>{
-    let len = this.state.timeDuration.length
+    if(this.state.timeDuration != undefined){
+        var len = this.state.timeDuration.length
+    }else{
+        var len = 0
+    }
     let list = []
     for( var i = len; i<6; i++){
         list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
@@ -135,39 +190,81 @@ export default class AddTimerScreen extends Component {
     this.scroller.scrollTo({x: 0, y: pos});
   };
 
-  setTimerData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@timerSettings')
-      if(value !== null) {
-        var json = JSON.parse(value)
-        if(this.state.channel == 1){
-            json.ch1 = this.state.timeDuration
-        }else if(this.state.channel == 2){
-            json.ch2 = this.state.timeDuration
+  setTimerData = () => {
+    var json = JSON.stringify(this.state.data)
+    AsyncStorage.setItem('@timerSettings', json).then(()=>{
+        this.onPressActivateSettings(()=>{this.props.navigation.navigate('dashboard')})
+    })
+  }
+
+  onPressActivateSettings = (callback)=>{
+
+    console.log("onPressActivate")
+    var json = {
+      settings: {
+        ch1: this.state.data.ch1,
+        ch2: this.state.data.ch2
+      }
+    }
+
+    json = JSON.stringify(json)
+
+    fetch(config.remote+'/device/settings', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.state.clientToken.token,
+      },
+      body: json
+    },)  
+    .then((response) => {
+        if(response.status == 200){
+            return response.json()
         }
-        json = JSON.stringify(json)
-        await AsyncStorage.setItem('@timerSettings', json)
-        this.setModalVisible(false)
-        this.props.navigation.navigate('dashboard')
-      }else{
-        try {
-            var json = {"ch1": [],"ch2": []}
-            if(this.state.channel == 1){
-                json.ch1 = this.state.timeDuration
-            }else if(this.state.channel == 2){
-                json.ch2 = this.state.timeDuration
-            }
-            json = JSON.stringify(json)
-            await AsyncStorage.setItem('@timerSettings', json)
-            this.setModalVisible(false)
-            this.props.navigation.navigate('dashboard')
-        } catch (e) {
-            console.log(e)
+    })
+    .then((responseJSON)=>{
+      if(responseJSON != null){
+        if(responseJSON.success == true){
+          setTimeout(()=>{
+            fetch(config.remote+'/device/settingsAck', {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.state.clientToken.token,
+              }
+            },)  
+            .then((response) => {
+                if(response.status == 200){
+                    return response.json()
+                }
+            })
+            .then((responseJSON)=>{
+              if(responseJSON != null){
+                if(responseJSON.msg == true){
+                  alert('Settings update successfully...')
+                  callback()
+                }else{
+                  alert('Couldn\'t update. Try again...')
+                }
+              }
+              this.setModalVisible(false)
+            })
+            .catch((err)=>{
+                console.log(err)
+                alert('Couldn\'t update. Try again...')
+                this.setModalVisible(false)
+            })
+          },2000)
         }
       }
-    } catch(e) {
-      console.log(e)
-    }
+    })
+    .catch((err)=>{
+        console.log(err)
+        alert('Couldn\'t update. Try again...')
+    })
+        
   }
 
 
@@ -204,11 +301,21 @@ export default class AddTimerScreen extends Component {
     }
   }
 
+  displayTime = (time)=>{
+    if(time == 0){
+      return "00"
+    }else{
+      if(time / 10 < 1){
+        return "0" + time
+      }
+      return time
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-
-        <LoadingModal content='Saving and updating settings.' isVisible={this.state.modalVisible}/>
+        <LoadingModal content='Saving and activating settings.' isVisible={this.state.modalVisible}/>
         <LoadingModal content='Fetching data...' isVisible={this.state.fetchVisible}/>
 
         { this.state.isVisible && <DateTimePicker value={new Date()}
@@ -243,7 +350,7 @@ export default class AddTimerScreen extends Component {
                 <View style={styles.pickTimeBox}>
                     <View style={styles.timeBoxInner}>
                         <Text style={styles.timeText}>Time  :  </Text>
-                        <Text style={styles.timeText}>{this.state.hour}:{this.state.minutes}</Text>
+                        <Text style={styles.timeText}>{this.displayTime(this.state.hour)}:{this.displayTime(this.state.minutes)}</Text>
                         <TouchableOpacity style={styles.timePicker} onPress={()=>{this.setState({isVisible: !this.state.isVisible})}}>
                             <Icon 
                                 name = 'access-time'
