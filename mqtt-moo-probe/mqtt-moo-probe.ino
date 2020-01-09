@@ -27,12 +27,16 @@ int chTwo[5][3];
 int chSizeOne;
 int chSizeTwo;
 
+// ssid
+char ssid[100];
+// password
+char password[100];
 
 // mqtt server address
 char addr[20] = "142.93.216.218";
 
 //channel pins
-int channelOnePin = 13;
+int channelOnePin = 12;
 int channelTwoPin = 0;
 
 // standlalone or connected mode
@@ -51,6 +55,7 @@ OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);
 
 WiFiClient net;
+WiFiManager wifiManager;
 MQTTClient client(400);
 
 const long utcOffsetInSeconds = 19800; // 5.5 ( UTC +5 1/2 ) *60*60
@@ -157,7 +162,6 @@ void connect() {
   }
 
   if(!client.connected()){
-    standalone = true;
     return;
   }
 
@@ -240,12 +244,41 @@ void initMinutes(){
   }
 }
 
+void getStoredSSID(){
+  Serial.println("Getting stored ssid");
+  String tempSSID = wifiManager.getSSID();
+  tempSSID.toCharArray(ssid, tempSSID.length() + 1);
+}
+
+void getStoredPassword(){
+  Serial.println("Getting stored password");
+  String tempPassword = wifiManager.getPassword();
+  tempPassword.toCharArray(password, tempPassword.length() + 1);
+}
+
+void getNewSSID(){
+  Serial.println("Getting new ssid");
+  String tempSSID = WiFi.SSID();
+  tempSSID.toCharArray(ssid, tempSSID.length() + 1);
+  Serial.println(tempSSID);
+}
+
+void getNewPassword(){
+  Serial.println("Getting new password");
+  String tempPassword = WiFi.psk();
+  tempPassword.toCharArray(password, tempPassword.length() + 1);
+  Serial.println(tempPassword);
+}
+
 void setup() {
   Serial.begin(9600);
-  Wire.begin( 2, 14 );
+  Wire.begin( 14, 2 );
+
+  getStoredSSID();
+  getStoredPassword();
   
-  WiFiManager wifiManager;
   wifiManager.setTimeout(180);
+  
   client.begin(addr, net);
   client.onMessage(messageReceived);
   
@@ -256,15 +289,12 @@ void setup() {
     // Note: Local domain names (e.g. "Computer.local" on OSX) are not supported by Arduino.
     // You need to set the IP address directly.
 
+   getNewSSID(); 
+   getNewPassword();
    timeClient.begin(); 
    connect();
 
-   if(!client.connected()){
-    standalone = true;
-   }else{
-    standalone = false;
-   }
-  } 
+  }
 
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -347,6 +377,23 @@ void executeTimerChTwo( int hours, int minutes ){
   }
 }
 
+int initHours = -1;
+void wifiReconnect(int hours){
+  if( initHours != hours ){
+    Serial.println("Trying to reconnect");
+    initHours = hours;
+    WiFi.begin(ssid, password);
+    delay(5000);
+    if( WiFi.status() != WL_CONNECTED ){
+      standalone = true;
+      Serial.println("Reconnection failed");
+    }else{
+      standalone = false;
+      initHours = -1;
+    }
+  }
+}
+
 int hours = 0;
 int minutes = 0;
 int seconds = 0;
@@ -355,7 +402,12 @@ void loop() {
   if(standalone == false){
     client.loop();
     if (!client.connected()) {
-      connect();
+      if (WiFi.status() != WL_CONNECTED){
+        Serial.println("Wifi gone");
+        standalone = true;
+      }else{
+        connect();
+      }
     }
   }
 
@@ -382,7 +434,7 @@ void loop() {
     
     Serial.println("tick");
 
-    if(temperatureC != 85){
+    if(temperatureC != 85 && temperatureC != -127){
        client.publish("temp", deviceId + " " + String(temperatureC));
        tempInHour( temperatureC , hours ); 
     }
@@ -392,4 +444,7 @@ void loop() {
   // check and execute timers
   executeTimerChOne( hours, minutes );
   executeTimerChTwo( hours, minutes );
+  if( standalone == true ){
+    wifiReconnect( hours );
+  }
 }
