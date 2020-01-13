@@ -102,7 +102,7 @@ export default class AddTimerScreen extends Component {
 
   addTimeAndDuration = () =>{
     if(this.state.timeDuration != undefined){
-        if(this.state.timeDuration.length == 6){
+        if(this.state.timeDuration.length == 3){
             alert('Maximum settings reached...')
         }else{
             if(this.state.hour != '-- ' && this.state.duration != ''){
@@ -165,7 +165,7 @@ export default class AddTimerScreen extends Component {
 
   renderTimeList = ()=>{
     if(this.state.timeDuration != undefined){
-        return this.state.timeDuration.slice(0).reverse().map((item, index) => {
+        return this.state.timeDuration.slice(0).map((item, index) => {
             return (
                 <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} active={true} onPress={this.onPressDelete}/>
             );
@@ -180,7 +180,7 @@ export default class AddTimerScreen extends Component {
         var len = 0
     }
     let list = []
-    for( var i = len; i<6; i++){
+    for( var i = len; i<3; i++){
         list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
     }
     return list
@@ -330,7 +330,7 @@ export default class AddTimerScreen extends Component {
         ref={(scroller) => {this.scroller = scroller}}>
             <View style={styles.headingBox}>
                 <Text style={styles.heading}>
-                    Edit Timer Settings
+                    Edit Irrigation Timer Settings
                 </Text>
             </View>
             <View style={styles.channelBox}>
@@ -340,8 +340,8 @@ export default class AddTimerScreen extends Component {
                         radio_props={radio_props}
                         formHorizontal={true}
                         initial={0}
-                        buttonColor={'rgb(238, 179, 158)'}
-                        selectedButtonColor={'rgb(238, 179, 158)'}
+                        buttonColor={'#027368'}
+                        selectedButtonColor={'#027368'}
                         onPress={(value)=>{this.toggleChannel(value)}}
                     />
                 </View>

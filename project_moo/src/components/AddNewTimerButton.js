@@ -30,7 +30,7 @@ export default class AddNewTimer extends Component {
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.addNewTimerText}>Edit Time Durations</Text>
+                <Text style={styles.addNewTimerText}>Edit Irrigation Timer Settings</Text>
             </View>
         </TouchableOpacity>
       </View>

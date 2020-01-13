@@ -33,7 +33,7 @@ export default class timerDisplay extends Component {
   renderTimerListBuffer = ()=>{
     let len = this.props.data.length
     let list = []
-    for(var i = len; i<6 ; i++){
+    for(var i = len; i<3 ; i++){
       list.push(
         <OnlyTimeDuration key={i} index={i} hour=" ---" minutes="---" duration=" ---" color="inactive"/>
       )
@@ -69,7 +69,7 @@ export default class timerDisplay extends Component {
 const styles = StyleSheet.create({
   container: {
     width: WIDTH - 30,
-    height: 250,
+    height: 150,
     backgroundColor: 'white',
     marginTop: 15,
     borderRadius: 5

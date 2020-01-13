@@ -22,7 +22,11 @@ export default class LogoutButton extends Component {
             },
             {text: 'OK', onPress: () => {
                 AsyncStorage.setItem('@token', '').then(()=>{
-                    this.props.navigation.navigate('splash')
+                  AsyncStorage.setItem('@timerSettings', '').then(()=>{
+                    AsyncStorage.setItem('@lastTemp', '').then(()=>{
+                      this.props.navigation.navigate('splash')
+                    })
+                  })
                 })
             }},
         ],

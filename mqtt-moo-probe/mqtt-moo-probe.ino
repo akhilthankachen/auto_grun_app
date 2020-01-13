@@ -43,10 +43,10 @@ int channelTwoPin = 0;
 bool standalone = false;
 
 // device id
-String deviceId = "test123";
+String deviceId = "ally01";
 
 // GPIO where the DS18B20 is connected to
-const int oneWireBus = 4;     
+const int oneWireBus = 0;     
 
 // Setup a oneWire instance to communicate with any OneWire devices
 OneWire oneWire(oneWireBus);
@@ -56,7 +56,7 @@ DallasTemperature sensors(&oneWire);
 
 WiFiClient net;
 WiFiManager wifiManager;
-MQTTClient client(400);
+MQTTClient client(512);
 
 const long utcOffsetInSeconds = 19800; // 5.5 ( UTC +5 1/2 ) *60*60
 // Define NTP Client to get time
@@ -78,10 +78,10 @@ void storeSettings( char* json ){
   // fake data
   struct { 
     uint val = 0;
-    char str[400] = "";
+    char str[500] = "";
   } data;
 
-  strncpy( data.str, json, 400 );
+  strncpy( data.str, json, 500 );
 
   EEPROM.begin(512);
   EEPROM.put(addr,data);
@@ -89,7 +89,7 @@ void storeSettings( char* json ){
   EEPROM.end();
 
   data.val = 0; 
-  strncpy(data.str,"",400);
+  strncpy(data.str,"",500);
   
 }
 
@@ -101,7 +101,7 @@ void loadSettings(){
   // fake data
   struct { 
     uint val = 0;
-    char str[400] = "";
+    char str[500] = "";
   } data;
 
   EEPROM.begin(512);
@@ -113,7 +113,7 @@ void loadSettings(){
   handleSettings( data.str );
 
   data.val = 0; 
-  strncpy(data.str,"",400);
+  strncpy(data.str,"",500);
 }
 
 void handleSettings( char* json ){
@@ -149,17 +149,16 @@ void handleSettings( char* json ){
 }
 
 void connect() {
+  if( WiFi.status() != WL_CONNECTED ){
+    return;  
+  }
 
   Serial.print("\nconnecting...");
   int i = 0;
-  while (!client.connect( "esp8266" , "cowfarm", "cowfarm")) {
-    Serial.print(".");
-    delay(1000);
-    i++;
-    if(i == 10){
-      break;
-    }
-  }
+
+  char deviceIdChar[deviceId.length() + 1];
+  deviceId.toCharArray(deviceIdChar, deviceId.length() + 1);
+  client.connect( deviceIdChar , "cowfarm", "cowfarm");
 
   if(!client.connected()){
     return;
@@ -277,7 +276,7 @@ void setup() {
   getStoredSSID();
   getStoredPassword();
   
-  wifiManager.setTimeout(180);
+  wifiManager.setTimeout(60);
   
   client.begin(addr, net);
   client.onMessage(messageReceived);
@@ -285,6 +284,7 @@ void setup() {
   if(!wifiManager.autoConnect("AutoConnectAP")) {
     Serial.println("failed to connect and hit timeout");
     standalone = true;
+    WiFi.disconnect(true);
   }else{
     // Note: Local domain names (e.g. "Computer.local" on OSX) are not supported by Arduino.
     // You need to set the IP address directly.
@@ -383,10 +383,8 @@ void wifiReconnect(int hours){
     Serial.println("Trying to reconnect");
     initHours = hours;
     WiFi.begin(ssid, password);
-    delay(5000);
     if( WiFi.status() != WL_CONNECTED ){
       standalone = true;
-      Serial.println("Reconnection failed");
     }else{
       standalone = false;
       initHours = -1;
@@ -405,6 +403,7 @@ void loop() {
       if (WiFi.status() != WL_CONNECTED){
         Serial.println("Wifi gone");
         standalone = true;
+        WiFi.disconnect(true);
       }else{
         connect();
       }
@@ -445,6 +444,12 @@ void loop() {
   executeTimerChOne( hours, minutes );
   executeTimerChTwo( hours, minutes );
   if( standalone == true ){
-    wifiReconnect( hours );
+    if( WiFi.status() != WL_CONNECTED ){
+      wifiReconnect( minutes );
+    }else{
+      Serial.println("Wifi connected");
+      standalone = false;
+      initHours = -1;
+    }
   }
 }

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgb(255, 204, 186)',
+        backgroundColor: '#E9F2EA',
         color: 'white',
         borderRadius: 5,
         flexDirection: 'row'

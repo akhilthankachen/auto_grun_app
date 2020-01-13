@@ -49,15 +49,39 @@ export default class DashboardScreen extends Component<Props> {
       if(responseJSON != null){
         if(responseJSON.success == true){
           var json = JSON.parse(responseJSON.msg)
-          AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
-            console.log("setting value")
-            this.setState({
-              channel1: json.ch1,
-              channel2: json.ch2,
-              value: responseJSON.msg,
-              initCheck: true
-            })
-          })
+          if(responseJSON != ''){
+            if(json.ch1 && json.ch2){
+              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
+                console.log("setting value")
+                this.setState({
+                  channel1: json.ch1,
+                  channel2: json.ch2,
+                  value: responseJSON.msg,
+                  initCheck: true
+                })
+              }) 
+            }else if(json.ch1){
+              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
+                console.log("setting value")
+                this.setState({
+                  channel1: json.ch1,
+                  channel2: [],
+                  value: responseJSON.msg,
+                  initCheck: true
+                })
+              })
+            }else if(json.ch2){
+              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
+                console.log("setting value")
+                this.setState({
+                  channel1: [],
+                  channel2: json.ch2,
+                  value: responseJSON.msg,
+                  initCheck: true
+                })
+              })
+            }
+          }
         }
       }
     })
@@ -212,9 +236,9 @@ export default class DashboardScreen extends Component<Props> {
                   />
                 </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} deviceOnline={this.state.deviceOnline}/>
-                <TempGraph heading="Average Temp Per Hour" route="/device/avgTempDay" key={0} keyDup={0}/>
-                <TempGraph heading="Maximum Temp Per Hour" route="/device/maxTempDay" key={1} keyDup={1}/>
-                <TempGraph heading="Minimum Temp Per Hour" route="/device/minTempDay" key={2} keyDup={2}/>
+                <TempGraph heading="Today's average temperature °C/h" route="/device/avgTempDay" key={0} keyDup={0}/>
+                <TempGraph heading="Today's maximum temperature °C/h" route="/device/maxTempDay" key={1} keyDup={1}/>
+                <TempGraph heading="Today's minimum temperature °C/h" route="/device/minTempDay" key={2} keyDup={2}/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>

@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'project_moo' do
-  # Pods for project_moo
+target 'Ally' do
+  # Pods for Ally
   pod 'MQTTClient'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -39,7 +39,7 @@ target 'project_moo' do
 
   pod 'sp-react-native-mqtt', :path => '../node_modules/sp-react-native-mqtt'
 
-  target 'project_mooTests' do
+  target 'AllyTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -47,10 +47,10 @@ target 'project_moo' do
   use_native_modules!
 end
 
-target 'project_moo-tvOS' do
-  # Pods for project_moo-tvOS
+target 'Ally-tvOS' do
+  # Pods for Ally-tvOS
 
-  target 'project_moo-tvOSTests' do
+  target 'Ally-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
