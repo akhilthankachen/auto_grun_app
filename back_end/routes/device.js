@@ -131,7 +131,7 @@ router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,n
                 res.json({success: false,msg : "Internal err"});
             } else {
                 console.log(doc.mac)
-                DeviceTemp.findOne({mac: doc.mac},{ sort: {'timeStamp' : -1}}, (err,post) => {
+                DeviceTemp.findOne({mac: doc.mac},{},{ sort: {'timeStamp' : -1}}, (err,post) => {
                     res.json(post)
                 })
             }
