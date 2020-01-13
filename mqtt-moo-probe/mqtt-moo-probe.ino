@@ -36,8 +36,8 @@ char password[100];
 char addr[20] = "142.93.216.218";
 
 //channel pins
-int channelOnePin = 12;
-int channelTwoPin = 0;
+int channelOnePin = 5;
+int channelTwoPin = 4;
 
 // standlalone or connected mode
 bool standalone = false;
@@ -191,7 +191,7 @@ float tempSum = 0;
 float tempMax = 0;
 float tempMin = 0;
 int tempCounter = 0;
-int lastHour;
+int lastHour = -1;
 
 void tempInHour(float temp, int currentHour){
    if(lastHour == currentHour){
@@ -208,7 +208,7 @@ void tempInHour(float temp, int currentHour){
      }
      
    }else{
-     if( lastHour != 0 ){
+     if( lastHour != -1 ){
       client.publish("tempAverage", deviceId + " " + String(tempSum/tempCounter));
       client.publish("tempMax", deviceId + " " + String(tempMax));
       client.publish("tempMin", deviceId + " " + String(tempMin));

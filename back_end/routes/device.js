@@ -130,7 +130,6 @@ router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,n
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
             } else {
-                console.log(doc.mac)
                 DeviceTemp.findOne({mac: doc.mac},{},{ sort: {'timeStamp' : -1}}, (err,post) => {
                     res.json(post)
                 })
@@ -213,7 +212,11 @@ router.post('/avgTempDay', passport.authenticate('jwt',{session:false}), (req,re
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
                     } else {
-                        res.json({success: true, msg : docs});
+                        let len = docs.length
+                        if(len>=12){
+                            len = 12
+                        }
+                        res.json({success: true, msg : docs.slice(0,len)});
                     }
                     
                 })
@@ -299,7 +302,11 @@ router.post('/maxTempDay', passport.authenticate('jwt',{session:false}), (req,re
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
                     } else {
-                        res.json({success: true, msg : docs}); 
+                        let len = docs.length
+                        if(len>=12){
+                            len = 12
+                        }
+                        res.json({success: true, msg : docs.slice(0,len)}); 
                     }
                     
                 })
@@ -336,7 +343,11 @@ router.post('/minTempDay', passport.authenticate('jwt',{session:false}), (req,re
                         console.log(err);
                         res.json({success: false, msg: "Internal error"});
                     } else {
-                        res.json({success: true, msg : docs}); 
+                        let len = docs.length
+                        if(len>=12){
+                            len = 12
+                        }
+                        res.json({success: true, msg : docs.slice(0,len)});
                     }
                     
                 })
