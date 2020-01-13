@@ -125,7 +125,7 @@ router.get('/lastTemp', passport.authenticate('jwt',{session:false}), (req,res,n
     if(!req.user) {
         res.json({success: false, msg : "User not authernticated"});
     } else {
-        Device.findOne({user : req.user._id},(err,dev) => {
+        Device.findOne({user : req.user._id},(err,doc) => {
             if(err) {
                 console.log(err);
                 res.json({success: false,msg : "Internal err"});
