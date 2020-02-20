@@ -1,23 +1,17 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 type Props = {};
-export default class SplashScreen extends Component<Props> {
-    getMyValue = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@token')
-            if(value != null){
-              this.props.navigation.navigate('dashboard')
-            }else{
-              this.props.navigation.navigate('login')
-            }
-        } catch(e) {
-            // do nothing
-        }
-    }  
+class SplashScreen extends Component<Props> { 
   componentDidMount = () => {
-    this.getMyValue()
+    if( this.props.user.token != '' && this.props.user.authStatus == true){
+      this.props.navigation.navigate('dashboard')
+    }else{
+      this.props.navigation.navigate('login')
+    }
   }
 
   render() {
@@ -28,6 +22,16 @@ export default class SplashScreen extends Component<Props> {
     );
   }
 }
+
+SplashScreen.propTypes = {
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  user: state.user
+})
+
+export default connect(mapStateToProps, null)(SplashScreen)
 
 const styles = StyleSheet.create({
   container: {

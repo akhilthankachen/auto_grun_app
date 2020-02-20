@@ -23,6 +23,9 @@ export default class timerDisplay extends Component {
   } 
 
   renderTimeList = ()=>{
+    if( this.props.data.length < 1){
+      return <Text style={styles.empty}>Empty</Text>
+    }
     return this.props.data.slice(0).reverse().map((item, index) => {
       return (
           <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} color="active"/>
@@ -33,7 +36,7 @@ export default class timerDisplay extends Component {
   renderTimerListBuffer = ()=>{
     let len = this.props.data.length
     let list = []
-    for(var i = len; i<3 ; i++){
+    for(var i = len; i<6 ; i++){
       list.push(
         <OnlyTimeDuration key={i} index={i} hour=" ---" minutes="---" duration=" ---" color="inactive"/>
       )
@@ -42,14 +45,14 @@ export default class timerDisplay extends Component {
   }
 
   render() {
+    var height = 75 + (((this.props.data.length > 0 ? this.props.data.length : 1)  - 1) * 35)
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {height: height}]}>
         <View style={styles.titleBox}>
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>
         </View>
         <View style={styles.listDuration}>
           {this.renderTimeList()}
-          {this.renderTimerListBuffer()}
         </View>
 
       </View>
@@ -69,7 +72,6 @@ export default class timerDisplay extends Component {
 const styles = StyleSheet.create({
   container: {
     width: WIDTH - 30,
-    height: 150,
     backgroundColor: 'white',
     marginTop: 15,
     borderRadius: 5
@@ -109,5 +111,12 @@ const styles = StyleSheet.create({
   },
   removeBox: {
     width: (WIDTH - 60)/2 - 7.5,
+  },
+  empty:{
+    alignSelf: 'center',
+    fontFamily: 'sans-serif-medium',
+    fontWeight: '500',
+    fontSize: 15,
+    color: 'gray'
   }
 });

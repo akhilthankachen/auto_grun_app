@@ -10,16 +10,21 @@ import TimeAndDurationBox from './components/TimeAndDurationBox';
 import AsyncStorage from '@react-native-community/async-storage';
 import LoadingModal from './components/LoadingModal'
 import config from '../config'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { putTimer } from './actions/timerActions'
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
 
 var radio_props = [
-    {label: 'Channel 1  ', value: 1 },
-    {label: 'Channel 2  ', value: 2 }
+    {label: 'Ch1  ', value: 1 },
+    {label: 'Ch2  ', value: 2 },
+    {label: 'Ch3  ', value: 3 },
+    {label: 'Ch4  ', value: 4 }
 ];
 
-export default class AddTimerScreen extends Component {
+class AddTimerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,57 +34,24 @@ export default class AddTimerScreen extends Component {
         hour: '-- ',
         minutes: ' --',
         duration: '',
-        timeDuration: [],
-        data: {},
-        fetchVisible: true,
+        timeDuration: this.props.timer.ch1,
+        data: this.props.timer,
+        fetchVisible: false,
         clientToken: ''
     };
 
-    this.getData(this.fetchOff)
   }
 
-  fetchOff = ()=>{
+  UNSAFE_componentWillReceiveProps = next => {
+    this.setState({
+      data: next.timer
+    })
+  }
+
+  fetchOff = (val)=>{
       this.setState({
-          fetchVisible: false
+          fetchVisible: val
       })
-  }
-
-  getData = async (callback)=>{
-    try{
-      const value = await AsyncStorage.getItem('@timerSettings')
-      if(value != null){
-        var json = JSON.parse(value)
-        this.setState({
-            data: json
-        })
-        if(this.state.channel == 1){
-          this.setState({
-            timeDuration: json.ch1
-          })
-        }else{
-          this.setState({
-            timeDuration: json.ch2
-          })
-        }
-      }
-      this.getToken(callback)
-    }catch(e){
-      console.log(e)
-    }
-  }
-
-  getToken = async (callback) => {
-    try {
-        const value = await AsyncStorage.getItem('@token')
-        if(value != null){
-          this.setState({
-            clientToken: JSON.parse(value)
-          })
-          callback()
-        }
-    } catch(e) {
-        // do nothing
-    }
   }
 
   setModalVisible(visible) {
@@ -102,7 +74,7 @@ export default class AddTimerScreen extends Component {
 
   addTimeAndDuration = () =>{
     if(this.state.timeDuration != undefined){
-        if(this.state.timeDuration.length == 3){
+        if( this.state.timeDuration.length == 6 ){
             alert('Maximum settings reached...')
         }else{
             if(this.state.hour != '-- ' && this.state.duration != ''){
@@ -113,9 +85,13 @@ export default class AddTimerScreen extends Component {
                 interArray.push(json)
                 let tempData = this.state.data
                 if(this.state.channel == 1){
-                    tempData.ch1 = interArray
-                }else{
-                    tempData.ch2 = interArray
+                  tempData.ch1 = interArray
+                }else if(this.state.channel == 2){
+                  tempData.ch2 = interArray
+                }else if(this.state.channel == 3){
+                  tempData.ch3 = interArray
+                }else if(this.state.channel == 4){
+                  tempData.ch4 = interArray
                 }
                 this.setState({
                     timeDuration: interArray,
@@ -138,9 +114,13 @@ export default class AddTimerScreen extends Component {
             interArray.push(json)
             var tempData = this.state.data
             if(this.state.channel == 1){
-                tempData.ch1 = interArray
-            }else{
-                tempData.ch2 = interArray
+              tempData.ch1 = interArray
+            }else if(this.state.channel == 2){
+              tempData.ch2 = interArray
+            }else if(this.state.channel == 3){
+              tempData.ch3 = interArray
+            }else if(this.state.channel == 4){
+              tempData.ch4 = interArray
             }
             this.setState({
                 timeDuration: interArray,
@@ -180,7 +160,7 @@ export default class AddTimerScreen extends Component {
         var len = 0
     }
     let list = []
-    for( var i = len; i<3; i++){
+    for( var i = len; i<6; i++){
         list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
     }
     return list
@@ -191,80 +171,10 @@ export default class AddTimerScreen extends Component {
   };
 
   setTimerData = () => {
-    var json = JSON.stringify(this.state.data)
-    AsyncStorage.setItem('@timerSettings', json).then(()=>{
-        this.onPressActivateSettings(()=>{this.props.navigation.navigate('dashboard')})
+    this.props.putTimer(this.state.data, ()=>{
+      this.setModalVisible(false)
+      this.props.navigation.navigate('dashboard')
     })
-  }
-
-  onPressActivateSettings = (callback)=>{
-
-    console.log("onPressActivate")
-    var json = {
-      settings: {
-        ch1: this.state.data.ch1,
-        ch2: this.state.data.ch2
-      }
-    }
-
-    json = JSON.stringify(json)
-
-    fetch(config.remote+'/device/settings', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.state.clientToken.token,
-      },
-      body: json
-    },)  
-    .then((response) => {
-        if(response.status == 200){
-            return response.json()
-        }
-    })
-    .then((responseJSON)=>{
-      if(responseJSON != null){
-        if(responseJSON.success == true){
-          setTimeout(()=>{
-            fetch(config.remote+'/device/settingsAck', {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.state.clientToken.token,
-              }
-            },)  
-            .then((response) => {
-                if(response.status == 200){
-                    return response.json()
-                }
-            })
-            .then((responseJSON)=>{
-              if(responseJSON != null){
-                if(responseJSON.msg == true){
-                  alert('Settings update successfully...')
-                  callback()
-                }else{
-                  alert('Couldn\'t update. Try again...')
-                }
-              }
-              this.setModalVisible(false)
-            })
-            .catch((err)=>{
-                console.log(err)
-                alert('Couldn\'t update. Try again...')
-                this.setModalVisible(false)
-            })
-          },2000)
-        }
-      }
-    })
-    .catch((err)=>{
-        console.log(err)
-        alert('Couldn\'t update. Try again...')
-    })
-        
   }
 
 
@@ -275,29 +185,53 @@ export default class AddTimerScreen extends Component {
 
   toggleChannel = (value)=>{
     if(value == 1){
-        if(this.state.data.ch1){
-            this.setState({
-                channel: value,
-                timeDuration: this.state.data.ch1
-            })
-        }else{
-            this.setState({
-                channel: value,
-                timeDuration: []
-            })
-        }
-    }else{
-        if(this.state.data.ch2){
-            this.setState({
-                channel: value,
-                timeDuration: this.state.data.ch2
-            })
-        }else{
-            this.setState({
-                channel: value,
-                timeDuration: []
-            })
-        }
+      if(this.state.data.ch1){
+        this.setState({
+            channel: value,
+            timeDuration: this.state.data.ch1
+        })
+      }else{
+        this.setState({
+            channel: value,
+            timeDuration: []
+        })
+      }
+    }else if(value == 2){
+      if(this.state.data.ch2){
+        this.setState({
+            channel: value,
+            timeDuration: this.state.data.ch2
+        })
+      }else{
+        this.setState({
+            channel: value,
+            timeDuration: []
+        })
+      }
+    }else if(value == 3){
+      if(this.state.data.ch3){
+        this.setState({
+            channel: value,
+            timeDuration: this.state.data.ch3
+        })
+      }else{
+        this.setState({
+            channel: value,
+            timeDuration: []
+        })
+      }
+    }else if(value == 4){
+      if(this.state.data.ch4){
+        this.setState({
+            channel: value,
+            timeDuration: this.state.data.ch4
+        })
+      }else{
+        this.setState({
+            channel: value,
+            timeDuration: []
+        })
+      }
     }
   }
 
@@ -399,6 +333,17 @@ export default class AddTimerScreen extends Component {
     );
   }
 }
+
+AddTimerScreen.propTypes = {
+  timer: PropTypes.object.isRequired,
+  putTimer: PropTypes.func.isRequired
+}
+
+mapStateToProps = state => ({
+  timer: state.timer
+})
+
+export default connect(mapStateToProps,{ putTimer })(AddTimerScreen) 
 
 const styles = StyleSheet.create({
     container: {

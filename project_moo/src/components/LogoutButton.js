@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
+import { connect } from 'react-redux'
+import { deauthenticate } from '../actions/userActions'
+import PropTypes from 'prop-types'
+import { purge } from '../store'
+
 
 const WIDTH = Dimensions.get('window').width
-export default class LogoutButton extends Component {
+class LogoutButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
+  }
+
+  UNSAFE_componentWillReceiveProps = next => { 
+    if(next.authStatus == false){
+      this.props.navigation.navigate('splash')
+    }
   }
 
   onlogoutPress = ()=>{
@@ -21,13 +32,8 @@ export default class LogoutButton extends Component {
                 style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-                AsyncStorage.setItem('@token', '').then(()=>{
-                  AsyncStorage.setItem('@timerSettings', '').then(()=>{
-                    AsyncStorage.setItem('@lastTemp', '').then(()=>{
-                      this.props.navigation.navigate('splash')
-                    })
-                  })
-                })
+                this.props.purge()
+                this.props.deauthenticate()
             }},
         ],
         {cancelable: false},
@@ -49,9 +55,21 @@ export default class LogoutButton extends Component {
             </View>
         </TouchableOpacity>
       </View>
-    );
+    )
   }
 }
+
+LogoutButton.propTypes = {
+  deauthenticate: PropTypes.func.isRequired,
+  authStatus: PropTypes.bool.isRequired,
+  purge: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => ({
+  authStatus: state.user.authStatus
+})
+
+export default connect(mapStateToProps, { deauthenticate, purge })(LogoutButton)
 
 const styles = StyleSheet.create({
     container:{

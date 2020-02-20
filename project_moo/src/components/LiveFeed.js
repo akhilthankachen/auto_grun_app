@@ -1,161 +1,42 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
+import React, {Component} from 'react'
+import {StyleSheet, Text, View, Dimensions} from 'react-native'
 import config from '../../config'
 import dateFormat from 'dateformat'
-import AsyncStorage from '@react-native-community/async-storage';
-
+import { connect } from 'react-redux'
+import { getLiveTemp, getDeviceStatus } from '../actions/liveTempActions'
+import PropTypes from 'prop-types'
 
 
 const WIDTH = Dimensions.get('window').width
 type Props = {};
 var setIntervalObject;
 var setIntervalObjectPing;
-export default class LiveFeed extends Component<Props> {
+class LiveFeed extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
-            liveTemp: '',
-            lastUpdated: '',
-            clientToken: '',
             deviceOnline: null,
             networkOnline: true,
+            liveTemp: this.props.live.temp,
+            lastUpdated: this.props.live.lastUpdated
         }
-        this.getToken()
     }
-    getToken = async () => {
-      try {
-          const value = await AsyncStorage.getItem('@token')
-          if(value != null){
-            this.setState({
-              clientToken: JSON.parse(value)
-            })
-          }
-      } catch(e) {
-          // do nothing
-      }
-  }
-    getMyValue = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@lastTemp')
-            if(value != null){
-              let tempJson = JSON.parse(value)
-              let date = new Date(tempJson.timeStamp)
-              let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
-              this.setState({
-                liveTemp: tempJson.temp,
-                lastUpdated: dateFormated
-              })
-            }
-        } catch(e) {
-            // do nothing
-        }
-    }  
+
+    UNSAFE_componentWillReceiveProps = next => {
+      this.setState({
+        liveTemp: next.live.temp,
+        lastUpdated: next.live.lastUpdated,
+        networkOnline: next.live.networkOnline,
+        deviceOnline: next.live.deviceOnline
+      })
+    }
 
     componentDidMount = () => {
-        this.getMyValue()
-
         setIntervalObject = setInterval(()=>{
-            fetch(config.remote+'/device/lastTemp', {
-                method: 'GET',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': this.state.clientToken.token,
-                }
-            },)  
-            .then((response) => {
-                if(response.status == 200){
-                    return response.json()
-                }
-            })
-            .then((responseJSON)=>{
-              if(responseJSON != null){
-                let date = new Date(responseJSON.timeStamp)
-                let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
-                this.setState({
-                  liveTemp: responseJSON.temp,
-                  lastUpdated: dateFormated
-                })
-                AsyncStorage.setItem('@lastTemp', JSON.stringify(responseJSON))
-              }
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-        }, 2000)
-
-        setIntervalObjectPing = setInterval(()=>{
-          fetch(config.remote+'/device/ping', {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': this.state.clientToken.token,
-            }
-          },)
-          .then((response) => {
-            if(response.status == 200){
-                return response.json()
-            }
-          })  
-          .then((responseJSON)=>{
-            if(responseJSON != null){
-              if(responseJSON.success == true){
-
-                setTimeout(()=>{
-                  fetch(config.remote+'/device/pingAck', {
-                    method: 'GET',
-                    headers: {
-                      'Accept': 'application/json',
-                      'Content-Type': 'application/json',
-                      'Authorization': this.state.clientToken.token,
-                    }
-                  },)
-                  .then((response) => {
-                    if(response.status == 200){
-                        return response.json()
-                    }
-                  }) 
-                  .then((responseJSON)=>{
-                    if(responseJSON != null){
-                      if(responseJSON.success){
-                        if(responseJSON.msg){
-                          this.setState({
-                            deviceOnline: true
-                          })
-                          this.props.updateStatus(true)
-                        }else{
-                          this.setState({
-                            deviceOnline: false
-                          })
-                          this.props.updateStatus(false)
-                        }
-                      }
-                    }
-                  })
-                  .catch((err)=>{
-                    console.log(err)
-                    this.setState({
-                      networkOnline: false,
-                      deviceOnline: false
-                    })
-                    this.props.updateStatus(false)
-                  })  
-
-                }, 2000)
-              }
-            }
-          })
-          .catch((err)=>{
-              console.log(err)
-              this.setState({
-                networkOnline: false,
-                deviceOnline: false
-              })
-              this.props.updateStatus(false)
-          })
+          this.props.getLiveTemp()
+          this.props.getDeviceStatus()
         }, 5000)
-  
+
     }
 
     componentWillUnmount = ()=>{
@@ -202,6 +83,18 @@ export default class LiveFeed extends Component<Props> {
     );
   }
 }
+
+LiveFeed.propTypes = {
+  live: PropTypes.object.isRequired,
+  getLiveTemp: PropTypes.func.isRequired,
+  getDeviceStatus: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => ({
+  live: state.live
+})
+
+export default connect(mapStateToProps, {getLiveTemp, getDeviceStatus})(LiveFeed)
 
 const styles = StyleSheet.create({
   container: {

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import { Icon, CheckBox } from 'react-native-elements'
-import AsyncStorage from '@react-native-community/async-storage';
-import config from '../config'
 import LoadingModal from './components/LoadingModal'
+import { connect } from 'react-redux'
+import { authenticate } from './actions/userActions'
+import PropTypes from 'prop-types'
+
 import {
   StyleSheet, 
   Text, 
@@ -15,7 +17,7 @@ import { TextInput } from 'react-native-gesture-handler';
 
 type Props = {};
 const { width : WIDTH } = Dimensions.get('window')
-export default class LoginScreen extends Component<Props> {
+class LoginScreen extends Component<Props> {
 
   constructor(props){
     super(props)
@@ -34,57 +36,30 @@ export default class LoginScreen extends Component<Props> {
     this.setState({modalVisible: visible});
   }
 
-  onLoginPress = () =>{
-    this.setModalVisible(true)
-    if(this.state.username != '' && this.state.password != ''){
-      fetch(config.remote+'/users/authenticate', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: this.state.username,
-          password: this.state.password
-        },
+  UNSAFE_componentWillReceiveProps = (next)=>{
+    if(next.user.authStatus == true && next.user.token != ''){
+      this.setModalVisible(false)
+      this.props.navigation.navigate('dashboard')
+    }
 
-        )
-      })  
-      .then((response) => {
-        if(response.status == 200){
-          return response.json()
-        }else{
-          this.setState({
-            status: '* Error'
-          })
-          this.setModalVisible(false)
-        }
+    if(next.user.authMessage != '' && next.user.authStatus == false){
+      this.setModalVisible(false)
+      this.setState({
+        status: next.user.authMessage
       })
-      .then((responseJSON)=>{
-        // response json
-        if(responseJSON.success == false){
-          this.setState({
-            status: '* '+responseJSON.msg
-          })
-          this.setModalVisible(false)
-        }else{
-          // user token
-          AsyncStorage.setItem('@token', JSON.stringify(responseJSON)).then(()=>{
-            this.setModalVisible(false)
-            this.props.navigation.navigate('dashboard')
-          })
-          .catch((err)=>{
-            console.log(err)
-            this.setModalVisible(false)
-          })
-        }
-      })
-      .catch((err)=>{
-        this.setState({
-          status: '* Error, Check network connection'
-        })
-        this.setModalVisible(false)
-      })
+    }
+  }
+
+  onLoginPressRedux = () => {
+    this.setModalVisible(true)
+
+    if(this.state.username != '' && this.state.password != ''){
+      let credentials = {
+        username: this.state.username,
+        password: this.state.password
+      }
+      
+      this.props.authenticate(credentials)
     }else{
       this.setState({
         status: '* Empty fields'
@@ -104,7 +79,8 @@ export default class LoginScreen extends Component<Props> {
         <View style={styles.loginSection}>
           <View style={styles.statusContainer}>
             <Text style = {styles.statusText}>
-            {this.state.status}</Text>
+              {this.state.status}
+            </Text>
           </View>
           <View style={styles.usernameContainer}>
             <TextInput 
@@ -159,7 +135,7 @@ export default class LoginScreen extends Component<Props> {
           </View>
           <TouchableOpacity
             style={styles.login}
-            onPress = {this.onLoginPress}
+            onPress = {this.onLoginPressRedux}
             >
             <Text style={styles.loginText}>
               Login
@@ -188,6 +164,17 @@ export default class LoginScreen extends Component<Props> {
     );
   }
 }
+
+LoginScreen.propTypes = {
+  authenticate: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state =>({
+  user: state.user
+})
+
+export default connect(mapStateToProps, { authenticate })(LoginScreen)
 
 const styles = StyleSheet.create({
   container: {
@@ -267,7 +254,7 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     position: 'absolute',
-    top: 5,
+    top: -20,
     left: 10,
   },
   statusText: {

@@ -14,77 +14,22 @@ export default class TempGraph extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
-          lastUpdated: '',
+          lastUpdated: this.props.data.lastUpdated,
           clientToken: '',
-          labels: [0,0,0,0],
-          data: [0,0,0,0],
+          labels: this.props.data.labels,
+          data: this.props.data.data,
           keyDup: this.props.keyDup
         }
-        this.getToken()
     }
-    getToken = async () => {
-      try {
-          const value = await AsyncStorage.getItem('@token')
-          if(value != null){
-            this.setState({
-              clientToken: JSON.parse(value)
-            })
-          }
-      } catch(e) {
-          // do nothing
-      }
-  }
-  
-  componentDidMount = ()=>{
-    setIntervalObject = setInterval(()=>{
-      fetch(config.remote+this.props.route, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': this.state.clientToken.token,
-          },
-          body: JSON.stringify({date: Date.now()})
-      },)  
-      .then((response) => {
-          if(response.status == 200){
-              return response.json()
-          }
+
+  UNSAFE_componentWillReceiveProps = next => {
+    if(next.data.data.length != this.state.data.length) {
+      this.setState({
+        data: next.data.data,
+        labels: next.data.labels,
+        lastUpdated: next.data.lastUpdated
       })
-      .then((responseJSON)=>{
-        if(responseJSON != null){
-          let date = new Date()
-          let dateFormated = dateFormat(date, "mmmm dS, yyyy, h:MM:ss TT")
-          if(responseJSON.msg){
-            var labels = responseJSON.msg.map((json)=>{
-              let tempDate = new Date(json.timeStamp)
-              return tempDate.getHours()
-            })
-
-            var data = responseJSON.msg.map((json)=>{
-              return json.temp
-            })
-
-          }
-
-          if(this.state.data.length <= data.length){
-            this.setState({
-              labels: labels,
-              data: data,
-              lastUpdated: dateFormated
-            })
-          }
-          
-        }
-      })
-      .catch((err)=>{
-          console.log(err)
-      })
-    }, 10000)
-  }
-
-  componentWillUnmount = ()=>{
-    clearInterval(setIntervalObject)
+    }
   }
 
   render() {

@@ -8,18 +8,26 @@ import LogoutButton from './components/LogoutButton'
 import AddNewTimerButton from './components/AddNewTimerButton';
 import TimerDisplay from './components/TimerDisplay'
 import LoadingModal from './components/LoadingModal'
-import DisplayTimerModal from './components/DisplayTimerModal'
-import config from '../config'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { getTimer } from './actions/timerActions'
+import { getTempHour } from './actions/liveTempActions'
 
 const WIDTH = Dimensions.get('window').width
 var didFocusSubscription = ''
 type Props = {};
-export default class DashboardScreen extends Component<Props> {
+var setIntervalObject
+class DashboardScreen extends Component<Props> {
   constructor(props){
     super(props)
     this.state = {
-      channel1: [],
-      channel2: [],
+      channel1: this.props.timer.ch1,
+      channel2: this.props.timer.ch2,
+      channel3: this.props.timer.ch3,
+      channel4: this.props.timer.ch4,
+      maxTemp: this.props.live.maxTemp,
+      minTemp: this.props.live.minTemp,
+      avgTemp: this.props.live.avgTemp,
       isVisible: false,
       clientToken: '',
       deviceOnline: false,
@@ -27,194 +35,43 @@ export default class DashboardScreen extends Component<Props> {
       updateOnce: false,
       initCheck: false
     }
-    this.getToken()
+    this.props.getTimer()
   }
 
-  getSettingsFromServer = () => {
-    console.log('gettings settings')
-    fetch(config.remote+'/device/getSettings', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.state.clientToken.token,
-      }
-    },)  
-    .then((response) => {
-        if(response.status == 200){
-            return response.json()
-        }
-    })
-    .then((responseJSON)=>{
-      if(responseJSON != null){
-        if(responseJSON.success == true){
-          var json = JSON.parse(responseJSON.msg)
-          if(responseJSON != ''){
-            if(json.ch1 && json.ch2){
-              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
-                console.log("setting value")
-                this.setState({
-                  channel1: json.ch1,
-                  channel2: json.ch2,
-                  value: responseJSON.msg,
-                  initCheck: true
-                })
-              }) 
-            }else if(json.ch1){
-              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
-                console.log("setting value")
-                this.setState({
-                  channel1: json.ch1,
-                  channel2: [],
-                  value: responseJSON.msg,
-                  initCheck: true
-                })
-              })
-            }else if(json.ch2){
-              AsyncStorage.setItem('@timerSettings', responseJSON.msg).then(()=>{
-                console.log("setting value")
-                this.setState({
-                  channel1: [],
-                  channel2: json.ch2,
-                  value: responseJSON.msg,
-                  initCheck: true
-                })
-              })
-            }
-          }
-        }
-      }
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
-  }
-
-  getToken = async () => {
-    try {
-        const value = await AsyncStorage.getItem('@token')
-        if(value != null){
-          this.setState({
-            clientToken: JSON.parse(value)
-          })
-          this.getSettingsFromServer()
-        }
-    } catch(e) {
-        // do nothing
-    }
-  }
-
-
-  checkDataAndUpdate = async ()=>{
-    try{
-      const value = await AsyncStorage.getItem('@timerSettings')
-        if(value != null){
-          var json = JSON.parse(value)
-          if(value.localeCompare(this.state.value) != 0){
-            console.log("check and update")
-            this.setState({
-              channel1: json.ch1,
-              channel2: json.ch2,
-              value: value,
-            })
-          }
-        }
-    }catch(e){
-      console.log(e)
-    }
-  }
-
-
-  componentDidUpdate = ()=>{
-    if(this.state.initCheck == true){
-      this.checkDataAndUpdate()
-    }
+  componentDidMount = ()=>{
+    setIntervalObject = setInterval(()=>{
+      this.props.getTempHour()
+    }, 10000)
   }
 
   componentWillUnmount = ()=>{
- 
+    clearInterval(setIntervalObject)
   }
 
-  updateDeviceStatus = (status)=>{
-    this.setState({
-      deviceOnline: status
-    })
-  }
-
-  onPressActivateSettings = (channel)=>{
-    console.log("onPressActivate")
-    var json = {
-      settings: {
-        ch1: this.state.channel1,
-        ch2: this.state.channel2
-      }
+  UNSAFE_componentWillReceiveProps = next => {
+    if(this.state.channel1.length != next.timer.ch1.length || 
+      this.state.channel2.length != next.timer.ch2.length || 
+      this.state.channel3.length != next.timer.ch3.length || 
+      this.state.channel4.length != next.timer.ch4.length){
+        this.setState({
+          channel1: next.timer.ch1,
+          channel2: next.timer.ch2,
+          channel3: next.timer.ch3,
+          channel4: next.timer.ch4,
+        })
     }
-
-    json = JSON.stringify(json)
-
-    fetch(config.remote+'/device/settings', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.state.clientToken.token,
-      },
-      body: json
-    },)  
-    .then((response) => {
-        if(response.status == 200){
-            return response.json()
-        }
-    })
-    .then((responseJSON)=>{
-      if(responseJSON != null){
-        if(responseJSON.success == true){
-          setTimeout(()=>{
-            fetch(config.remote+'/device/settingsAck', {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.state.clientToken.token,
-              }
-            },)  
-            .then((response) => {
-                if(response.status == 200){
-                    return response.json()
-                }
-            })
-            .then((responseJSON)=>{
-              if(responseJSON != null){
-                if(responseJSON.msg == true){
-                  alert('Settings update successfully...')
-                  this.setState({
-                    isVisible: false,
-                    updateOnce: false
-                  })
-                }else{
-                  alert('Couldn\'t update. Try again...')
-                  this.setState({
-                    updateOnce: false
-                  })
-                }
-              }
-            })
-            .catch((err)=>{
-                console.log(err)
-                alert('Couldn\'t update. Try again...')
-                this.setState({
-                  updateOnce: false
-                })
-            })
-          },2000)
-        }
-      }
-    })
-    .catch((err)=>{
-        console.log(err)
-        alert('Couldn\'t update. Try again...')
-    })
-        
+    if( this.state.maxTemp.data.length != next.live.maxTemp.data.length || 
+      this.state.minTemp.data.length != next.live.minTemp.data.length || 
+      this.state.avgTemp.data.length != next.live.avgTemp.data.length){
+        this.setState({
+          maxTemp: next.live.maxTemp,
+          minTemp: next.live.minTemp,
+          avgTemp: next.live.avgTemp
+        })
+    } 
+    if( next.live.deviceOnline == true && this.props.live.deviceOnline != true){
+      this.props.getTimer()
+    }
   }
 
   render() {
@@ -234,17 +91,41 @@ export default class DashboardScreen extends Component<Props> {
                     channel={2}
                     data={this.state.channel2}
                   />
+                  <TimerDisplay 
+                    key={3} 
+                    channel={3}
+                    data={this.state.channel3}
+                  />
+                  <TimerDisplay 
+                    key={4} 
+                    channel={4}
+                    data={this.state.channel4}
+                  />
                 </View>
-                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} deviceOnline={this.state.deviceOnline}/>
-                <TempGraph heading="Today's average temperature °C/h" route="/device/avgTempDay" key={0} keyDup={0}/>
-                <TempGraph heading="Today's maximum temperature °C/h" route="/device/maxTempDay" key={1} keyDup={1}/>
-                <TempGraph heading="Today's minimum temperature °C/h" route="/device/minTempDay" key={2} keyDup={2}/>
+                <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} />
+                <TempGraph heading="Today's average temperature °C/h" data={this.state.avgTemp} route="/device/avgTempDay" key={0} keyDup={0}/>
+                <TempGraph heading="Today's maximum temperature °C/h" data={this.state.maxTemp} route="/device/maxTempDay" key={1} keyDup={1}/>
+                <TempGraph heading="Today's minimum temperature °C/h" data={this.state.minTemp} route="/device/minTempDay" key={2} keyDup={2}/>
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>
     );
   }
 }
+
+DashboardScreen.propTypes = {
+  getTimer: PropTypes.func.isRequired,
+  timer: PropTypes.object.isRequired,
+  live: PropTypes.object.isRequired,
+  getTempHour: PropTypes.func.isRequired,
+}
+
+mapStateToProps = state => ({
+  timer: state.timer,
+  live: state.live
+})
+
+export default connect(mapStateToProps, { getTimer, getTempHour })(DashboardScreen)
 
 const styles = StyleSheet.create({
   container: {

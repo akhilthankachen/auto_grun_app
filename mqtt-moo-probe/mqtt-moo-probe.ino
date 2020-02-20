@@ -11,6 +11,7 @@
 #include <RTClib.h>
 #include <EEPROM.h>
 #include <Wire.h>
+#include <FS.h>
 
 // settings begin
 /////////////////
@@ -22,10 +23,14 @@ bool rtcMode = false;
 RTC_DS3231 rtc;
 
 // channel settings array
-int chOne[5][3];
-int chTwo[5][3];
+int chOne[6][3];
+int chTwo[6][3];
+int chThree[6][3];
+int chFour[6][3];
 int chSizeOne;
 int chSizeTwo;
+int chSizeThree;
+int chSizeFour;
 
 // ssid
 char ssid[100];
@@ -36,14 +41,16 @@ char password[100];
 char addr[20] = "142.93.216.218";
 
 //channel pins
-int channelOnePin = 5;
-int channelTwoPin = 4;
+int channelOnePin = 15;
+int channelTwoPin = 12;
+int channelThreePin = 14;
+int channelFourPin = 13;
 
 // standlalone or connected mode
 bool standalone = false;
 
 // device id
-String deviceId = "ally01";
+String deviceId = "test123";
 
 // GPIO where the DS18B20 is connected to
 const int oneWireBus = 0;     
@@ -56,7 +63,7 @@ DallasTemperature sensors(&oneWire);
 
 WiFiClient net;
 WiFiManager wifiManager;
-MQTTClient client(512);
+MQTTClient client(4096);
 
 const long utcOffsetInSeconds = 19800; // 5.5 ( UTC +5 1/2 ) *60*60
 // Define NTP Client to get time
@@ -116,6 +123,43 @@ void loadSettings(){
   strncpy(data.str,"",500);
 }
 
+void storeSettingsSPIFFS( char *str){
+  Serial.println( "Storing settings to spiffs...");
+  File f;
+  f = SPIFFS.open("/settings.txt", "w");
+  if( !f ){
+    Serial.println("Settings file open for write failed!!!");
+  }else{
+    int bytesWritten = f.print(str);
+
+    if (bytesWritten == 0){
+      Serial.println("Settings file write failed");
+    }
+  }
+  f.close();
+}
+
+String loadSettingsSPIFFS(){
+  Serial.println( "Loading settings from spiffs" );
+  File f;
+  String settings;
+  if( SPIFFS.exists("/settings.txt") ){
+    f = SPIFFS.open("/settings.txt", "r");
+    if( f && f.size() ){
+      while( f.available() ){
+        settings += char(f.read());
+      }
+    }else{
+      settings = "{}";
+    }
+  }else{
+    settings = "{}";
+  }
+
+  f.close();
+  return settings;
+}
+
 void handleSettings( char* json ){
   Serial.println(json);
   //converting json
@@ -126,8 +170,12 @@ void handleSettings( char* json ){
   deserializeJson(doc, json);
   JsonArray ch1 = doc["ch1"];
   JsonArray ch2 = doc["ch2"];
+  JsonArray ch3 = doc["ch3"];
+  JsonArray ch4 = doc["ch4"];  
   chSizeOne = ch1.size();
   chSizeTwo = ch2.size();
+  chSizeThree = ch3.size();
+  chSizeFour = ch4.size();
   
   if(chSizeOne != 0){
     for( int i=0; i<chSizeOne; i++){
@@ -143,6 +191,22 @@ void handleSettings( char* json ){
       chTwo[i][0] = tmp["h"];
       chTwo[i][1] = tmp["m"];
       chTwo[i][2] = tmp["d"];
+    }
+  }
+  if(chSizeThree != 0){
+    for( int i=0; i<chSizeThree; i++){
+      JsonObject tmp = ch3[i];
+      chThree[i][0] = tmp["h"];
+      chThree[i][1] = tmp["m"];
+      chThree[i][2] = tmp["d"];
+    }
+  }
+  if(chSizeFour != 0){
+    for( int i=0; i<chSizeFour; i++){
+      JsonObject tmp = ch4[i];
+      chFour[i][0] = tmp["h"];
+      chFour[i][1] = tmp["m"];
+      chFour[i][2] = tmp["d"];
     }
   }
 
@@ -175,7 +239,8 @@ void messageReceived(String &topic, String &payload) {
   if(topic == "settings/" + deviceId){
     char charBuff[payload.length() +1];
     payload.toCharArray(charBuff, payload.length() + 1);
-    storeSettings( charBuff );
+    //storeSettings( charBuff );
+    storeSettingsSPIFFS( charBuff );
     handleSettings( charBuff );
     client.publish("settingsAck", deviceId);
   }
@@ -209,6 +274,7 @@ void tempInHour(float temp, int currentHour){
      
    }else{
      if( lastHour != -1 ){
+      Serial.println("Average min max published");
       client.publish("tempAverage", deviceId + " " + String(tempSum/tempCounter));
       client.publish("tempMax", deviceId + " " + String(tempMax));
       client.publish("tempMin", deviceId + " " + String(tempMin));
@@ -230,15 +296,18 @@ void syncNtpRtc(){
 }
 
 int initialMinutes = 0;
+int initialHours = 0;
 
 void initMinutes(){
   if( rtcMode ){
     DateTime instance = rtc.now();
     initialMinutes = instance.minute();
+    initialHours = instance.hour();
   }else{
     if( !standalone ){
       timeClient.update();
       initialMinutes = timeClient.getMinutes();
+      initialHours = timeClient.getHours();
     }
   }
 }
@@ -271,7 +340,8 @@ void getNewPassword(){
 
 void setup() {
   Serial.begin(9600);
-  Wire.begin( 14, 2 );
+  Wire.begin( 4, 5 );
+  SPIFFS.begin();
 
   getStoredSSID();
   getStoredPassword();
@@ -312,10 +382,18 @@ void setup() {
 
   pinMode(channelOnePin, OUTPUT);
   pinMode(channelTwoPin, OUTPUT);
+  pinMode(channelThreePin, OUTPUT);
+  pinMode(channelFourPin, OUTPUT);
   digitalWrite(channelOnePin, LOW);
-  digitalWrite(channelTwoPin, LOW);
+  digitalWrite(channelTwoPin, LOW);  
+  digitalWrite(channelThreePin, LOW);
+  digitalWrite(channelFourPin, LOW);
 
-  loadSettings();
+  //loadSettings();
+  String payload = loadSettingsSPIFFS();
+  char charBuff[payload.length() +1];
+  payload.toCharArray(charBuff, payload.length() + 1); 
+  handleSettings( charBuff );
   initMinutes();
 }
 
@@ -377,6 +455,64 @@ void executeTimerChTwo( int hours, int minutes ){
   }
 }
 
+bool chActiveThree = false;
+int chActiveThreeEstimation = 0;
+
+void executeTimerChThree( int hours, int minutes ){
+  if( chActiveThree ){
+    if( minutes == chActiveThreeEstimation ){
+      chActiveThree = false;
+      chActiveThreeEstimation = 0;
+      Serial.println("switching off digital pin channel 3" );
+      digitalWrite(channelThreePin, LOW);
+    }
+  }else{
+    if( chSizeThree != 0 ){
+      for( int i = 0 ; i<chSizeThree ; i++ ){
+        if( hours == chThree[i][0] && minutes == chThree[i][1]){
+          chActiveThree = true;
+          if( minutes + chThree[i][2] >= 60 ){
+            chActiveThreeEstimation = minutes + chThree[i][2] - 60;
+          }else{
+            chActiveThreeEstimation = chThree[i][2] + minutes;              
+          }
+          Serial.println("switching on digital pin channel 3" );
+          digitalWrite(channelThreePin, HIGH);
+        }
+      }
+    }
+  }
+}
+
+bool chActiveFour = false;
+int chActiveFourEstimation = 0;
+
+void executeTimerChFour( int hours, int minutes ){
+  if( chActiveFour ){
+    if( minutes == chActiveFourEstimation ){
+      chActiveFour = false;
+      chActiveFourEstimation = 0;
+      Serial.println("switching off digital pin channel 4" );
+      digitalWrite(channelFourPin, LOW);
+    }
+  }else{
+    if( chSizeFour != 0 ){
+      for( int i = 0 ; i<chSizeFour ; i++ ){
+        if( hours == chFour[i][0] && minutes == chFour[i][1]){
+          chActiveFour = true;
+          if( minutes + chFour[i][2] >= 60 ){
+            chActiveFourEstimation = minutes + chFour[i][2] - 60;
+          }else{
+            chActiveFourEstimation = chFour[i][2] + minutes;              
+          }
+          Serial.println("switching on digital pin channel 4" );
+          digitalWrite(channelFourPin, HIGH);
+        }
+      }
+    }
+  }
+}
+
 int initHours = -1;
 void wifiReconnect(int hours){
   if( initHours != hours ){
@@ -429,20 +565,31 @@ void loop() {
   if (initialMinutes!=minutes) {
     initialMinutes = minutes;
     sensors.requestTemperatures(); 
-    float temperatureC = sensors.getTempCByIndex(0);
+    int temperatureC = sensors.getTempCByIndex(0);
     
     Serial.println("tick");
 
     if(temperatureC != 85 && temperatureC != -127){
-       client.publish("temp", deviceId + " " + String(temperatureC));
        tempInHour( temperatureC , hours ); 
     }
     Serial.println(String(temperatureC));
   }
 
+  if ( initialHours != hours ){
+    initialHours = hours;
+    sensors.requestTemperatures(); 
+    int temperatureCH = sensors.getTempCByIndex(0);
+    Serial.println("H tick");
+    if(temperatureCH != 85 && temperatureCH != -127){
+     client.publish("temp", deviceId + " " + String(temperatureCH));
+    }
+  }
+
   // check and execute timers
   executeTimerChOne( hours, minutes );
   executeTimerChTwo( hours, minutes );
+  executeTimerChThree( hours, minutes );
+  executeTimerChFour( hours, minutes );
   if( standalone == true ){
     if( WiFi.status() != WL_CONNECTED ){
       wifiReconnect( minutes );

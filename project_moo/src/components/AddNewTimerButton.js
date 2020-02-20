@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 const WIDTH = Dimensions.get('window').width
-export default class AddNewTimer extends Component {
+class AddNewTimer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +13,7 @@ export default class AddNewTimer extends Component {
   }
 
   onAddPress = ()=>{
-    if(this.props.deviceOnline){
+    if(this.props.live.deviceOnline){
       this.props.navigation.navigate('addTimer')
     }else(
       alert("Device not online...")
@@ -37,6 +38,16 @@ export default class AddNewTimer extends Component {
     );
   }
 }
+
+AddNewTimer.propTypes = {
+  live: PropTypes.object.isRequired
+}
+
+mapStateToProps = state => ({
+  live: state.live
+}) 
+
+export default connect(mapStateToProps,null)(AddNewTimer)
 
 const styles = StyleSheet.create({
     container:{
