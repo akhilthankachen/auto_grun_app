@@ -57,17 +57,70 @@
                 if(response.status == 200){
                     return response.json()
                 }else{
-                    console.log(response)
+                    alert('user creation failure')
                 }
             })
             .then((responseJSON)=>{
                 console.log(responseJSON)
                 // response json
                 if(responseJSON.success == false){
-                    alert('authentication failure') 
+                    alert('user creation failure') 
                 
                 }else{
                     // user token
+                    fetch( 'https://easyacres.in:3000/users/authenticate', {
+                        method: 'POST',
+                        headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username: username, password: password})
+                    })  
+                    .then((response) => {
+                        if(response.status == 200){
+                            return response.json()
+                        }else{
+                            alert('user creation failed') 
+                        }
+                    })
+                    .then((responseJSON)=>{
+                        // response json
+                        if(responseJSON.success == false){
+                            alert('usercreation failed') 
+                        
+                        }else{
+                            // user token
+                            fetch( 'https://easyacres.in:3000/device/createDevice', {
+                                method: 'POST',
+                                headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': token
+                                },
+                                body: JSON.stringify({ mac: deviceId})
+                            })  
+                            .then((response) => {
+                                if(response.status == 200){
+                                    return response.json()
+                                }else{
+                                    alert('user creation failure')
+                                }
+                            })
+                            .then((responseJSON)=>{
+                                console.log(responseJSON)
+                                // response json
+                                if(responseJSON.success == false){
+                                    alert('user creation failure') 
+                                
+                                }else{
+                                    alert('success')
+                        
+                                }
+                            })
+                
+                        }
+                    })
+
         
                 }
             })
