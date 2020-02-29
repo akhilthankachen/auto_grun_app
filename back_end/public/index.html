@@ -1,22 +1,88 @@
-<!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>demo</title>
-<style>
-    body {
-        padding: 0;
-        margin: 0;
-    }
-    #img {
-        width: 100%;
-        height: 100%;
-    }
-</style>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="description" content="Login - Register Template">
+    <meta name="author" content="Lorenzo Angelino aka MrLolok">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #303641;
+        }
+    </style>
+    <script>
+        function authenticate() {
+            console.log('hello')
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var credentials ={
+                username: username,
+                password: password
+            }
+        fetch( 'https://easyacres.in:3000/users/authenticate', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials)
+          })  
+          .then((response) => {
+            if(response.status == 200){
+                return response.json()
+            }else{
+                alert('authentication failure') 
+            }
+          })
+          .then((responseJSON)=>{
+            // response json
+            if(responseJSON.success == false){
+                alert('authentication failure') 
+               
+            }else{
+                // user token
+                alert('authentication success') 
+                var url= "https://easyacres.in:3000/register.html"
+                localStorage.setItem("token", responseJSON.token);
+                window.location = url; 
+    
+            }
+          })
+
+          return false
+        }
+    </script>
 </head>
 
 <body>
-    <img src="website.png" id="img">
+    <div id="container-login">
+        <div id="title">
+            <i class="material-icons lock">lock</i> Login
+        </div>
+
+        <form onsubmit="return authenticate()">
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">face</i>
+                </div>
+                <input id="username" placeholder="Username" type="text" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">vpn_key</i>
+                </div>
+                <input id="password" placeholder="Password" type="password" required class="validate" autocomplete="off">
+            </div>
+
+            <input type="submit" value="Log In" />
+        </form>
+    </div>
 </body>
 
-</html> 
+</html>

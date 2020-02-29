@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <meta name="description" content="Login - Register Template">
+    <meta name="author" content="Lorenzo Angelino aka MrLolok">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #303641;
+        }
+    </style>
+    <script>
+        
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                vars[key] = value;
+            });
+            return vars;
+        }
+        function register(){
+            console.log('hello')
+            var username = document.getElementById('username').value;
+            var name = document.getElementById('name').value;
+            var password = document.getElementById('password').value;
+            var email = document.getElementById('email').value;
+            var mobileNumber = document.getElementById('tel').value;
+            var deviceId = document.getElementById('device').value;
+
+
+            var token = localStorage.getItem("token");
+
+
+            console.log(token)
+            var credentials = {
+                username: username,
+                password: password,
+                email: email,
+                mobileNumber: mobileNumber,
+                name: name,
+                userType: 'end'
+            }
+            fetch( 'https://easyacres.in:3000/users/register', {
+                method: 'POST',
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': token
+                },
+                body: JSON.stringify(credentials)
+            })  
+            .then((response) => {
+                if(response.status == 200){
+                    return response.json()
+                }else{
+                    console.log(response)
+                }
+            })
+            .then((responseJSON)=>{
+                console.log(responseJSON)
+                // response json
+                if(responseJSON.success == false){
+                    alert('authentication failure') 
+                
+                }else{
+                    // user token
+        
+                }
+            })
+
+            return false
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container-register">
+        <div id="title">
+            <i class="material-icons lock">lock</i> Register
+        </div>
+
+        <form onsubmit="return register()">
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">email</i>
+                </div>
+                <input id="email" placeholder="Email" type="email" required class="validate" autocomplete="off">
+            </div>
+            
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">person</i>
+                </div>
+                <input id="name" placeholder="name" type="text" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">face</i>
+                </div>
+                <input id="username" placeholder="Username" type="text" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">vpn_key</i>
+                </div>
+                <input id="password" placeholder="Password" type="password" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">phone</i>
+                </div>
+                <input id="tel" placeholder="phone number" type="tel" required class="validate" autocomplete="off">
+            </div>
+
+            <div class="input">
+                <div class="input-addon">
+                    <i class="material-icons">device_hub</i>
+                </div>
+                <input id="device" placeholder="device id" type="text" required class="validate" autocomplete="off">
+            </div>
+
+            <input type="submit" value="Register" />
+        </form>
+    </div>
+</body>
+
+</html>
