@@ -23,7 +23,7 @@ const livePersistConfig = {
 const timerPersistConfig = {
     key: 'timer',
     storage: AsyncStorage,
-    blacklist: ['ch1','ch2','ch3','ch4']
+    blacklist: ['ch1','ch2','ch3','ch4','m']
 }
 
 const rootReducer = combineReducers({

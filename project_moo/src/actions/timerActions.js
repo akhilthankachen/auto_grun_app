@@ -26,7 +26,8 @@ export const getTimer = () => (dispatch,getState) => {
                   ch1: json.ch1 ? json.ch1 : [],
                   ch2: json.ch2 ? json.ch2 : [],
                   ch3: json.ch3 ? json.ch3 : [],
-                  ch4: json.ch4 ? json.ch4 : []
+                  ch4: json.ch4 ? json.ch4 : [],
+                  m: json.m ? json.m : [0,0,0,0]
               })
             }
           }
@@ -46,7 +47,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
         ch1: data.ch1,
         ch2: data.ch2,
         ch3: data.ch3,
-        ch4: data.ch4
+        ch4: data.ch4,
+        m: data.m
       }
     }
 
@@ -92,7 +94,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
                         ch1: data.ch1,
                         ch2: data.ch2,
                         ch3: data.ch3,
-                        ch4: data.ch4
+                        ch4: data.ch4,
+                        m: data.m
                     })
                   }else{
                     alert('Couldn\'t update. Try again...')

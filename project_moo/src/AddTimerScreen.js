@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Alert, Modal, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, TextInput, Picker, Modal, TouchableHighlight } from 'react-native';
 import SaveAndActivate from './components/SaveAndActivate'
 import Close from './components/Close'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -247,6 +247,33 @@ class AddTimerScreen extends Component {
   }
 
   render() {
+      const pickerStyle = {
+        inputIOS: {
+          color: 'white',
+          paddingTop: 13,
+          paddingHorizontal: 10,
+          paddingBottom: 12,
+        },
+        inputAndroid: {
+          color: 'white',
+        },
+        placeholderColor: 'white',
+        underline: { borderTopWidth: 0 },
+        icon: {
+          position: 'absolute',
+          backgroundColor: 'transparent',
+          borderTopWidth: 5,
+          borderTopColor: '#00000099',
+          borderRightWidth: 5,
+          borderRightColor: 'transparent',
+          borderLeftWidth: 5,
+          borderLeftColor: 'transparent',
+          width: 0,
+          height: 0,
+          top: 20,
+          right: 15,
+        },
+      };
     return (
       <View style={styles.container}>
         <LoadingModal content='Saving and activating settings.' isVisible={this.state.modalVisible}/>
@@ -279,6 +306,27 @@ class AddTimerScreen extends Component {
                         onPress={(value)=>{this.toggleChannel(value)}}
                     />
                 </View>
+            </View>
+            <View style={styles.modeBox}>
+              <Text style={styles.modeText}>Mode : </Text>
+              <Picker
+                selectedValue={this.state.data.m[(this.state.channel)-1].toString()}
+                style={styles.modePicker}
+                itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily:"Ebrima", fontSize:17 }}
+                onValueChange={(itemValue, itemIndex) =>{
+                  let tempData = this.state.data
+                  tempData.m[this.state.channel-1] = itemIndex
+                  this.setState({
+                    data: tempData
+                  })
+                }
+                }>
+                <Picker.Item label="All Days" value="0" />
+                <Picker.Item label="Weekday" value="1" />
+                <Picker.Item label="Skip One" value="2" />
+                <Picker.Item label="Skip Two" value="3" />
+                <Picker.Item label="Weekend" value="4" />
+              </Picker>
             </View>
             <View style={styles.addTimeBox}>
                 <View style={styles.pickTimeBox}>
@@ -382,8 +430,27 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-condensed',
         marginBottom: 10
     },
+    modeBox: {
+      alignItems: 'center',
+      flexDirection: 'row',
+      marginTop: 10
+    },
+    modeText: {
+      fontSize: 15,
+      fontFamily: 'sans-serif-condensed',
+      marginBottom: 2,
+      marginRight: 10
+    },
+    modePicker: {
+      height: 50,
+      width: 140,
+      backfaceVisibility: 'visible',
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderColor: 'black',
+    },
     addTimeBox: {
-        marginTop: 30,
+        marginTop: 15,
     },
     modalContent: {
         backgroundColor: 'white',
