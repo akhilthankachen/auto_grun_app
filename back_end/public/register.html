@@ -83,10 +83,10 @@
                             alert('user creation failed') 
                         }
                     })
-                    .then((responseJSON)=>{
+                    .then((responseJSONTWO)=>{
                         // response json
                         if(responseJSON.success == false){
-                            alert('usercreation failed') 
+                            alert('user creation failed') 
                         
                         }else{
                             // user token
@@ -95,7 +95,7 @@
                                 headers: {
                                 Accept: 'application/json',
                                 'Content-Type': 'application/json',
-                                'Authorization': token
+                                'Authorization': responseJSONTWO.token
                                 },
                                 body: JSON.stringify({ mac: deviceId})
                             })  
