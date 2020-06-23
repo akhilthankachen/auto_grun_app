@@ -32,6 +32,15 @@ int chSizeTwo;
 int chSizeThree;
 int chSizeFour;
 
+// settings matrix
+int modes[5][7] = { {1,1,1,1,1,1,1},
+                           {0,1,1,1,1,1,0},
+                           {1,1,0,1,0,1,0},
+                           {1,1,0,0,1,0,0},
+                           {1,0,0,0,0,0,1} };
+int modeSettings[4] = { 0,0,0,0 };
+int mSize;
+
 // ssid
 char ssid[100];
 // password
@@ -50,7 +59,7 @@ int channelFourPin = 13;
 bool standalone = false;
 
 // device id
-String deviceId = "test123";
+String deviceId = "testbench";
 
 // GPIO where the DS18B20 is connected to
 const int oneWireBus = 0;     
@@ -76,52 +85,6 @@ unsigned long lastMillis = 0;
 //
 //
 // mqtt block begin
-
-void storeSettings( char* json ){
-  Serial.println("Saving settings to eeprom .. ");
-  
-  uint addr = 0;
-
-  // fake data
-  struct { 
-    uint val = 0;
-    char str[500] = "";
-  } data;
-
-  strncpy( data.str, json, 500 );
-
-  EEPROM.begin(512);
-  EEPROM.put(addr,data);
-  EEPROM.commit();
-  EEPROM.end();
-
-  data.val = 0; 
-  strncpy(data.str,"",500);
-  
-}
-
-void loadSettings(){
-  Serial.println("Loading settings from eeprom ..");
-
-  uint addr = 0;
-
-  // fake data
-  struct { 
-    uint val = 0;
-    char str[500] = "";
-  } data;
-
-  EEPROM.begin(512);
-
-  EEPROM.get(addr,data);
-
-  EEPROM.end();
-
-  handleSettings( data.str );
-
-  data.val = 0; 
-  strncpy(data.str,"",500);
-}
 
 void storeSettingsSPIFFS( char *str){
   Serial.println( "Storing settings to spiffs...");
@@ -171,11 +134,14 @@ void handleSettings( char* json ){
   JsonArray ch1 = doc["ch1"];
   JsonArray ch2 = doc["ch2"];
   JsonArray ch3 = doc["ch3"];
-  JsonArray ch4 = doc["ch4"];  
+  JsonArray ch4 = doc["ch4"];
+  JsonArray m = doc["m"];
+    
   chSizeOne = ch1.size();
   chSizeTwo = ch2.size();
   chSizeThree = ch3.size();
   chSizeFour = ch4.size();
+  mSize = m.size();
   
   if(chSizeOne != 0){
     for( int i=0; i<chSizeOne; i++){
@@ -207,6 +173,11 @@ void handleSettings( char* json ){
       chFour[i][0] = tmp["h"];
       chFour[i][1] = tmp["m"];
       chFour[i][2] = tmp["d"];
+    }
+  }
+  if(mSize !=0){
+    for( int i=0; i<mSize; i++){
+      modeSettings[i] = m[i];  
     }
   }
 
@@ -400,7 +371,8 @@ void setup() {
 bool chActiveOne = false;
 int chActiveOneEstimation = 0;
 
-void executeTimerChOne( int hours, int minutes ){
+void executeTimerChOne( int hours, int minutes, int days ){
+  
   if( chActiveOne ){
     if( minutes == chActiveOneEstimation ){
       chActiveOne = false;
@@ -410,16 +382,18 @@ void executeTimerChOne( int hours, int minutes ){
     }
   }else{
     if( chSizeOne != 0 ){
-      for( int i = 0 ; i<chSizeOne ; i++ ){
-        if( hours == chOne[i][0] && minutes == chOne[i][1] ){
-          chActiveOne = true;
-          if( minutes + chOne[i][2] >= 60 ){
-            chActiveOneEstimation = minutes + chOne[i][2] - 60;
-          }else{
-            chActiveOneEstimation = chOne[i][2] + minutes;              
+      if( modes[modeSettings[0]][days] == 1 ){
+        for( int i = 0 ; i<chSizeOne ; i++ ){
+          if( hours == chOne[i][0] && minutes == chOne[i][1] ){
+            chActiveOne = true;
+            if( minutes + chOne[i][2] >= 60 ){
+              chActiveOneEstimation = minutes + chOne[i][2] - 60;
+            }else{
+              chActiveOneEstimation = chOne[i][2] + minutes;              
+            }
+            Serial.println("switching on digital pin channel 1" );
+            digitalWrite(channelOnePin, HIGH);
           }
-          Serial.println("switching on digital pin channel 1" );
-          digitalWrite(channelOnePin, HIGH);
         }
       }
     }
@@ -429,7 +403,7 @@ void executeTimerChOne( int hours, int minutes ){
 bool chActiveTwo = false;
 int chActiveTwoEstimation = 0;
 
-void executeTimerChTwo( int hours, int minutes ){
+void executeTimerChTwo( int hours, int minutes, int days ){
   if( chActiveTwo ){
     if( minutes == chActiveTwoEstimation ){
       chActiveTwo = false;
@@ -439,16 +413,18 @@ void executeTimerChTwo( int hours, int minutes ){
     }
   }else{
     if( chSizeTwo != 0 ){
-      for( int i = 0 ; i<chSizeTwo ; i++ ){
-        if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
-          chActiveTwo = true;
-          if( minutes + chTwo[i][2] >= 60 ){
-            chActiveTwoEstimation = minutes + chTwo[i][2] - 60;
-          }else{
-            chActiveTwoEstimation = chTwo[i][2] + minutes;              
+      if( modes[modeSettings[1]][days] == 1 ){     
+        for( int i = 0 ; i<chSizeTwo ; i++ ){
+          if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
+            chActiveTwo = true;
+            if( minutes + chTwo[i][2] >= 60 ){
+              chActiveTwoEstimation = minutes + chTwo[i][2] - 60;
+            }else{
+              chActiveTwoEstimation = chTwo[i][2] + minutes;              
+            }
+            Serial.println("switching on digital pin channel 2" );
+            digitalWrite(channelTwoPin, HIGH);
           }
-          Serial.println("switching on digital pin channel 2" );
-          digitalWrite(channelTwoPin, HIGH);
         }
       }
     }
@@ -458,7 +434,7 @@ void executeTimerChTwo( int hours, int minutes ){
 bool chActiveThree = false;
 int chActiveThreeEstimation = 0;
 
-void executeTimerChThree( int hours, int minutes ){
+void executeTimerChThree( int hours, int minutes, int days ){
   if( chActiveThree ){
     if( minutes == chActiveThreeEstimation ){
       chActiveThree = false;
@@ -468,16 +444,18 @@ void executeTimerChThree( int hours, int minutes ){
     }
   }else{
     if( chSizeThree != 0 ){
-      for( int i = 0 ; i<chSizeThree ; i++ ){
-        if( hours == chThree[i][0] && minutes == chThree[i][1]){
-          chActiveThree = true;
-          if( minutes + chThree[i][2] >= 60 ){
-            chActiveThreeEstimation = minutes + chThree[i][2] - 60;
-          }else{
-            chActiveThreeEstimation = chThree[i][2] + minutes;              
+      if( modes[modeSettings[2]][days] == 1 ){
+        for( int i = 0 ; i<chSizeThree ; i++ ){
+          if( hours == chThree[i][0] && minutes == chThree[i][1]){
+            chActiveThree = true;
+            if( minutes + chThree[i][2] >= 60 ){
+              chActiveThreeEstimation = minutes + chThree[i][2] - 60;
+            }else{
+              chActiveThreeEstimation = chThree[i][2] + minutes;              
+            }
+            Serial.println("switching on digital pin channel 3" );
+            digitalWrite(channelThreePin, HIGH);
           }
-          Serial.println("switching on digital pin channel 3" );
-          digitalWrite(channelThreePin, HIGH);
         }
       }
     }
@@ -487,7 +465,7 @@ void executeTimerChThree( int hours, int minutes ){
 bool chActiveFour = false;
 int chActiveFourEstimation = 0;
 
-void executeTimerChFour( int hours, int minutes ){
+void executeTimerChFour( int hours, int minutes, int days ){
   if( chActiveFour ){
     if( minutes == chActiveFourEstimation ){
       chActiveFour = false;
@@ -497,16 +475,18 @@ void executeTimerChFour( int hours, int minutes ){
     }
   }else{
     if( chSizeFour != 0 ){
-      for( int i = 0 ; i<chSizeFour ; i++ ){
-        if( hours == chFour[i][0] && minutes == chFour[i][1]){
-          chActiveFour = true;
-          if( minutes + chFour[i][2] >= 60 ){
-            chActiveFourEstimation = minutes + chFour[i][2] - 60;
-          }else{
-            chActiveFourEstimation = chFour[i][2] + minutes;              
+      if( modes[modeSettings[3]][days] == 1 ){
+        for( int i = 0 ; i<chSizeFour ; i++ ){
+          if( hours == chFour[i][0] && minutes == chFour[i][1]){
+            chActiveFour = true;
+            if( minutes + chFour[i][2] >= 60 ){
+              chActiveFourEstimation = minutes + chFour[i][2] - 60;
+            }else{
+              chActiveFourEstimation = chFour[i][2] + minutes;              
+            }
+            Serial.println("switching on digital pin channel 4" );
+            digitalWrite(channelFourPin, HIGH);
           }
-          Serial.println("switching on digital pin channel 4" );
-          digitalWrite(channelFourPin, HIGH);
         }
       }
     }
@@ -531,6 +511,7 @@ void wifiReconnect(int hours){
 int hours = 0;
 int minutes = 0;
 int seconds = 0;
+int days = 0;
 
 void loop() {
   if(standalone == false){
@@ -551,12 +532,14 @@ void loop() {
     hours = instance.hour();
     minutes = instance.minute();
     seconds = instance.second();
+    days = instance.dayOfTheWeek();
   }else{
     if( !standalone ){
       timeClient.update();
       hours = timeClient.getHours();
       minutes = timeClient.getMinutes();
       seconds = timeClient.getSeconds();
+      days = timeClient.getDay();
     }
   }
 
@@ -586,10 +569,10 @@ void loop() {
   }
 
   // check and execute timers
-  executeTimerChOne( hours, minutes );
-  executeTimerChTwo( hours, minutes );
-  executeTimerChThree( hours, minutes );
-  executeTimerChFour( hours, minutes );
+  executeTimerChOne( hours, minutes, days );
+  executeTimerChTwo( hours, minutes, days );
+  executeTimerChThree( hours, minutes, days );
+  executeTimerChFour( hours, minutes, days );
   if( standalone == true ){
     if( WiFi.status() != WL_CONNECTED ){
       wifiReconnect( minutes );
