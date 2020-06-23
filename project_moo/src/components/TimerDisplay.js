@@ -28,7 +28,7 @@ export default class timerDisplay extends Component {
     }
     return this.props.data.slice(0).reverse().map((item, index) => {
       return (
-          <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} color="active"/>
+          <OnlyTimeDuration key={index} index={index} hour={item.h} minutes={item.m} duration={item.d/60} color="active"/>
       );
     });
   }

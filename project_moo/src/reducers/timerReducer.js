@@ -19,6 +19,8 @@ export default function(state = initialState, action) {
             ch2: action.ch2,
             ch3: action.ch3,
             ch4: action.ch4,
+            ch2p: action.ch2p,
+            ch3p: action.ch3p,
             m: action.m
         }
         case PURGE: return initialState

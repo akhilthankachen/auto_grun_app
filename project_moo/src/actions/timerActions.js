@@ -27,6 +27,8 @@ export const getTimer = () => (dispatch,getState) => {
                   ch2: json.ch2 ? json.ch2 : [],
                   ch3: json.ch3 ? json.ch3 : [],
                   ch4: json.ch4 ? json.ch4 : [],
+                  ch2p: json.ch2p ? json.ch2p : "0",
+                  ch3p: json.ch3p ? json.ch3p : "0",
                   m: json.m ? json.m : [0,0,0,0]
               })
             }
@@ -48,6 +50,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
         ch2: data.ch2,
         ch3: data.ch3,
         ch4: data.ch4,
+        ch2p: data.ch2p,
+        ch3p: data.ch3p,
         m: data.m
       }
     }
@@ -95,6 +99,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
                         ch2: data.ch2,
                         ch3: data.ch3,
                         ch4: data.ch4,
+                        ch2p: data.ch2p,
+                        ch3p: data.ch3p,
                         m: data.m
                     })
                   }else{

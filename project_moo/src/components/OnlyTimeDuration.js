@@ -20,7 +20,7 @@ export default class OnlyTimeDuration extends Component {
     if(time == 0){
       return "00"
     }else{
-      if(time / 10 < 1){
+      if(time / 10 < 1 && time >=1){
         return "0" + time
       }
       return time

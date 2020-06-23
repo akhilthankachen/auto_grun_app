@@ -82,7 +82,7 @@ class AddTimerScreen extends Component {
                 var interArray = this.state.timeDuration
                 var json = {"h": this.state.hour,
                             "m": this.state.minutes,
-                            "d": parseInt(this.state.duration) }
+                            "d": parseInt(this.state.duration)*60 }
                 interArray.push(json)
                 let tempData = this.state.data
                 if(this.state.channel == 1){
@@ -111,7 +111,7 @@ class AddTimerScreen extends Component {
             var interArray = []
             var json = {"h": this.state.hour,
                         "m": this.state.minutes,
-                        "d": parseInt(this.state.duration) }
+                        "d": parseInt(this.state.duration)*60 }
             interArray.push(json)
             var tempData = this.state.data
             if(this.state.channel == 1){
@@ -148,7 +148,7 @@ class AddTimerScreen extends Component {
     if(this.state.timeDuration != undefined){
         return this.state.timeDuration.slice(0).map((item, index) => {
             return (
-                <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d} active={true} onPress={this.onPressDelete}/>
+                <TimeAndDurationBox key={index} index={index} hour={item.h} minutes={item.m} duration={item.d/60} active={true} onPress={this.onPressDelete}/>
             );
         });
     }
@@ -171,12 +171,56 @@ class AddTimerScreen extends Component {
     
   }
 
+  renderChannelOneNotice = ()=>{
+    if( this.state.channel == 1 ){
+      return (
+        <View><Text style={styles.noticeText}>Channel one only supports even settings upto 6</Text></View>
+      )
+    }
+  }
+
   scrollToPos = (pos) => {
     this.scroller.scrollTo({x: 0, y: pos});
   };
 
   setTimerData = () => {
-    this.props.putTimer(this.state.data, ()=>{
+    // data manupulation for specific app
+    var data = this.state.data
+    var len = data.ch1.length
+    var ch1 = this.state.data.ch1
+    var interArray2 = []
+    var interArray3 = []
+    for ( var i = 0; i<len; i++ ){
+      var json = {}
+      var jsonAdd = {}
+      if(i%2 == 0){
+        json = ch1[i]
+        jsonAdd.h = json.h
+        jsonAdd.m = json.m
+        jsonAdd.d = json.d * (parseInt(data.ch2p)/100)
+        if(jsonAdd.d != 0){
+          interArray2.push(jsonAdd)
+        }
+      }else{
+        json = ch1[i]
+        jsonAdd.h = json.h
+        jsonAdd.m = json.m
+        jsonAdd.d = json.d * (parseInt(data.ch3p)/100)
+        if(jsonAdd.d != 0){
+          interArray3.push(jsonAdd)
+        }
+      }
+    }
+    data.ch2 = interArray2
+    data.ch3 = interArray3
+    var tempM = []
+    tempM[0] = data.m[0]
+    tempM[1] = data.m[0]
+    tempM[2] = data.m[0]
+    tempM[3] = data.m[3]
+    data.m = tempM
+
+    this.props.putTimer(data, ()=>{
       this.setModalVisible(false)
       this.props.navigation.navigate('dashboard')
     })
@@ -184,8 +228,13 @@ class AddTimerScreen extends Component {
 
 
   saveActivateExit = ()=>{
-    this.setModalVisible(true)
-    this.setTimerData()
+    if( this.state.data.ch1.length % 2 == 0){
+      this.setModalVisible(true)
+      this.setTimerData()
+    }else{
+      alert("Channel one only supports even settings upto 6 ...")
+    }
+
   }
 
   toggleChannel = (value)=>{
@@ -326,7 +375,7 @@ class AddTimerScreen extends Component {
             </View>
 
             { this.state.showTimeDuration && 
-            (<View style={styles.modeBox}>
+            <View style={styles.modeBox}>
               <Text style={styles.modeText}>Mode : </Text>
               <Picker
                 selectedValue={this.state.data.m[(this.state.channel)-1].toString()}
@@ -346,7 +395,8 @@ class AddTimerScreen extends Component {
                 <Picker.Item label="Skip Two" value="3" />
                 <Picker.Item label="Weekend" value="4" />
               </Picker>
-            </View> &&
+              </View>} 
+            { this.state.showTimeDuration &&
             <View style={styles.addTimeBox}>
                 <View style={styles.pickTimeBox}>
                     <View style={styles.timeBoxInner}>
@@ -380,7 +430,7 @@ class AddTimerScreen extends Component {
                 <View>
                     <AddTimeAndDurationButton style={{marginTop: 15}} onPress={this.addTimeAndDuration}/>
                 </View>
-            </View>)}
+            </View>}
 
             { !this.state.showTimeDuration && 
               <View style={styles.percentBox}>
@@ -411,6 +461,8 @@ class AddTimerScreen extends Component {
 
               </View>
             }
+
+            {this.renderChannelOneNotice()}
             
             <View style={{marginTop: 10}}>
                 {this.renderTimeList()}
@@ -490,6 +542,13 @@ const styles = StyleSheet.create({
       fontFamily: 'sans-serif-condensed',
       marginBottom: 2,
       marginRight: 10
+    },
+    noticeText: {
+      fontSize: 15,
+      fontFamily: 'sans-serif-condensed',
+      marginBottom: 2,
+      marginTop: 10,
+      color: "orange"
     },
     modePicker: {
       height: 50,
