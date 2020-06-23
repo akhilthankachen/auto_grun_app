@@ -37,7 +37,8 @@ class AddTimerScreen extends Component {
         timeDuration: this.props.timer.ch1,
         data: this.props.timer,
         fetchVisible: false,
-        clientToken: ''
+        clientToken: '',
+        showTimeDuration: true
     };
 
   }
@@ -163,7 +164,11 @@ class AddTimerScreen extends Component {
     for( var i = len; i<6; i++){
         list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
     }
-    return list
+
+    if( this.state.channel == 1 || this.state.channel == 4 ){
+      return list
+    }
+    
   }
 
   scrollToPos = (pos) => {
@@ -188,48 +193,60 @@ class AddTimerScreen extends Component {
       if(this.state.data.ch1){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch1
+            timeDuration: this.state.data.ch1,
+            showTimeDuration: true
         })
       }else{
         this.setState({
             channel: value,
-            timeDuration: []
+            timeDuration: [],
+            showTimeDuration: true
         })
       }
     }else if(value == 2){
       if(this.state.data.ch2){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch2
+            timeDuration: [],
+            percent: this.state.data.ch2p,
+            showTimeDuration: false
         })
       }else{
         this.setState({
             channel: value,
-            timeDuration: []
+            timeDuration: [],
+            percent: this.state.data.ch2p,
+            showTimeDuration: false
         })
       }
     }else if(value == 3){
       if(this.state.data.ch3){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch3
+            timeDuration: [],
+            percent: this.state.data.ch3p,
+            showTimeDuration: false
         })
       }else{
         this.setState({
             channel: value,
-            timeDuration: []
+            timeDuration: [],
+            percent: this.state.data.ch3p,
+            showTimeDuration: false,
         })
       }
     }else if(value == 4){
       if(this.state.data.ch4){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch4
+            timeDuration: this.state.data.ch4,
+            showTimeDuration: true
         })
       }else{
         this.setState({
             channel: value,
-            timeDuration: []
+            timeDuration: [],
+            showTimeDuration: true
         })
       }
     }
@@ -307,7 +324,9 @@ class AddTimerScreen extends Component {
                     />
                 </View>
             </View>
-            <View style={styles.modeBox}>
+
+            { this.state.showTimeDuration && 
+            (<View style={styles.modeBox}>
               <Text style={styles.modeText}>Mode : </Text>
               <Picker
                 selectedValue={this.state.data.m[(this.state.channel)-1].toString()}
@@ -327,7 +346,7 @@ class AddTimerScreen extends Component {
                 <Picker.Item label="Skip Two" value="3" />
                 <Picker.Item label="Weekend" value="4" />
               </Picker>
-            </View>
+            </View> &&
             <View style={styles.addTimeBox}>
                 <View style={styles.pickTimeBox}>
                     <View style={styles.timeBoxInner}>
@@ -361,7 +380,38 @@ class AddTimerScreen extends Component {
                 <View>
                     <AddTimeAndDurationButton style={{marginTop: 15}} onPress={this.addTimeAndDuration}/>
                 </View>
-            </View>
+            </View>)}
+
+            { !this.state.showTimeDuration && 
+              <View style={styles.percentBox}>
+                    <Text style={styles.durationText}>Percent  :  </Text>
+                    <TextInput
+                        style={styles.durationInput}
+                        onChangeText={(text) => {
+                          var data = this.state.data
+                          if( this.state.channel == 2){
+                            data.ch2p = text
+                          }else if( this.state.channel == 3){
+                            data.ch3p = text
+                          }
+                          this.setState({
+                            percent: text,
+                            data: data
+                          })
+                        }}
+                        value={this.state.percent}
+                        placeholder={'0'}
+                        onFocus={() => {
+                            
+                            this.scrollToPos(20)
+                        }}
+                        keyboardType='numeric'
+                    />
+                    <Text style={styles.durationText}>  %</Text>
+
+              </View>
+            }
+            
             <View style={{marginTop: 10}}>
                 {this.renderTimeList()}
                 {this.renderTimerListBuffer()}
@@ -473,6 +523,11 @@ const styles = StyleSheet.create({
         marginTop: 10,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    percentBox: {
+      marginTop: 30,
+      flexDirection: 'row',
+      alignItems: 'center'
     },
     durationInput: {
         borderWidth:1,

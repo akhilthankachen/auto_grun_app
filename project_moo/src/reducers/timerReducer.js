@@ -6,6 +6,8 @@ initialState = {
     ch2: [],
     ch3: [],
     ch4: [],
+    ch2p: "0",
+    ch3p: "0",
     m: [0,0,0,0]
 }
 
