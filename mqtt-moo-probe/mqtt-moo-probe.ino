@@ -400,6 +400,7 @@ void setup() {
 bool chActiveOne = false;
 int chActiveOneEstimation = 0;
 int chOneMillis = 0;
+int executedMinuteOne = -1;
 
 void executeTimerChOne( int hours, int minutes ){
   if( chActiveOne ){
@@ -410,16 +411,19 @@ void executeTimerChOne( int hours, int minutes ){
       digitalWrite(channelOnePin, LOW);
     }
   }else{
-    if( chSizeOne != 0 ){
-      for( int i = 0 ; i<chSizeOne ; i++ ){
-        if( hours == chOne[i][0] && minutes == chOne[i][1] ){
-          chActiveOne = true;
-          chOneMillis = millis();
-          chActiveOneEstimation = chOne[i][2];              
-          Serial.println("switching on digital pin channel 1" );
-          digitalWrite(channelOnePin, HIGH);
+    if( executedMinuteOne != minutes ){
+      if( chSizeOne != 0 ){
+        for( int i = 0 ; i<chSizeOne ; i++ ){
+          if( hours == chOne[i][0] && minutes == chOne[i][1] ){
+            chActiveOne = true;
+            chOneMillis = millis();
+            executedMinuteOne = minutes;
+            chActiveOneEstimation = chOne[i][2];              
+            Serial.println("switching on digital pin channel 1" );
+            digitalWrite(channelOnePin, HIGH);
+          }
         }
-      }
+      }      
     }
   }
 }
@@ -427,6 +431,7 @@ void executeTimerChOne( int hours, int minutes ){
 bool chActiveTwo = false;
 int chActiveTwoEstimation = 0;
 int chTwoMillis = 0;
+int executedMinuteTwo = -1;
 
 void executeTimerChTwo( int hours, int minutes ){
   if( chActiveTwo ){
@@ -437,14 +442,17 @@ void executeTimerChTwo( int hours, int minutes ){
       digitalWrite(channelTwoPin, LOW);
     }
   }else{
-    if( chSizeTwo != 0 ){
-      for( int i = 0 ; i<chSizeTwo ; i++ ){
-        if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
-          chActiveTwo = true;
-          chTwoMillis = millis();
-          chActiveTwoEstimation = chTwo[i][2];              
-          Serial.println("switching on digital pin channel 2" );
-          digitalWrite(channelTwoPin, HIGH);
+    if( executedMinuteTwo != minutes ){
+      if( chSizeTwo != 0 ){
+        for( int i = 0 ; i<chSizeTwo ; i++ ){
+          if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
+            chActiveTwo = true;
+            chTwoMillis = millis();
+            executedMinuteTwo = minutes;
+            chActiveTwoEstimation = chTwo[i][2];              
+            Serial.println("switching on digital pin channel 2" );
+            digitalWrite(channelTwoPin, HIGH);
+          }
         }
       }
     }
@@ -454,6 +462,7 @@ void executeTimerChTwo( int hours, int minutes ){
 bool chActiveThree = false;
 int chActiveThreeEstimation = 0;
 int chThreeMillis = 0;
+int executedMinuteThree = -1;
 
 void executeTimerChThree( int hours, int minutes ){
   if( chActiveThree ){
@@ -464,16 +473,19 @@ void executeTimerChThree( int hours, int minutes ){
       digitalWrite(channelThreePin, LOW);
     }
   }else{
-    if( chSizeThree != 0 ){
-      for( int i = 0 ; i<chSizeThree ; i++ ){
-        if( hours == chThree[i][0] && minutes == chThree[i][1]){
-          chActiveThree = true;
-          chThreeMillis = millis();
-          chActiveThreeEstimation = chThree[i][2];              
-          Serial.println("switching on digital pin channel 3" );
-          digitalWrite(channelThreePin, HIGH);
+    if( executedMinuteThree != minutes ){
+      if( chSizeThree != 0 ){
+        for( int i = 0 ; i<chSizeThree ; i++ ){
+          if( hours == chThree[i][0] && minutes == chThree[i][1]){
+            chActiveThree = true;
+            chThreeMillis = millis();
+            executedMinuteThree = minutes;
+            chActiveThreeEstimation = chThree[i][2];              
+            Serial.println("switching on digital pin channel 3" );
+            digitalWrite(channelThreePin, HIGH);
+          }
         }
-      }
+      }      
     }
   }
 }
@@ -481,6 +493,7 @@ void executeTimerChThree( int hours, int minutes ){
 bool chActiveFour = false;
 int chActiveFourEstimation = 0;
 int chFourMillis = 0;
+int executedMinuteFour = -1;
 
 void executeTimerChFour( int hours, int minutes ){
   if( chActiveFour ){
@@ -491,14 +504,17 @@ void executeTimerChFour( int hours, int minutes ){
       digitalWrite(channelFourPin, LOW);
     }
   }else{
-    if( chSizeFour != 0 ){
-      for( int i = 0 ; i<chSizeFour ; i++ ){
-        if( hours == chFour[i][0] && minutes == chFour[i][1]){
-          chActiveFour = true;
-          chFourMillis = millis();
-          chActiveFourEstimation = chFour[i][2];              
-          Serial.println("switching on digital pin channel 4" );
-          digitalWrite(channelFourPin, HIGH);
+    if( executedMinuteFour != minutes ){
+      if( chSizeFour != 0 ){
+        for( int i = 0 ; i<chSizeFour ; i++ ){
+          if( hours == chFour[i][0] && minutes == chFour[i][1]){
+            chActiveFour = true;
+            chFourMillis = millis();
+            executedMinuteFour = minutes;
+            chActiveFourEstimation = chFour[i][2];              
+            Serial.println("switching on digital pin channel 4" );
+            digitalWrite(channelFourPin, HIGH);
+          }
         }
       }
     }
@@ -582,6 +598,18 @@ void loop() {
   executeTimerChTwo( hours, minutes );
   executeTimerChThree( hours, minutes );
   executeTimerChFour( hours, minutes );
+  if( executedMinuteOne != minutes ){
+    executedMinuteOne = -1;
+  }
+  if( executedMinuteTwo != minutes ){
+    executedMinuteTwo = -1;
+  }
+  if( executedMinuteThree != minutes ){
+    executedMinuteThree = -1;
+  }
+  if( executedMinuteFour != minutes ){
+    executedMinuteFour = -1;
+  }
   if( standalone == true ){
     if( WiFi.status() != WL_CONNECTED ){
       wifiReconnect( minutes );
