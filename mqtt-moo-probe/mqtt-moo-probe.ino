@@ -399,10 +399,11 @@ void setup() {
 
 bool chActiveOne = false;
 int chActiveOneEstimation = 0;
+int chOneMillis = 0;
 
 void executeTimerChOne( int hours, int minutes ){
   if( chActiveOne ){
-    if( minutes == chActiveOneEstimation ){
+    if( (millis() - chOneMillis)/1000 >= chActiveOneEstimation ){
       chActiveOne = false;
       chActiveOneEstimation = 0;
       Serial.println("switching off digital pin channel 1" );
@@ -413,11 +414,8 @@ void executeTimerChOne( int hours, int minutes ){
       for( int i = 0 ; i<chSizeOne ; i++ ){
         if( hours == chOne[i][0] && minutes == chOne[i][1] ){
           chActiveOne = true;
-          if( minutes + chOne[i][2] >= 60 ){
-            chActiveOneEstimation = minutes + chOne[i][2] - 60;
-          }else{
-            chActiveOneEstimation = chOne[i][2] + minutes;              
-          }
+          chOneMillis = millis();
+          chActiveOneEstimation = chOne[i][2];              
           Serial.println("switching on digital pin channel 1" );
           digitalWrite(channelOnePin, HIGH);
         }
@@ -428,10 +426,11 @@ void executeTimerChOne( int hours, int minutes ){
 
 bool chActiveTwo = false;
 int chActiveTwoEstimation = 0;
+int chTwoMillis = 0;
 
 void executeTimerChTwo( int hours, int minutes ){
   if( chActiveTwo ){
-    if( minutes == chActiveTwoEstimation ){
+    if( (millis() - chTwoMillis)/1000 >= chActiveTwoEstimation ){
       chActiveTwo = false;
       chActiveTwoEstimation = 0;
       Serial.println("switching off digital pin channel 2" );
@@ -442,11 +441,8 @@ void executeTimerChTwo( int hours, int minutes ){
       for( int i = 0 ; i<chSizeTwo ; i++ ){
         if( hours == chTwo[i][0] && minutes == chTwo[i][1]){
           chActiveTwo = true;
-          if( minutes + chTwo[i][2] >= 60 ){
-            chActiveTwoEstimation = minutes + chTwo[i][2] - 60;
-          }else{
-            chActiveTwoEstimation = chTwo[i][2] + minutes;              
-          }
+          chTwoMillis = millis();
+          chActiveTwoEstimation = chTwo[i][2];              
           Serial.println("switching on digital pin channel 2" );
           digitalWrite(channelTwoPin, HIGH);
         }
@@ -457,10 +453,11 @@ void executeTimerChTwo( int hours, int minutes ){
 
 bool chActiveThree = false;
 int chActiveThreeEstimation = 0;
+int chThreeMillis = 0;
 
 void executeTimerChThree( int hours, int minutes ){
   if( chActiveThree ){
-    if( minutes == chActiveThreeEstimation ){
+    if( (millis() - chThreeMillis)/1000 >= chActiveThreeEstimation ){
       chActiveThree = false;
       chActiveThreeEstimation = 0;
       Serial.println("switching off digital pin channel 3" );
@@ -471,11 +468,8 @@ void executeTimerChThree( int hours, int minutes ){
       for( int i = 0 ; i<chSizeThree ; i++ ){
         if( hours == chThree[i][0] && minutes == chThree[i][1]){
           chActiveThree = true;
-          if( minutes + chThree[i][2] >= 60 ){
-            chActiveThreeEstimation = minutes + chThree[i][2] - 60;
-          }else{
-            chActiveThreeEstimation = chThree[i][2] + minutes;              
-          }
+          chThreeMillis = millis();
+          chActiveThreeEstimation = chThree[i][2];              
           Serial.println("switching on digital pin channel 3" );
           digitalWrite(channelThreePin, HIGH);
         }
@@ -486,10 +480,11 @@ void executeTimerChThree( int hours, int minutes ){
 
 bool chActiveFour = false;
 int chActiveFourEstimation = 0;
+int chFourMillis = 0;
 
 void executeTimerChFour( int hours, int minutes ){
   if( chActiveFour ){
-    if( minutes == chActiveFourEstimation ){
+    if( (millis() - chFourMillis)/1000 >= chActiveFourEstimation ){
       chActiveFour = false;
       chActiveFourEstimation = 0;
       Serial.println("switching off digital pin channel 4" );
@@ -500,11 +495,8 @@ void executeTimerChFour( int hours, int minutes ){
       for( int i = 0 ; i<chSizeFour ; i++ ){
         if( hours == chFour[i][0] && minutes == chFour[i][1]){
           chActiveFour = true;
-          if( minutes + chFour[i][2] >= 60 ){
-            chActiveFourEstimation = minutes + chFour[i][2] - 60;
-          }else{
-            chActiveFourEstimation = chFour[i][2] + minutes;              
-          }
+          chFourMillis = millis();
+          chActiveFourEstimation = chFour[i][2];              
           Serial.println("switching on digital pin channel 4" );
           digitalWrite(channelFourPin, HIGH);
         }
