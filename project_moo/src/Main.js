@@ -6,7 +6,7 @@ import {createSwitchNavigator, createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
 import DashboardScreen from './DashboardScreen';
-import AddTimerScreen from './AddTimerScreen'
+import AddTimerScreenV2 from './AddTimerScreenV2'
 
 var tabBarHeight = 50
 
@@ -33,7 +33,7 @@ export default class Main extends Component<Props> {
 
 const dashboardStackNavigator = createStackNavigator({
     dashboard: DashboardScreen,
-    addTimer: AddTimerScreen,
+    addTimer: AddTimerScreenV2,
 },{
     initialRouteName: 'dashboard',
     defaultNavigationOptions: {
