@@ -20,8 +20,7 @@ const HEIGHT = Dimensions.get('window').height
 var radio_props = [
     {label: 'Ch1  ', value: 1 },
     {label: 'Ch2  ', value: 2 },
-    {label: 'Ch3  ', value: 3 },
-    {label: 'Ch4  ', value: 4 }
+    {label: 'Ch3  ', value: 3 }
 ];
 
 class AddTimerScreen extends Component {
@@ -307,27 +306,7 @@ class AddTimerScreen extends Component {
                     />
                 </View>
             </View>
-            <View style={styles.modeBox}>
-              <Text style={styles.modeText}>Mode : </Text>
-              <Picker
-                selectedValue={this.state.data.m[(this.state.channel)-1].toString()}
-                style={styles.modePicker}
-                itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily:"Ebrima", fontSize:17 }}
-                onValueChange={(itemValue, itemIndex) =>{
-                  let tempData = this.state.data
-                  tempData.m[this.state.channel-1] = itemIndex
-                  this.setState({
-                    data: tempData
-                  })
-                }
-                }>
-                <Picker.Item label="All Days" value="0" />
-                <Picker.Item label="Weekday" value="1" />
-                <Picker.Item label="Skip One" value="2" />
-                <Picker.Item label="Skip Two" value="3" />
-                <Picker.Item label="Weekend" value="4" />
-              </Picker>
-            </View>
+
             <View style={styles.addTimeBox}>
                 <View style={styles.pickTimeBox}>
                     <View style={styles.timeBoxInner}>

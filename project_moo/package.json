@@ -1,5 +1,5 @@
 {
-  "name": "Ally",
+  "name": "ally",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,8 +15,8 @@
     "dateformat": "^3.0.3",
     "mqtt": "^3.0.0",
     "mqtt-client": "^0.1.0",
-    "react": "16.9.0",
-    "react-native": "^0.61.2",
+    "react": "16.13.1",
+    "react-native": "0.63.2",
     "react-native-chart-kit": "^3.11.0",
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",

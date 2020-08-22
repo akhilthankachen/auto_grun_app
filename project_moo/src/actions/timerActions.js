@@ -47,8 +47,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
         ch1: data.ch1,
         ch2: data.ch2,
         ch3: data.ch3,
-        ch4: data.ch4,
-        m: data.m
+        ch4: data.ch1.concat(data.ch2,data.ch3),
+        m: [0,0,0,0]
       }
     }
 
@@ -94,8 +94,8 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
                         ch1: data.ch1,
                         ch2: data.ch2,
                         ch3: data.ch3,
-                        ch4: data.ch4,
-                        m: data.m
+                        ch4: data.ch1.concat(data.ch2,data.ch3),
+                        m: [0,0,0,0]
                     })
                   }else{
                     alert('Couldn\'t update. Try again...')

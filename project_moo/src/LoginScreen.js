@@ -74,7 +74,7 @@ class LoginScreen extends Component<Props> {
       <View style={styles.container}>
         <LoadingModal content="Logging In" isVisible={this.state.modalVisible}/>
         <Image style={styles.logo} source={require('./images/logo-small.png')}/>
-        <Text style={styles.logoText}>Ally</Text>
+        <Text style={styles.logoText}>AllyPapaya</Text>
 
         <View style={styles.loginSection}>
           <View style={styles.statusContainer}>

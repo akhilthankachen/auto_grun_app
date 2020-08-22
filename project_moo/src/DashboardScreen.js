@@ -96,11 +96,6 @@ class DashboardScreen extends Component<Props> {
                     channel={3}
                     data={this.state.channel3}
                   />
-                  <TimerDisplay 
-                    key={4} 
-                    channel={4}
-                    data={this.state.channel4}
-                  />
                 </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} />
                 <TempGraph heading="Today's average temperature °C/h" data={this.state.avgTemp} route="/device/avgTempDay" key={0} keyDup={0}/>
