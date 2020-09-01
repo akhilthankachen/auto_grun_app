@@ -120,6 +120,12 @@ class AddTimerScreenV2 extends Component {
                         <Text style={styles.heading}>
                             Timer Settings
                         </Text>
+                        <Icon 
+                                    name = 'sync'
+                                    type = 'material'
+                                    color = 'white'
+                                    size = {20}
+                                />
                         <Text style={styles.deviceText}>Device : <Text>ACTIVE</Text></Text>
                         
                     </View>
