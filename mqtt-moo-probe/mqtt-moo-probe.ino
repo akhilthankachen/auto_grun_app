@@ -59,7 +59,7 @@ int channelFourPin = 13;
 bool standalone = false;
 
 // device id
-String deviceId = "testbench";
+String deviceId = "test123";
 
 // GPIO where the DS18B20 is connected to
 const int oneWireBus = 0;     
