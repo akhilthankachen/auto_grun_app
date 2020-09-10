@@ -5,13 +5,14 @@ import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './src/store'
 const { store, persistor } = configureStore()
 import { Provider } from 'react-redux'
+import SplashScreen from './src/SplashScreen'
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={<SplashScreen/>} persistor={persistor}>
           <Main/>
         </PersistGate>
       </Provider>

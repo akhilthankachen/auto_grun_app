@@ -4,6 +4,7 @@ import LoadingModal from './components/LoadingModal'
 import { connect } from 'react-redux'
 import { authenticate } from './actions/userActions'
 import PropTypes from 'prop-types'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
   StyleSheet, 
@@ -11,12 +12,16 @@ import {
   View, 
   Image,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 type Props = {};
 const { width : WIDTH } = Dimensions.get('window')
+const fontFamily = Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-medium'
+const fontFamilyLight = Platform.OS === 'ios' ? 'Helvetica-Light' : 'sans-serif-light'
+
 class LoginScreen extends Component<Props> {
 
   constructor(props){
@@ -71,96 +76,112 @@ class LoginScreen extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <LoadingModal content="Logging In" isVisible={this.state.modalVisible}/>
-        <Image style={styles.logo} source={require('./images/logo-small.png')}/>
-        <Text style={styles.logoText}>Ally</Text>
+      <SafeAreaView style={{flex:1,backgroundColor: 'white'}}>
+        <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "position" : "position"}
+              style={{flex:1}}
+              contentContainerStyle={styles.container}
+              keyboardVerticalOffset={Platform.OS == "ios" ? -200 : -235}
+              >
+          <LoadingModal content="Logging In" isVisible={this.state.modalVisible}/>
+          <Image style={styles.logo} source={require('./images/logo-small.png')}/>
+          <Text style={styles.logoText}>Ally</Text>
 
-        <View style={styles.loginSection}>
-          <View style={styles.statusContainer}>
-            <Text style = {styles.statusText}>
-              {this.state.status}
-            </Text>
-          </View>
-          <View style={styles.usernameContainer}>
-            <TextInput 
-              style = {styles.username}
-              placeholder = {'Username'}
-              autoCapitalize = 'none'
-              onChangeText = {(text) => {this.setState({
-                username: text,
-                status: ''
-              })}}
-            />
-            <View style = {styles.person}>
-              <Icon 
-                name = 'person'
-                type = 'material'
-                color = '#A66066'
-                size = {20}
+          <View style={styles.loginSection}>
+            <View style={styles.statusContainer}>
+              <Text style = {styles.statusText}>
+                {this.state.status}
+              </Text>
+            </View>
+            <View style={styles.usernameContainer}>
+              <TextInput 
+                style = {styles.username}
+                placeholder = {'Username'}
+                autoCapitalize = 'none'
+                onChangeText = {(text) => {this.setState({
+                  username: text,
+                  status: ''
+                })}}
               />
-            </View>  
-          </View>
-          <View style = {styles.passwordContainer}>
-            <TextInput 
-              style = {styles.password}
-              placeholder = {'Password'}
-              autoCapitalize = 'none'
-              underlineColorAndroid = 'transparent'
-              secureTextEntry = {this.state.showHide}
-              onChangeText = {(text) => {this.setState({
-                password: text,
-                status: ''
-              })}}
-            /> 
-            <View style = {styles.person}>
-              <Icon 
-                name = 'lock'
-                color = '#A66066'
-                size = {20}
+              <View style = {styles.person}>
+                <Icon 
+                  name = 'person'
+                  type = 'material'
+                  color = '#A66066'
+                  size = {20}
+                />
+              </View>  
+            </View>
+            <View style = {styles.passwordContainer}>
+              <TextInput 
+                style = {styles.password}
+                placeholder = {'Password'}
+                autoCapitalize = 'none'
+                underlineColorAndroid = 'transparent'
+                secureTextEntry = {this.state.showHide}
+                onChangeText = {(text) => {this.setState({
+                  password: text,
+                  status: ''
+                })}}
+              /> 
+              <View style = {styles.person}>
+                <Icon 
+                  name = 'lock'
+                  color = '#A66066'
+                  size = {20}
+                />
+              </View>
+              <View style = {styles.showHide}>
+                <TouchableOpacity
+                  onPress = {()=>{this.setState({showHide: !this.state.showHide})}}  
+                >
+                  <Icon 
+                    name = 'ios-eye'
+                    type = 'ionicon'
+                    color = '#A66066'
+                    size = {25}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.login}
+              onPress = {this.onLoginPressRedux}
+              >
+              <Text style={styles.loginText}>
+                Login
+              </Text>
+            </TouchableOpacity>
+            <View style = {styles.remember} >
+              <CheckBox 
+                center
+                title = 'Remember me'
+                iconType='material'
+                checkedIcon='check-box'
+                uncheckedIcon='check-box-outline-blank'
+                checked={this.state.checked}
+                onPress = {()=>{this.setState({checked: !this.state.checked})}}
               />
             </View>
-            <View style = {styles.showHide}>
-              <TouchableOpacity
-                onPress = {()=>{this.setState({showHide: !this.state.showHide})}}  
-              >
-                <Icon 
-                  name = 'ios-eye'
-                  type = 'ionicon'
-                  color = '#A66066'
-                  size = {25}
-                />
+            <View style = {styles.forgotContainer}>
+              <TouchableOpacity>
+                <Text style = {styles.forgotText}>
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style = {styles.createNewAccount}>
+              <TouchableOpacity onPress={()=>{this.props.navigation.navigate('CreateAccount')}}>
+                <Text style = {styles.createText}>
+                  Create New Account
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.login}
-            onPress = {this.onLoginPressRedux}
-            >
-            <Text style={styles.loginText}>
-              Login
-            </Text>
-          </TouchableOpacity>
-          <View style = {styles.remember} >
-            <CheckBox 
-              center
-              title = 'Remember me'
-              iconType='material'
-              checkedIcon='check-box'
-              uncheckedIcon='check-box-outline-blank'
-              checked={this.state.checked}
-              onPress = {()=>{this.setState({checked: !this.state.checked})}}
-            />
-          </View>
-          <View style = {styles.forgotContainer}>
-            <TouchableOpacity>
-              <Text style = {styles.forgotText}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>  
-      </View>
+          
+        </KeyboardAvoidingView>  
+      </SafeAreaView>
     );
   }
 }
@@ -182,8 +203,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    width: null,
-    height: null
   },
   logo: {
     width: 80,
@@ -205,7 +224,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     fontSize: 18,
     backgroundColor: '#F2F2F2',
-    fontFamily: 'sans-serif-light',
+    fontFamily: fontFamilyLight,
     color: '#5E7A7E'
   },
   passwordContainer: {
@@ -218,7 +237,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     fontSize: 18,
     backgroundColor: '#F2F2F2',
-    fontFamily: 'sans-serif-light',
+    fontFamily: fontFamilyLight,
     color: '#5E7A7E'
   },
   loginSection: {
@@ -265,8 +284,18 @@ const styles = StyleSheet.create({
   },
   logoText: {
     marginTop: 25,
-    fontFamily: 'sans-serif-medium',
+    fontFamily: fontFamily,
     fontSize: 25,
     color: '#027368'
+  },
+  createNewAccount: {
+    marginTop: 20,
+    alignItems: 'center'
+  },
+  createText: {
+    fontWeight: '400',
+    fontFamily: fontFamily,
+    fontSize: 15,
+    color: '#5E7A7E'
   }
 });

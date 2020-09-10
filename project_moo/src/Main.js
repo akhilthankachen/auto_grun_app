@@ -1,52 +1,97 @@
-import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {Component} from 'react'
+import {StyleSheet} from 'react-native'
 import LoginScreen from './LoginScreen'
-import SplashScreen from './SplashScreen'
-import {createSwitchNavigator, createAppContainer} from 'react-navigation'
-import {createStackNavigator} from 'react-navigation-stack'
-import {createMaterialTopTabNavigator} from 'react-navigation-tabs'
-import DashboardScreen from './DashboardScreen';
 import AddTimerScreenV2 from './AddTimerScreenV2'
+import CreateAccountScreen from './CreateAccountScreen'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-var tabBarHeight = 50
-
-const styles = StyleSheet.create({
-    logo: {
-        width: 42,
-        height: 35
-    }
-});
+const rootStack = createStackNavigator()
 
 type Props = {};
-export default class Main extends Component<Props> {
+class Main extends Component<Props> {
     constructor(props){
         super(props)
-        this.state = {
-            initialRoute: 'login'
-        }
     }
+
     render() {
-        return <AppContainer />
+        let { user } = this.props
+        return (
+            <SafeAreaProvider>
+                <NavigationContainer>
+                    <rootStack.Navigator>
+                        { user.token === '' ? (
+                        <>
+                            <rootStack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+                            <rootStack.Screen name="CreateAccount" component={CreateAccountScreen} options={{headerShown: false}} />
+                        </>
+                        ) : (
+                            <rootStack.Screen name="home" component={AddTimerScreenV2} />
+                        )}
+                    </rootStack.Navigator>
+                </NavigationContainer>
+            </SafeAreaProvider>
+        )
     }
 }
 
+Main.propTypes = {
+    user: PropTypes.object.isRequired
+}
 
-const dashboardStackNavigator = createStackNavigator({
-    dashboard: DashboardScreen,
-    addTimer: AddTimerScreenV2,
-},{
-    initialRouteName: 'dashboard',
-    defaultNavigationOptions: {
-        headerShown: false
-    }
+const mapStateToProps = state => ({
+    user: state.user
 })
 
-const AppSwitchNavigator = createSwitchNavigator({
-    splash: SplashScreen,
-    login: LoginScreen,
-    dashboard: dashboardStackNavigator
-},{
-    initialRouteName: 'splash'
-})
+export default connect(mapStateToProps, null)(Main)
 
-const AppContainer = createAppContainer(AppSwitchNavigator)
+// const dashboardStackNavigator = createStackNavigator({
+//     dashboard: DashboardScreen,
+//     addTimer: AddTimerScreenV2,
+// },{
+//     initialRouteName: 'dashboard',
+//     defaultNavigationOptions: {
+//         headerShown: false
+//     }
+// })
+
+// const materialBottomTabNavigator = createMaterialTopTabNavigator({
+//     Timer: { 
+//         screen: AddTimerScreenV2,
+//         navigationOptions: {
+//             tabBarIcon: ({tintColor, focused}) => {
+//                 <Icon  
+//                     name={'device-hub'} 
+//                     type = 'material' 
+//                     color={'white'}  
+//                     size={25}  
+//                 />  
+//             }
+//         } 
+//     },
+//     Device: { screen: dashboardStackNavigator },
+//     Stats: { screen: AddTimerScreenV2 }
+// },{
+//     initialRouteName: 'Device',
+//     tabBarPosition: 'bottom',
+//     tabBarOptions: {
+//         upperCaseLabel: false,
+//         showIcon: true,
+//         showLabel: false,
+//         activeTintColor: 'black',
+//         background
+//     }
+// })
+
+// const AppSwitchNavigator = createSwitchNavigator({
+//     splash: SplashScreen,
+//     login: LoginScreen,
+//     dashboard: materialBottomTabNavigator
+// },{
+//     initialRouteName: 'splash'
+// })
+
+// const AppContainer = createAppContainer(AppSwitchNavigator)

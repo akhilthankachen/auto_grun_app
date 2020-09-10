@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, Animated } from 'react-native'
-import SaveAndActivate from './components/SaveAndActivate'
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, Animated, Platform } from 'react-native'
 import { Icon } from 'react-native-elements'
 
+const fontFamily = Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-medium'
+const animationNativeDriver = true
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
@@ -41,51 +42,61 @@ class AddTimerScreenV2 extends Component {
         } = this.state
         Animated.spring( translateX, {
             toValue: xValue,
-            duration: 100
+            duration: 100,
+            useNativeDriver: animationNativeDriver
         }).start()
         if( active === 0 ){
             Animated.parallel([
                 Animated.spring(translateXTabOne, {
                     toValue: 0,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabTwo, {
                     toValue: WIDTH,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabThree, {
                     toValue: WIDTH,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start()
             ])
         }else if( active === 1){
             Animated.parallel([
                 Animated.spring(translateXTabOne, {
                     toValue: -WIDTH,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabTwo, {
                     toValue: 0,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabThree, {
                     toValue: WIDTH,
                     duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start()
             ])
         }else if( active === 2 ){
             Animated.parallel([
                 Animated.spring(translateXTabOne, {
                     toValue: -WIDTH,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabTwo, {
                     toValue: -WIDTH,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start(),
                 Animated.spring(translateXTabThree, {
                     toValue: 0,
-                    duration: 100
+                    duration: 100,
+                    useNativeDriver: animationNativeDriver
                 }).start()
             ])
         }
@@ -297,11 +308,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#027368'
     },
     syncText: {
-        fontFamily: 'sans-serif-medium',
+        fontFamily: fontFamily,
         fontWeight: '500',
         fontSize: 15,
         color: 'white',
-        paddingLeft: 10
+        paddingLeft: 10,
     },    
     main: {
         width: WIDTH - 30,
@@ -319,7 +330,7 @@ const styles = StyleSheet.create({
         marginRight: 15
     },
     heading: {
-        fontFamily: 'sans-serif-medium',
+        fontFamily: fontFamily,
         fontSize: 20
     },
     tabContainer: {
@@ -328,12 +339,12 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     tabText: {
-        fontFamily: 'sans-serif-medium',
+        fontFamily: fontFamily,
         fontWeight: '500',
         fontSize: 15,
     },
     deviceText: {
-        fontFamily: 'sans-serif-medium',
+        fontFamily: fontFamily,
         fontSize: 12
     }
 })

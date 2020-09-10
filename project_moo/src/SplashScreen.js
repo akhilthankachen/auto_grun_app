@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 type Props = {};
 class SplashScreen extends Component<Props> { 
-  componentDidMount = () => {
-    if( this.props.user.token != '' && this.props.user.authStatus == true){
-      this.props.navigation.navigate('dashboard')
-    }else{
-      this.props.navigation.navigate('login')
-    }
-  }
+  // componentDidMount = () => {
+  //   if( this.props.user.token != '' && this.props.user.authStatus == true){
+  //     this.props.navigation.navigate('dashboard')
+  //   }else{
+  //     this.props.navigation.navigate('login')
+  //   }
+  // }
 
   render() {
     return (

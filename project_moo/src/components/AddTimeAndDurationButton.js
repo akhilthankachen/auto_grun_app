@@ -27,7 +27,7 @@ export default class AddTimeAndDurationButton extends Component {
                     color = 'rgb(10, 79, 0)'
                     size = {20}
                 />
-                <Text style={styles.logoutText}>Update settings</Text>
+                <Text style={styles.logoutText}>Update settings </Text>
             </View>
         </TouchableOpacity>
       </View>
