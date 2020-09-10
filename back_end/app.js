@@ -113,15 +113,16 @@ app.get('/', (req,res) => { // home '/' response
 });
 
 
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(port, () => {
-	console.log('HTTPS Server running on port 443');
-});
-// app.listen(port, () => {
-//     if(mode_config.mode == "dev"){
-//         console.log('server started at port ' + port);
-//     }
+
+// const httpsServer = https.createServer(credentials, app);
+// httpsServer.listen(port, () => {
+// 	console.log('HTTPS Server running on port 3000');
 // });
+app.listen(port, () => {
+    if(mode_config.mode == "dev"){
+        console.log('server started at port ' + port);
+    }
+});
 
 // const tempRouter = require('./routes/device').tempRouter
 // console.log(tempRouter)
