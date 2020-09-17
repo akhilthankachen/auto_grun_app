@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet} from 'react-native'
-import LoginScreen from './LoginScreen'
+import LoginScreenPhoneAuth from './LoginScreenPhoneAuth'
 import AddTimerScreenV2 from './AddTimerScreenV2'
 import CreateAccountScreen from './CreateAccountScreen'
 import { NavigationContainer } from '@react-navigation/native'
@@ -25,7 +24,7 @@ class Main extends Component<Props> {
                     <rootStack.Navigator>
                         { user.token === '' ? (
                         <>
-                            <rootStack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+                            <rootStack.Screen name="Login" component={LoginScreenPhoneAuth} options={{headerShown: false}} />
                             <rootStack.Screen name="CreateAccount" component={CreateAccountScreen} options={{headerShown: false}} />
                         </>
                         ) : (
