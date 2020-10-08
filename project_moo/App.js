@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from './src/store'
 const { store, persistor } = configureStore()
 import { Provider } from 'react-redux'
-import SplashScreen from './src/SplashScreen'
+import SplashScreen from './src/screens/SplashScreen'
 
 type Props = {};
 export default class App extends Component<Props> {

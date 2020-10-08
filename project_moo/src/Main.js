@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import LoginScreenPhoneAuth from './LoginScreenPhoneAuth'
-import AddTimerScreenV2 from './AddTimerScreenV2'
-import CreateAccountScreen from './CreateAccountScreen'
+import LoginScreenPhoneAuth from './screens/LoginScreenPhoneAuth'
+import AddTimerScreenV2 from './screens/AddTimerScreenV2'
+import CreateAccountScreen from './screens/CreateAccountScreen'
+import TitleBar from './components/TitleBar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -21,16 +22,37 @@ class Main extends Component<Props> {
         return (
             <SafeAreaProvider>
                 <NavigationContainer>
-                    <rootStack.Navigator>
-                        { user.token === '' ? (
-                        <>
-                            <rootStack.Screen name="Login" component={LoginScreenPhoneAuth} options={{headerShown: false}} />
-                            <rootStack.Screen name="CreateAccount" component={CreateAccountScreen} options={{headerShown: false}} />
-                        </>
-                        ) : (
-                            <rootStack.Screen name="home" component={AddTimerScreenV2} />
-                        )}
-                    </rootStack.Navigator>
+                    
+                        <rootStack.Navigator
+                            headerMode='float'
+                            screenOptions={{
+                                header: (props) => {
+                                    return(<TitleBar {...props}/>)
+                                }
+                            }}
+                        >
+                            { user.token === '' ? (
+                            <>
+                                <rootStack.Screen 
+                                    name="Login" 
+                                    component={LoginScreenPhoneAuth} 
+                                    options={{
+                                        title: 'Ally'
+                                    }}
+                                />
+                                <rootStack.Screen 
+                                    name="CreateAccount" 
+                                    component={CreateAccountScreen}
+                                    options={{
+                                        title: 'Update Info'
+                                    }}
+                                />
+                            </>
+                            ) : (
+                                <rootStack.Screen name="home" component={AddTimerScreenV2} />
+                            )}
+                        </rootStack.Navigator>
+                    
                 </NavigationContainer>
             </SafeAreaProvider>
         )

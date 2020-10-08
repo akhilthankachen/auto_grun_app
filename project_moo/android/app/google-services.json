@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "612169489330",
+    "firebase_url": "https://ally-da45f.firebaseio.com",
+    "project_id": "ally-da45f",
+    "storage_bucket": "ally-da45f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612169489330:android:8ee0906ce1b63b7f9662ab",
+        "android_client_info": {
+          "package_name": "com.ally"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612169489330-hv8ivpmgjkmriqpnp2m0gokgvkemo7mr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ally",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "612169489330-iglholu28uui5rd8romir5jg4go9dt5q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiuBTJs_HAjrOwE7J3c1Zg0OEWq9bBcuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612169489330-iglholu28uui5rd8romir5jg4go9dt5q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "612169489330-d5d4tn1tnu0qbqeuogk8g88de7i51lds.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Ally"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
