@@ -6,8 +6,8 @@
 	objectVersion = 46;
 	objects = {
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* AllyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AllyTests.m */; };
-		0E7DD32C5A3A5FA6394DD669 /* libPods-Ally-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1179DA68BFDFB0833EFBE974 /* libPods-Ally-tvOSTests.a */; };
+		00E356F31AD99517003FC87E /* allyHydroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* allyHydroTests.m */; };
+		0E7DD32C5A3A5FA6394DD669 /* libPods-allyHydro-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1179DA68BFDFB0833EFBE974 /* libPods-allyHydro-tvOSTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -15,10 +15,10 @@
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* AllyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AllyTests.m */; };
-		48BC977E8DFCE86B1099D67F /* libPods-AllyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37505EA40BCCF802B683A92A /* libPods-AllyTests.a */; };
-		ABBF13C2B4B9E0EE6DE4CC82 /* libPods-Ally.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979CC12E43E18FB4A380A47 /* libPods-Ally.a */; };
-		F7369869BACBCD9C9C7B05B0 /* libPods-Ally-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51843996997F7C55449F39EC /* libPods-Ally-tvOS.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* allyHydroTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* allyHydroTests.m */; };
+		48BC977E8DFCE86B1099D67F /* libPods-allyHydroTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37505EA40BCCF802B683A92A /* libPods-allyHydroTests.a */; };
+		ABBF13C2B4B9E0EE6DE4CC82 /* libPods-allyHydro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979CC12E43E18FB4A380A47 /* libPods-allyHydro.a */; };
+		F7369869BACBCD9C9C7B05B0 /* libPods-allyHydro-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51843996997F7C55449F39EC /* libPods-allyHydro-tvOS.a */; };
 		6F1DA57E5A234156AEE3D975 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F34014A76A234836B1D9DD2C /* AntDesign.ttf */; };
 		A99F2558D5744C7C9C93B0E2 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E9E360AF5A424E62AF5643C1 /* Entypo.ttf */; };
 		672C826BF348430AB9688BD4 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67EFDADD469D408ABFA93B21 /* EvilIcons.ttf */; };
@@ -43,43 +43,43 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = Ally;
+			remoteInfo = allyHydro;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "Ally-tvOS";
+			remoteInfo = "allyHydro-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* AllyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AllyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* allyHydroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = allyHydroTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* AllyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AllyTests.m; sourceTree = "<group>"; };
-		0979CC12E43E18FB4A380A47 /* libPods-Ally.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ally.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1179DA68BFDFB0833EFBE974 /* libPods-Ally-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ally-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* Ally.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ally.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Ally/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Ally/AppDelegate.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* allyHydroTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = allyHydroTests.m; sourceTree = "<group>"; };
+		0979CC12E43E18FB4A380A47 /* libPods-allyHydro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-allyHydro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1179DA68BFDFB0833EFBE974 /* libPods-allyHydro-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-allyHydro-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* allyHydro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = allyHydro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = allyHydro/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = allyHydro/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Ally/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Ally/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Ally/main.m; sourceTree = "<group>"; };
-		1D8DBC34A210CF2C11175944 /* Pods-Ally-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Ally-tvOS/Pods-Ally-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		212193F372B4C237393F0267 /* Pods-Ally-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Ally-tvOS/Pods-Ally-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		245E5630FB637B0F853F5AD1 /* Pods-Ally-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Ally-tvOSTests/Pods-Ally-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* Ally-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ally-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* Ally-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ally-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		37505EA40BCCF802B683A92A /* libPods-AllyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AllyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4EFB7C5EFC08921ADFE7729A /* Pods-Ally-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Ally-tvOSTests/Pods-Ally-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		51843996997F7C55449F39EC /* libPods-Ally-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ally-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		53FFA6F468F98F83ECBE8894 /* Pods-Ally.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally.debug.xcconfig"; path = "Target Support Files/Pods-Ally/Pods-Ally.debug.xcconfig"; sourceTree = "<group>"; };
-		5AAB04F7CA899C3B6FF6C278 /* Pods-AllyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AllyTests.release.xcconfig"; path = "Target Support Files/Pods-AllyTests/Pods-AllyTests.release.xcconfig"; sourceTree = "<group>"; };
-		70FAB315E11D4652A8B082D2 /* Pods-Ally.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ally.release.xcconfig"; path = "Target Support Files/Pods-Ally/Pods-Ally.release.xcconfig"; sourceTree = "<group>"; };
-		9131E841D21C5EFD401A30D9 /* Pods-AllyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AllyTests.debug.xcconfig"; path = "Target Support Files/Pods-AllyTests/Pods-AllyTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = allyHydro/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = allyHydro/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = allyHydro/main.m; sourceTree = "<group>"; };
+		1D8DBC34A210CF2C11175944 /* Pods-allyHydro-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro-tvOS.release.xcconfig"; path = "Target Support Files/Pods-allyHydro-tvOS/Pods-allyHydro-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		212193F372B4C237393F0267 /* Pods-allyHydro-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-allyHydro-tvOS/Pods-allyHydro-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		245E5630FB637B0F853F5AD1 /* Pods-allyHydro-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-allyHydro-tvOSTests/Pods-allyHydro-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* allyHydro-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "allyHydro-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* allyHydro-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "allyHydro-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		37505EA40BCCF802B683A92A /* libPods-allyHydroTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-allyHydroTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EFB7C5EFC08921ADFE7729A /* Pods-allyHydro-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-allyHydro-tvOSTests/Pods-allyHydro-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		51843996997F7C55449F39EC /* libPods-allyHydro-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-allyHydro-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53FFA6F468F98F83ECBE8894 /* Pods-allyHydro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro.debug.xcconfig"; path = "Target Support Files/Pods-allyHydro/Pods-allyHydro.debug.xcconfig"; sourceTree = "<group>"; };
+		5AAB04F7CA899C3B6FF6C278 /* Pods-allyHydroTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydroTests.release.xcconfig"; path = "Target Support Files/Pods-allyHydroTests/Pods-allyHydroTests.release.xcconfig"; sourceTree = "<group>"; };
+		70FAB315E11D4652A8B082D2 /* Pods-allyHydro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydro.release.xcconfig"; path = "Target Support Files/Pods-allyHydro/Pods-allyHydro.release.xcconfig"; sourceTree = "<group>"; };
+		9131E841D21C5EFD401A30D9 /* Pods-allyHydroTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-allyHydroTests.debug.xcconfig"; path = "Target Support Files/Pods-allyHydroTests/Pods-allyHydroTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F34014A76A234836B1D9DD2C /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
@@ -105,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48BC977E8DFCE86B1099D67F /* libPods-AllyTests.a in Frameworks */,
+				48BC977E8DFCE86B1099D67F /* libPods-allyHydroTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABBF13C2B4B9E0EE6DE4CC82 /* libPods-Ally.a in Frameworks */,
+				ABBF13C2B4B9E0EE6DE4CC82 /* libPods-allyHydro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7369869BACBCD9C9C7B05B0 /* libPods-Ally-tvOS.a in Frameworks */,
+				F7369869BACBCD9C9C7B05B0 /* libPods-allyHydro-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,20 +129,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E7DD32C5A3A5FA6394DD669 /* libPods-Ally-tvOSTests.a in Frameworks */,
+				0E7DD32C5A3A5FA6394DD669 /* libPods-allyHydro-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* AllyTests */ = {
+		00E356EF1AD99517003FC87E /* allyHydroTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* AllyTests.m */,
+				00E356F21AD99517003FC87E /* allyHydroTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = AllyTests;
+			path = allyHydroTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -153,7 +153,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* Ally */ = {
+		13B07FAE1A68108700A75B9A /* allyHydro */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -164,7 +164,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = Ally;
+			name = allyHydro;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -172,10 +172,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				0979CC12E43E18FB4A380A47 /* libPods-Ally.a */,
-				51843996997F7C55449F39EC /* libPods-Ally-tvOS.a */,
-				1179DA68BFDFB0833EFBE974 /* libPods-Ally-tvOSTests.a */,
-				37505EA40BCCF802B683A92A /* libPods-AllyTests.a */,
+				0979CC12E43E18FB4A380A47 /* libPods-allyHydro.a */,
+				51843996997F7C55449F39EC /* libPods-allyHydro-tvOS.a */,
+				1179DA68BFDFB0833EFBE974 /* libPods-allyHydro-tvOSTests.a */,
+				37505EA40BCCF802B683A92A /* libPods-allyHydroTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -190,9 +190,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* Ally */,
+				13B07FAE1A68108700A75B9A /* allyHydro */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* AllyTests */,
+				00E356EF1AD99517003FC87E /* allyHydroTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D956CC9234C73FC70F032BE1 /* Pods */,
@@ -206,10 +206,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Ally.app */,
-				00E356EE1AD99517003FC87E /* AllyTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* Ally-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* Ally-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* allyHydro.app */,
+				00E356EE1AD99517003FC87E /* allyHydroTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* allyHydro-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* allyHydro-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -217,14 +217,14 @@
 		D956CC9234C73FC70F032BE1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53FFA6F468F98F83ECBE8894 /* Pods-Ally.debug.xcconfig */,
-				70FAB315E11D4652A8B082D2 /* Pods-Ally.release.xcconfig */,
-				212193F372B4C237393F0267 /* Pods-Ally-tvOS.debug.xcconfig */,
-				1D8DBC34A210CF2C11175944 /* Pods-Ally-tvOS.release.xcconfig */,
-				245E5630FB637B0F853F5AD1 /* Pods-Ally-tvOSTests.debug.xcconfig */,
-				4EFB7C5EFC08921ADFE7729A /* Pods-Ally-tvOSTests.release.xcconfig */,
-				9131E841D21C5EFD401A30D9 /* Pods-AllyTests.debug.xcconfig */,
-				5AAB04F7CA899C3B6FF6C278 /* Pods-AllyTests.release.xcconfig */,
+				53FFA6F468F98F83ECBE8894 /* Pods-allyHydro.debug.xcconfig */,
+				70FAB315E11D4652A8B082D2 /* Pods-allyHydro.release.xcconfig */,
+				212193F372B4C237393F0267 /* Pods-allyHydro-tvOS.debug.xcconfig */,
+				1D8DBC34A210CF2C11175944 /* Pods-allyHydro-tvOS.release.xcconfig */,
+				245E5630FB637B0F853F5AD1 /* Pods-allyHydro-tvOSTests.debug.xcconfig */,
+				4EFB7C5EFC08921ADFE7729A /* Pods-allyHydro-tvOSTests.release.xcconfig */,
+				9131E841D21C5EFD401A30D9 /* Pods-allyHydroTests.debug.xcconfig */,
+				5AAB04F7CA899C3B6FF6C278 /* Pods-allyHydroTests.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -257,9 +257,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* AllyTests */ = {
+		00E356ED1AD99517003FC87E /* allyHydroTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AllyTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "allyHydroTests" */;
 			buildPhases = (
 				D799FE2F5B57E648BD4E9DFA /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -271,14 +271,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = AllyTests;
-			productName = AllyTests;
-			productReference = 00E356EE1AD99517003FC87E /* AllyTests.xctest */;
+			name = allyHydroTests;
+			productName = allyHydroTests;
+			productReference = 00E356EE1AD99517003FC87E /* allyHydroTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* Ally */ = {
+		13B07F861A680F5B00A75B9A /* allyHydro */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Ally" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "allyHydro" */;
 			buildPhases = (
 				E7BDD8CCF76A29F53B00D0D1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -292,14 +292,14 @@
 			);
 			dependencies = (
 			);
-			name = Ally;
-			productName = Ally;
-			productReference = 13B07F961A680F5B00A75B9A /* Ally.app */;
+			name = allyHydro;
+			productName = allyHydro;
+			productReference = 13B07F961A680F5B00A75B9A /* allyHydro.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* Ally-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* allyHydro-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Ally-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "allyHydro-tvOS" */;
 			buildPhases = (
 				C08F47D88252E85AF1361389 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -312,14 +312,14 @@
 			);
 			dependencies = (
 			);
-			name = "Ally-tvOS";
-			productName = "Ally-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* Ally-tvOS.app */;
+			name = "allyHydro-tvOS";
+			productName = "allyHydro-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* allyHydro-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* Ally-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* allyHydro-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Ally-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "allyHydro-tvOSTests" */;
 			buildPhases = (
 				4FA21596E057B019051FEFF4 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -331,9 +331,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "Ally-tvOSTests";
-			productName = "Ally-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* Ally-tvOSTests.xctest */;
+			name = "allyHydro-tvOSTests";
+			productName = "allyHydro-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* allyHydro-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -360,7 +360,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Ally" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "allyHydro" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -373,10 +373,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Ally */,
-				00E356ED1AD99517003FC87E /* AllyTests */,
-				2D02E47A1E0B4A5D006451C7 /* Ally-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* Ally-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* allyHydro */,
+				00E356ED1AD99517003FC87E /* allyHydroTests */,
+				2D02E47A1E0B4A5D006451C7 /* allyHydro-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* allyHydro-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -475,7 +475,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ally-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-allyHydro-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -488,7 +488,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ally/Pods-Ally-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-allyHydro/Pods-allyHydro-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -527,7 +527,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ally/Pods-Ally-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-allyHydro/Pods-allyHydro-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C08F47D88252E85AF1361389 /* [CP] Check Pods Manifest.lock */ = {
@@ -545,7 +545,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ally-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-allyHydro-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -567,7 +567,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AllyTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-allyHydroTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -589,7 +589,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ally-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-allyHydro-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -612,7 +612,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automaticAlly\"\n  fi\nfi\n";
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automaticallyHydro\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F122414F3F0027D42C /* Start Packager */ = {
@@ -631,7 +631,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automaticAlly\"\n  fi\nfi\n";
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automaticallyHydro\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -641,7 +641,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* AllyTests.m in Sources */,
+				00E356F31AD99517003FC87E /* allyHydroTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,7 +667,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* AllyTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* allyHydroTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,12 +676,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Ally */;
+			target = 13B07F861A680F5B00A75B9A /* allyHydro */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* Ally-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* allyHydro-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -693,7 +693,7 @@
 				13B07FB21A68108700A75B9A /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = Ally;
+			path = allyHydro;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -701,14 +701,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9131E841D21C5EFD401A30D9 /* Pods-AllyTests.debug.xcconfig */;
+			baseConfigurationReference = 9131E841D21C5EFD401A30D9 /* Pods-allyHydroTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = AllyTests/Info.plist;
+				INFOPLIST_FILE = allyHydroTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -718,17 +718,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ally.app/Ally";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/allyHydro.app/allyHydro";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5AAB04F7CA899C3B6FF6C278 /* Pods-AllyTests.release.xcconfig */;
+			baseConfigurationReference = 5AAB04F7CA899C3B6FF6C278 /* Pods-allyHydroTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = AllyTests/Info.plist;
+				INFOPLIST_FILE = allyHydroTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -738,18 +738,18 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ally.app/Ally";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/allyHydro.app/allyHydro";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53FFA6F468F98F83ECBE8894 /* Pods-Ally.debug.xcconfig */;
+			baseConfigurationReference = 53FFA6F468F98F83ECBE8894 /* Pods-allyHydro.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				INFOPLIST_FILE = Ally/Info.plist;
+				INFOPLIST_FILE = allyHydro/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -757,18 +757,18 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Ally;
+				PRODUCT_NAME = allyHydro;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 70FAB315E11D4652A8B082D2 /* Pods-Ally.release.xcconfig */;
+			baseConfigurationReference = 70FAB315E11D4652A8B082D2 /* Pods-allyHydro.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Ally/Info.plist;
+				INFOPLIST_FILE = allyHydro/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -776,14 +776,14 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Ally;
+				PRODUCT_NAME = allyHydro;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 212193F372B4C237393F0267 /* Pods-Ally-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 212193F372B4C237393F0267 /* Pods-allyHydro-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -794,14 +794,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Ally-tvOS/Info.plist";
+				INFOPLIST_FILE = "allyHydro-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Ally-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.allyHydro-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -811,7 +811,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D8DBC34A210CF2C11175944 /* Pods-Ally-tvOS.release.xcconfig */;
+			baseConfigurationReference = 1D8DBC34A210CF2C11175944 /* Pods-allyHydro-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -822,14 +822,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Ally-tvOS/Info.plist";
+				INFOPLIST_FILE = "allyHydro-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Ally-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.allyHydro-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -839,7 +839,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 245E5630FB637B0F853F5AD1 /* Pods-Ally-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 245E5630FB637B0F853F5AD1 /* Pods-allyHydro-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -849,24 +849,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Ally-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "allyHydro-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Ally-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.allyHydro-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ally-tvOS.app/Ally-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/allyHydro-tvOS.app/allyHydro-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4EFB7C5EFC08921ADFE7729A /* Pods-Ally-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 4EFB7C5EFC08921ADFE7729A /* Pods-allyHydro-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -876,17 +876,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Ally-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "allyHydro-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.Ally-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.allyHydro-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Ally-tvOS.app/Ally-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/allyHydro-tvOS.app/allyHydro-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -993,7 +993,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "AllyTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "allyHydroTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -1002,7 +1002,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Ally" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "allyHydro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -1011,7 +1011,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Ally-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "allyHydro-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -1020,7 +1020,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Ally-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "allyHydro-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -1029,7 +1029,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Ally" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "allyHydro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

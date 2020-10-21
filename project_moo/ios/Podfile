@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'Ally' do
-  # Pods for Ally
+target 'allyHydro' do
+  # Pods for allyHydro
   pod 'MQTTClient'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -39,7 +39,7 @@ target 'Ally' do
 
   pod 'sp-react-native-mqtt', :path => '../node_modules/sp-react-native-mqtt'
 
-  target 'AllyTests' do
+  target 'allyHydroTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -47,10 +47,10 @@ target 'Ally' do
   use_native_modules!
 end
 
-target 'Ally-tvOS' do
-  # Pods for Ally-tvOS
+target 'allyHydro-tvOS' do
+  # Pods for allyHydro-tvOS
 
-  target 'Ally-tvOSTests' do
+  target 'allyHydro-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

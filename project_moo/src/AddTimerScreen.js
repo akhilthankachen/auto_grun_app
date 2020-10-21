@@ -4,7 +4,6 @@ import SaveAndActivate from './components/SaveAndActivate'
 import Close from './components/Close'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import AddTimeAndDurationButton from './components/AddTimeAndDurationButton'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import { Icon } from 'react-native-elements'
 import TimeAndDurationBox from './components/TimeAndDurationBox';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -21,7 +20,6 @@ var radio_props = [
     {label: 'Ch1  ', value: 1 },
     {label: 'Ch2  ', value: 2 },
     {label: 'Ch3  ', value: 3 },
-    {label: 'Ch4  ', value: 4 }
 ];
 
 class AddTimerScreen extends Component {
@@ -33,18 +31,19 @@ class AddTimerScreen extends Component {
         channel: 1,
         hour: '-- ',
         minutes: ' --',
-        duration: '',
-        timeDuration: this.props.timer.ch1,
+        duration: this.props.timer.ch1.duration ? this.props.timer.ch1.duration.toString() : '0',
+        up: this.props.timer.ch1.up ? this.props.timer.ch1.up.toString() : '0',
+        lp: this.props.timer.ch1.lp ? this.props.timer.ch1.lp.toString() : '0',
         data: this.props.timer,
         fetchVisible: false,
-        clientToken: ''
+        clientToken: '',
+        durationToggle: false,
     };
-
   }
 
   UNSAFE_componentWillReceiveProps = next => {
     this.setState({
-      data: next.timer
+      data: next.timer,
     })
   }
 
@@ -153,7 +152,7 @@ class AddTimerScreen extends Component {
     }
   }
 
-  renderTimerListBuffer = ()=>{
+/*   renderTimerListBuffer = ()=>{
     if(this.state.timeDuration != undefined){
         var len = this.state.timeDuration.length
     }else{
@@ -164,7 +163,7 @@ class AddTimerScreen extends Component {
         list.push(<TimeAndDurationBox key={i} index={i} hour=" ---" minutes="---" duration="---" active={false}/>)
     }
     return list
-  }
+  } */
 
   scrollToPos = (pos) => {
     this.scroller.scrollTo({x: 0, y: pos});
@@ -188,48 +187,40 @@ class AddTimerScreen extends Component {
       if(this.state.data.ch1){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch1
-        })
-      }else{
-        this.setState({
-            channel: value,
-            timeDuration: []
+            up: this.state.data.ch1.up ? this.props.timer.ch1.up.toString() : '0',
+            lp: this.state.data.ch1.lp ? this.props.timer.ch1.lp.toString() : '0',
+            duration: this.state.data.ch1.duration ? this.props.timer.ch1.duration.toString() : '0',
+            durationToggle: false,
         })
       }
     }else if(value == 2){
       if(this.state.data.ch2){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch2
-        })
-      }else{
-        this.setState({
-            channel: value,
-            timeDuration: []
+            up: this.state.data.ch2.up ? this.props.timer.ch2.up.toString() : '0',
+            lp: this.state.data.ch2.lp ? this.props.timer.ch2.lp.toString() : '0',
+            duration: this.state.data.ch2.duration ? this.props.timer.ch2.duration.toString() : '0',
+            durationToggle: false,
         })
       }
     }else if(value == 3){
       if(this.state.data.ch3){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch3
-        })
-      }else{
-        this.setState({
-            channel: value,
-            timeDuration: []
+            up: this.state.data.ch3.up ? this.props.timer.ch3.up.toString() : '0',
+            lp: this.state.data.ch3.lp ? this.props.timer.ch3.lp.toString() : '0',
+            duration: this.state.data.ch3.duration ? this.props.timer.ch3.duration.toString() : '0',
+            durationToggle: true,
         })
       }
     }else if(value == 4){
       if(this.state.data.ch4){
         this.setState({
             channel: value,
-            timeDuration: this.state.data.ch4
-        })
-      }else{
-        this.setState({
-            channel: value,
-            timeDuration: []
+            up: this.state.data.ch3.up ? this.props.timer.ch4.up.toString() : '0',
+            lp: this.state.data.ch3.lp ? this.props.timer.ch4.lp.toString() : '0',
+            duration: this.state.data.ch3.duration ? this.props.timer.ch4.duration.toString() : '0',
+            durationToggle: false,
         })
       }
     }
@@ -244,6 +235,51 @@ class AddTimerScreen extends Component {
       }
       return time
     }
+  }
+
+  setUp = (text) => {
+    let interData = this.state.data
+    if(this.state.channel == 1){
+      interData.ch1.up = parseInt(text)
+    }else if(this.state.channel == 2){
+      interData.ch2.up = parseInt(text)
+    }else if(this.state.channel == 3){
+      interData.ch3.up = parseInt(text)
+    }
+    this.setState({
+      up: text,
+      data: interData
+    })
+  }
+
+  setLp = (text) => {
+    let interData = this.state.data
+    if(this.state.channel == 1){
+      interData.ch1.lp = parseInt(text)
+    }else if(this.state.channel == 2){
+      interData.ch2.lp = parseInt(text)
+    }else if(this.state.channel == 3){
+      interData.ch3.lp = parseInt(text)
+    }
+    this.setState({
+      lp: text,
+      data: interData
+    })
+  }
+
+  setDuration = (text) => {
+    let interData = this.state.data
+    if(this.state.channel == 1){
+      interData.ch1.duration = parseInt(text)
+    }else if(this.state.channel == 2){
+      interData.ch2.duration = parseInt(text)
+    }else if(this.state.channel == 3){
+      interData.ch3.duration = parseInt(text)
+    }
+    this.setState({
+      duration: text,
+      data: interData
+    })
   }
 
   render() {
@@ -307,7 +343,7 @@ class AddTimerScreen extends Component {
                     />
                 </View>
             </View>
-            <View style={styles.modeBox}>
+            <View style={{display: 'none'}}>
               <Text style={styles.modeText}>Mode : </Text>
               <Picker
                 selectedValue={this.state.data.m[(this.state.channel)-1].toString()}
@@ -330,7 +366,7 @@ class AddTimerScreen extends Component {
             </View>
             <View style={styles.addTimeBox}>
                 <View style={styles.pickTimeBox}>
-                    <View style={styles.timeBoxInner}>
+{/*                     <View style={styles.timeBoxInner}>
                         <Text style={styles.timeText}>Time  :  </Text>
                         <Text style={styles.timeText}>{this.displayTime(this.state.hour)}:{this.displayTime(this.state.minutes)}</Text>
                         <TouchableOpacity style={styles.timePicker} onPress={()=>{this.setState({isVisible: !this.state.isVisible})}}>
@@ -341,30 +377,61 @@ class AddTimerScreen extends Component {
                                 size = {20}
                             />
                         </TouchableOpacity>
-                    </View>
-                    <View style={styles.durationBox}>
-                        <Text style={styles.durationText}>Duration  :  </Text>
+                    </View> */}
+                    <View style={styles.durationBoxOne}>
+                        <Text style={styles.durationText}>Upper Temp  :  </Text>
                         <TextInput
                             style={styles.durationInput}
-                            onChangeText={(text) => this.setState({duration: text})}
-                            value={this.state.duration}
-                            placeholder={'0'}
+                            onChangeText={(text) => {this.setUp(text)}}
+                            value={this.state.up}
                             onFocus={() => {
                                 
                                 this.scrollToPos(20)
                             }}
                             keyboardType='numeric'
                         />
-                        <Text style={styles.durationText}>  Minutes</Text>
+                        <Text style={styles.durationText}>  °C</Text>
                     </View>
+                    <View style={styles.durationBox}>
+                        <Text style={styles.durationText}>Lower Temp  :  </Text>
+                        <TextInput
+                            style={styles.durationInput}
+                            onChangeText={(text) => {this.setLp(text)}}
+                            value={this.state.lp}
+                            onFocus={() => {
+                                
+                                this.scrollToPos(20)
+                            }}
+                            keyboardType='numeric'
+                        />
+                        <Text style={styles.durationText}>  °C</Text>
+                    </View>
+                    {
+                      this.state.durationToggle &&
+                      <View style={[styles.durationBox, {marginLeft: 38}]}>
+                          <Text style={styles.durationText}>Duration         :  </Text>
+                          <TextInput
+                              style={styles.durationInput}
+                              onChangeText={(text) => {this.setDuration(text)}}
+                              value={this.state.duration}
+                              onFocus={() => {
+                                  
+                                  this.scrollToPos(20)
+                              }}
+                              keyboardType='numeric'
+                          />
+                          <Text style={styles.durationText}>  seconds</Text>
+                      </View>
+                    }
+
                 </View>
                 <View>
-                    <AddTimeAndDurationButton style={{marginTop: 15}} onPress={this.addTimeAndDuration}/>
+                    {/* <AddTimeAndDurationButton style={{marginTop: 15}} onPress={this.addTimeAndDuration}/> */}
                 </View>
             </View>
             <View style={{marginTop: 10}}>
-                {this.renderTimeList()}
-                {this.renderTimerListBuffer()}
+                {/* this.renderTimeList() */}
+                {/* {this.renderTimerListBuffer()} */}
             </View>
         </ScrollView>
 
@@ -474,6 +541,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    durationBoxOne: {
+      marginTop: 50,
+      flexDirection: 'row',
+      alignItems: 'center'
+  },
     durationInput: {
         borderWidth:1,
         borderColor: 'black',
@@ -485,4 +557,5 @@ const styles = StyleSheet.create({
     },
     savingModal: {
     }
+    
 });

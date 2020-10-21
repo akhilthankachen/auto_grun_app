@@ -3,6 +3,7 @@ import timeoutPromise from '../timeoutPromise'
 import config from '../../config'
 
 export const getTimer = () => (dispatch,getState) => {
+    console.log('get')
     timeoutPromise(5000, fetch(config.remote+'/device/getSettings', {
         method: 'GET',
         headers: {
@@ -20,13 +21,13 @@ export const getTimer = () => (dispatch,getState) => {
         if(responseJSON != null){
           if(responseJSON.success == true){
             var json = JSON.parse(responseJSON.msg)
-            if(responseJSON != ''){
+            if(responseJSON.msg !== ''){
               dispatch({
                   type: UPDATE_TIMER,
-                  ch1: json.ch1 ? json.ch1 : [],
-                  ch2: json.ch2 ? json.ch2 : [],
-                  ch3: json.ch3 ? json.ch3 : [],
-                  ch4: json.ch4 ? json.ch4 : [],
+                  ch1: json.ch1 ? json.ch1 : {},
+                  ch2: json.ch2 ? json.ch2 : {},
+                  ch3: json.ch3 ? json.ch3 : {},
+                  ch4: json.ch4 ? json.ch4 : {},
                   m: json.m ? json.m : [0,0,0,0]
               })
             }
@@ -42,13 +43,24 @@ export const getTimer = () => (dispatch,getState) => {
 
 export const putTimer = (data, callback) => (dispatch,getState) => {
     console.log("Put Timer")
+    let ch1 = {
+      up: data.ch1.up ? data.ch1.up : 0,
+      lp: data.ch1.lp ? data.ch1.lp : 0
+    }
+    let ch2 = {
+      up: data.ch2.up ? data.ch2.up : 0,
+      lp: data.ch2.lp ? data.ch2.lp : 0
+    }
+    let ch3 = {
+      up: data.ch3.up ? data.ch3.up : 0,
+      lp: data.ch3.lp ? data.ch3.lp : 0,
+      d : data.ch3.duration ? data.ch3.duration : 0
+    }
     var json = {
       settings: {
-        ch1: data.ch1,
-        ch2: data.ch2,
-        ch3: data.ch3,
-        ch4: data.ch4,
-        m: data.m
+        ch1: ch1,
+        ch2: ch2,
+        ch3: ch3
       }
     }
 

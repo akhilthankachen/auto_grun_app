@@ -16,7 +16,8 @@ class AddNewTimer extends Component {
     if(this.props.live.deviceOnline){
       this.props.navigation.navigate('addTimer')
     }else(
-      alert("Device not online...")
+      this.props.navigation.navigate('addTimer')
+      /* alert("Device not online...") */
     )
   }
 

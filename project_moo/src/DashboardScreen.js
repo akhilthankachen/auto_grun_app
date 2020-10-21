@@ -49,10 +49,25 @@ class DashboardScreen extends Component<Props> {
   }
 
   UNSAFE_componentWillReceiveProps = next => {
-    if(this.state.channel1.length != next.timer.ch1.length || 
-      this.state.channel2.length != next.timer.ch2.length || 
-      this.state.channel3.length != next.timer.ch3.length || 
-      this.state.channel4.length != next.timer.ch4.length){
+    let chOneState = JSON.stringify(this.state.channel1)
+    let chTwoState = JSON.stringify(this.state.channel2)
+    let chThreeState = JSON.stringify(this.state.channel3)
+    let chFourState = JSON.stringify(this.state.channel4)
+    let chOneProps = JSON.stringify(next.timer.ch1)
+    let chTwoProps = JSON.stringify(next.timer.ch2)
+    let chThreeProps = JSON.stringify(next.timer.ch3)
+    let chFourProps = JSON.stringify(next.timer.ch4)
+
+    let chOneCompare = chOneState.localeCompare(chOneProps)
+    let chTwoCompare = chTwoState.localeCompare(chTwoProps)
+    let chThreeCompare = chThreeState.localeCompare(chThreeProps)
+    let chFourCompare = chFourState.localeCompare(chFourProps)
+
+    if(
+        chOneCompare != 0 || 
+        chTwoCompare != 0 || 
+        chThreeCompare != 0 || 
+        chFourCompare != 0){
         this.setState({
           channel1: next.timer.ch1,
           channel2: next.timer.ch2,
@@ -96,16 +111,11 @@ class DashboardScreen extends Component<Props> {
                     channel={3}
                     data={this.state.channel3}
                   />
-                  <TimerDisplay 
-                    key={4} 
-                    channel={4}
-                    data={this.state.channel4}
-                  />
                 </View>
                 <AddNewTimerButton style={styles.addNewTimer} navigation={this.props.navigation} />
                 <TempGraph heading="Today's average temperature °C/h" data={this.state.avgTemp} route="/device/avgTempDay" key={0} keyDup={0}/>
-                <TempGraph heading="Today's maximum temperature °C/h" data={this.state.maxTemp} route="/device/maxTempDay" key={1} keyDup={1}/>
-                <TempGraph heading="Today's minimum temperature °C/h" data={this.state.minTemp} route="/device/minTempDay" key={2} keyDup={2}/>
+                {/* <TempGraph heading="Today's maximum temperature °C/h" data={this.state.maxTemp} route="/device/maxTempDay" key={1} keyDup={1}/> */}
+                {/* <TempGraph heading="Today's minimum temperature °C/h" data={this.state.minTemp} route="/device/minTempDay" key={2} keyDup={2}/> */}
                 <LogoutButton style={styles.logout} navigation={this.props.navigation}/>
             </ScrollView>
         </View>

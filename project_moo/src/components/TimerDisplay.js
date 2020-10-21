@@ -17,8 +17,8 @@ export default class timerDisplay extends Component {
     this.state = {
       displayTimerVisible: false,
       channel: this.props.channel,
-      data: [],
-      value: ''
+      data: this.props.data,
+      value: '',
     };
   } 
 
@@ -44,6 +44,35 @@ export default class timerDisplay extends Component {
     return list
   }
 
+  renderTempRange = ()=>{
+    if(this.props.data.up == 0 || this.props.data.up == undefined){
+      var up = "Not Set"
+    }else{
+      var up = this.props.data.up + "°C"
+    }
+    if(this.props.data.lp == 0 || this.props.data.lp == undefined){
+      var lp = "Not Set"
+    }else{
+      var lp = this.props.data.lp + "°C"
+    }
+    if( this.props.channel == 3){
+      if(this.props.data.d == 0 || this.props.data.d == undefined){
+        var d = "Not Set"
+      }else{
+        var d = this.props.data.d + "s"
+      }
+    }
+    return (
+      <View style={styles.settings}>
+        <Text style={styles.settingsText}>Upper Temp : {up}</Text>
+        <Text style={styles.settingsText}>Lower Temp : {lp}</Text>
+        { this.props.channel == 3 &&
+          <Text style={styles.settingsText}>Duration : {d}</Text>
+        }
+      </View>
+    )
+  }
+
   render() {
     var height = 75 + (((this.props.data.length > 0 ? this.props.data.length : 1)  - 1) * 35)
     return (
@@ -52,7 +81,7 @@ export default class timerDisplay extends Component {
           <Text style={styles.channelText}>Channel {this.props.channel}</Text>
         </View>
         <View style={styles.listDuration}>
-          {this.renderTimeList()}
+          {this.renderTempRange()}
         </View>
 
       </View>
@@ -112,11 +141,20 @@ const styles = StyleSheet.create({
   removeBox: {
     width: (WIDTH - 60)/2 - 7.5,
   },
-  empty:{
+  empty: {
     alignSelf: 'center',
     fontFamily: 'sans-serif-medium',
     fontWeight: '500',
     fontSize: 15,
     color: 'gray'
+  },
+  settings: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  settingsText: {
+    fontSize: 10,
+    paddingLeft: 16,
   }
 });
