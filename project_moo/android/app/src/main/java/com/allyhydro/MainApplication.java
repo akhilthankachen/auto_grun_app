@@ -1,4 +1,4 @@
-package com.allyhydrohydro;
+package com.allyhydro;
 
 import android.app.Application;
 import android.content.Context;
