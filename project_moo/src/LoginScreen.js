@@ -26,7 +26,7 @@ class LoginScreen extends Component<Props> {
       username: '',
       password: '',
       checked: false,
-      showHide: true,
+      showHide: false,
       status: ''
     }
   }
@@ -103,7 +103,7 @@ class LoginScreen extends Component<Props> {
           </View>
           <View style = {styles.passwordContainer}>
             <TextInput 
-              style = {styles.password}
+              style = {styles.username}
               placeholder = {'Password'}
               autoCapitalize = 'none'
               underlineColorAndroid = 'transparent'
@@ -205,11 +205,11 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
     fontSize: 18,
     backgroundColor: '#F2F2F2',
-    fontFamily: 'sans-serif-light',
+    
     color: '#5E7A7E'
   },
   passwordContainer: {
-    marginTop: 10
+    marginTop: 10,
   },
   password: {
     width: WIDTH - 55,

@@ -66,7 +66,7 @@ export default class timerDisplay extends Component {
       <View style={styles.settings}>
         <Text style={styles.settingsText}>Upper Temp : {up}</Text>
         <Text style={styles.settingsText}>Lower Temp : {lp}</Text>
-        { this.props.channel == 3 &&
+        { this.props.channel == 4 &&
           <Text style={styles.settingsText}>Duration : {d}</Text>
         }
       </View>

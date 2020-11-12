@@ -31,7 +31,7 @@ class AddTimerScreen extends Component {
         channel: 1,
         hour: '-- ',
         minutes: ' --',
-        duration: this.props.timer.ch1.duration ? this.props.timer.ch1.duration.toString() : '0',
+        duration: this.props.timer.ch1.duration ? this.props.timer.ch1.duration.toString() : '1',
         up: this.props.timer.ch1.up ? this.props.timer.ch1.up.toString() : '0',
         lp: this.props.timer.ch1.lp ? this.props.timer.ch1.lp.toString() : '0',
         data: this.props.timer,
@@ -209,7 +209,7 @@ class AddTimerScreen extends Component {
             channel: value,
             up: this.state.data.ch3.up ? this.props.timer.ch3.up.toString() : '0',
             lp: this.state.data.ch3.lp ? this.props.timer.ch3.lp.toString() : '0',
-            duration: this.state.data.ch3.duration ? this.props.timer.ch3.duration.toString() : '0',
+            duration: this.state.data.ch3.duration ? this.props.timer.ch3.duration.toString() : '1',
             durationToggle: true,
         })
       }
@@ -219,7 +219,7 @@ class AddTimerScreen extends Component {
             channel: value,
             up: this.state.data.ch3.up ? this.props.timer.ch4.up.toString() : '0',
             lp: this.state.data.ch3.lp ? this.props.timer.ch4.lp.toString() : '0',
-            duration: this.state.data.ch3.duration ? this.props.timer.ch4.duration.toString() : '0',
+            duration: this.state.data.ch3.duration ? this.props.timer.ch4.duration.toString() : '1',
             durationToggle: false,
         })
       }
@@ -408,7 +408,7 @@ class AddTimerScreen extends Component {
                     </View>
                     {
                       this.state.durationToggle &&
-                      <View style={[styles.durationBox, {marginLeft: 38}]}>
+                      <View style={[styles.durationBox, {marginLeft: 38, display: 'none'}]}>
                           <Text style={styles.durationText}>Duration         :  </Text>
                           <TextInput
                               style={styles.durationInput}

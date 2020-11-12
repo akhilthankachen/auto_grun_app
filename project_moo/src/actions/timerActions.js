@@ -54,7 +54,7 @@ export const putTimer = (data, callback) => (dispatch,getState) => {
     let ch3 = {
       up: data.ch3.up ? data.ch3.up : 0,
       lp: data.ch3.lp ? data.ch3.lp : 0,
-      d : data.ch3.duration ? data.ch3.duration : 0
+      d : 1
     }
     var json = {
       settings: {
