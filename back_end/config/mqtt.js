@@ -1,5 +1,5 @@
 module.exports = {
-    remote: 'mqtt://192.168.225.111',
+    remote: 'mqtt://localhost:1883',
     username: 'cowfarm',
     password: 'cowfarm'
 }

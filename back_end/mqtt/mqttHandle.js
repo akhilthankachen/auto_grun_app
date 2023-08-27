@@ -4,14 +4,15 @@ const DeviceTemp = require('../models/device/deviceTemp')
 const DeviceAvgTemp = require('../models/device/DeviceAvgTemp')
 const DeviceMaxTemp = require('../models/device/DeviceMaxTemp')
 const DeviceMinTemp = require('../models/device/DeviceMinTemp')
+const MQTTConfig = require('../config/mqtt')
 
-const ip = 'mqtt://localhost:1883';
-module.exports = client  = mqtt.connect(ip)
+const ip = MQTTConfig.remote;
+const config = {
+    username: MQTTConfig.username,
+    password: MQTTConfig.password
+}
+module.exports = client  = mqtt.connect(ip, config)
 
-//{
-//   username: config.username,
-//   password: config.password
-//}
 
 pingAckRouter = (message) => {
     message = message.toString().split(" ");
